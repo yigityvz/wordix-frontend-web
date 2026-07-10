@@ -61,6 +61,269 @@ wordix-api
 
 Frontend ileride Docker'a alınacaksa compose'a ayrıca `wordix-web` servisi eklenecektir.
 
+
+```markdown
+## Figma ZIP Visual Reference
+
+This repository contains a Figma/Make generated React + Vite + Tailwind export under:
+
+```text
+design/figma/react-reference
+
+This export is only a visual reference. Codex must not copy React code into Angular.
+
+Before implementing UI, Codex must read:
+
+docs/FIGMA_EXPORT_HANDOFF.md
+docs/DESIGN_SYSTEM.md
+docs/UI_SCREEN_INVENTORY.md
+design/figma/react-reference/src/index.css
+design/figma/react-reference/src/pages
+design/figma/react-reference/src/components
+
+Rules:
+
+Rebuild UI with Angular + Tailwind + NgRx.
+Preserve Clean Frontend Architecture.
+Support light mode and dark mode.
+Use one Keycloak login screen.
+admin redirects to /admin/dashboard.
+basic_user redirects to /dashboard.
+No dead buttons.
+Backend Swagger/OpenAPI is behavior source of truth.
+
+---
+
+## 1.1 Görsel tasarım, tema ve UI kalite standardı
+
+Wordix frontend sadece çalışan bir arayüz olmayacak; modern, temiz, premium hissi veren bir dil öğrenme web uygulaması olacak.
+
+Tasarım karakteri:
+
+```text
+Modern SaaS + language learning dashboard
+Clean layout
+Yumuşak radius
+Net typography
+Card-based interface
+Responsive mobile-first yaklaşım
+Dark mode ve light mode desteği
+Coastal blues renk paleti
+Aşırı kalabalık olmayan, ferah arayüz
+```
+
+Codex tasarım yaparken şu kurallara uymalıdır:
+
+```text
+Rastgele renk kullanılmayacak.
+Tüm renkler Tailwind theme tokenlarından gelecek.
+Dark/light mode birlikte düşünülmeden component yazılmayacak.
+Her yeni component hover, focus, disabled ve loading state desteklemeli.
+Formlar erişilebilir label/error/helper text yapısına sahip olmalı.
+Admin panel ile kullanıcı panelinin görsel dili aynı aileden ama layoutu ayrı olmalı.
+```
+
+Zorunlu tema desteği:
+
+```text
+Light mode olacak.
+Dark mode olacak.
+Tema toggle olacak.
+Kullanıcı tercihi localStorage içinde saklanacak.
+Tailwind darkMode: 'class' yaklaşımı kullanılacak.
+html veya body üzerinde dark class yönetilecek.
+```
+
+Önerilen theme storage key:
+
+```text
+wordix-theme
+```
+
+Önerilen theme değerleri:
+
+```ts
+export type WordixTheme = 'light' | 'dark';
+```
+
+İleride `system` tema desteği eklenebilir ama ilk uygulamada light/dark yeterlidir.
+
+### 1.1.1 Coastal Blues renk paleti
+
+Kullanıcının seçtiği ana renk paleti Coastal Blues ailesidir. Bu palet Wordix'in ana görsel kimliğidir.
+
+Kullanıcı tarafından verilen palette bazı anahtar adları tekrar ettiği için, Tailwind/TypeScript içinde çakışma olmaması adına renk tokenları aşağıdaki canonical isimlerle kullanılacaktır.
+
+Tailwind `theme.extend.colors` içine eklenecek önerilen yapı:
+
+```ts
+colors: {
+  'deep-space-blue': {
+    DEFAULT: '#012a4a',
+    100: '#00090f',
+    200: '#00111e',
+    300: '#011a2d',
+    400: '#01233c',
+    500: '#012a4a',
+    600: '#025ca1',
+    700: '#048df6',
+    800: '#54b4fc',
+    900: '#aad9fe',
+  },
+  'yale-blue-dark': {
+    DEFAULT: '#013a63',
+    100: '#000c14',
+    200: '#001828',
+    300: '#01243d',
+    400: '#012f51',
+    500: '#013a63',
+    600: '#026bb6',
+    700: '#0d99fd',
+    800: '#5dbbfd',
+    900: '#aeddfe',
+  },
+  'yale-blue': {
+    DEFAULT: '#01497c',
+    100: '#000f19',
+    200: '#011e32',
+    300: '#012c4c',
+    400: '#013b65',
+    500: '#01497c',
+    600: '#0277ca',
+    700: '#1c9ffd',
+    800: '#68bffd',
+    900: '#b3dffe',
+  },
+  'yale-blue-bright': {
+    DEFAULT: '#014f86',
+    100: '#000f1a',
+    200: '#001f35',
+    300: '#002e4f',
+    400: '#013e6a',
+    500: '#014f86',
+    600: '#0179cf',
+    700: '#1ea0fe',
+    800: '#69c0fe',
+    900: '#b4dfff',
+  },
+  'rich-cerulean': {
+    DEFAULT: '#2a6f97',
+    100: '#09161e',
+    200: '#112d3c',
+    300: '#1a435b',
+    400: '#225979',
+    500: '#2a6f97',
+    600: '#3a93c7',
+    700: '#6baed5',
+    800: '#9cc9e3',
+    900: '#cee4f1',
+  },
+  cerulean: {
+    DEFAULT: '#2c7da0',
+    100: '#091920',
+    200: '#123240',
+    300: '#1a4b60',
+    400: '#236480',
+    500: '#2c7da0',
+    600: '#3fa1ca',
+    700: '#6fb8d8',
+    800: '#9fd0e5',
+    900: '#cfe7f2',
+  },
+  'air-force-blue': {
+    DEFAULT: '#468faf',
+    100: '#0e1d23',
+    200: '#1c3946',
+    300: '#2a5669',
+    400: '#38738c',
+    500: '#468faf',
+    600: '#67a7c3',
+    700: '#8dbdd2',
+    800: '#b3d3e1',
+    900: '#d9e9f0',
+  },
+  'steel-blue': {
+    DEFAULT: '#61a5c2',
+    100: '#10222a',
+    200: '#214454',
+    300: '#31677e',
+    400: '#4189a7',
+    500: '#61a5c2',
+    600: '#81b7ce',
+    700: '#a0c9da',
+    800: '#c0dbe6',
+    900: '#dfedf3',
+  },
+  'sky-blue-light': {
+    DEFAULT: '#89c2d9',
+    100: '#112b35',
+    200: '#22566a',
+    300: '#34819f',
+    400: '#52a6c7',
+    500: '#89c2d9',
+    600: '#a0cee0',
+    700: '#b7dae8',
+    800: '#cfe6f0',
+    900: '#e7f3f7',
+  },
+  'light-blue': {
+    DEFAULT: '#a9d6e5',
+    100: '#12333d',
+    200: '#25657b',
+    300: '#3798b8',
+    400: '#6bb9d3',
+    500: '#a9d6e5',
+    600: '#badeea',
+    700: '#cbe6f0',
+    800: '#dceff5',
+    900: '#eef7fa',
+  },
+}
+```
+
+Semantic kullanım önerisi:
+
+```text
+Primary: yale-blue / yale-blue-bright
+Dark background: deep-space-blue-500, deep-space-blue-300, yale-blue-dark-300
+Light background: light-blue-900, sky-blue-light-900, white
+Cards: white/dark deep-space-blue-400
+Borders: steel-blue-800/light-blue-700 veya dark mode'da yale-blue-dark-400
+Accent: cerulean-600, rich-cerulean-600
+Charts: palette içinden sırayla seçilen tonlar
+```
+
+Codex yeni component yazarken hex değerlerini component içine gömmemelidir. Tailwind classları veya theme tokenları kullanılmalıdır.
+
+### 1.1.2 Modern component kalite standardı
+
+Shared UI componentleri şu kalite seviyesinde hazırlanmalıdır:
+
+```text
+Button: primary, secondary, ghost, danger, loading, disabled
+Input: label, helper text, validation error
+Card: light/dark uyumlu, hover state opsiyonlu
+Modal/Dialog: focus trap ve escape close planı
+Badge: status/role/progress/flag için reusable
+Toast/Snackbar: success/error/info/warning
+Skeleton/Spinner: API loading state için
+EmptyState/ErrorState: liste ve sayfa hataları için
+ThemeToggle: light/dark geçişi için
+```
+
+UI modernliği için önerilen görsel kurallar:
+
+```text
+rounded-2xl / rounded-3xl
+soft shadow
+subtle border
+gradient hero/header alanları
+responsive grid
+micro interaction hover/transition
+dark mode contrast kontrolü
+```
+
+
 ---
 
 ## 2. Backend mimarisinden gelen kalıcı kurallar
@@ -128,6 +391,60 @@ PagedResult<T>
 ```
 
 Frontend HTTP katmanı bu response formatlarını merkezi yönetmelidir.
+
+
+### 2.5 Admin ve basic user giriş davranışı
+
+Tek bir Keycloak login ekranı olacaktır. Ayrı admin login ekranı yapılmayacaktır.
+
+Akış:
+
+```text
+Kullanıcı aynı login ekranından giriş yapar.
+Frontend token rollerini okur.
+Kullanıcı admin rolüne sahipse admin dashboard'a yönlendirilir.
+Kullanıcı basic_user rolüne sahipse user dashboard'a yönlendirilir.
+```
+
+Roller:
+
+```text
+basic_user -> /dashboard
+admin      -> /admin/dashboard veya /admin/analytics
+```
+
+Kullanıcı hem `admin` hem `basic_user` rolüne sahipse ilk davranış admin paneline yönlendirme olabilir. İleride "workspace switcher" eklenebilir.
+
+Kurallar:
+
+```text
+Admin panel ayrı feature altında kalacak.
+Admin componentleri kullanıcı dashboard componentleriyle karıştırılmayacak.
+Admin route'ları RoleGuard ile korunacak.
+Admin API service, admin-analytics feature altında tutulacak.
+Basic user route'ları admin dependency import etmeyecek.
+```
+
+Admin panelin hedefi:
+
+```text
+Modern analytics dashboard
+Top lookups
+Most saved items
+Import/provider statistics
+Admin-only cards/charts/tables
+```
+
+Admin layout önerisi:
+
+```text
+features/admin-analytics
+core/layout/admin-shell
+core/layout/user-shell
+```
+
+Eğer ilk fazlarda iki ayrı shell erken gelirse, önce tek AppShell kullanılabilir; fakat route yapısı admin/user ayrımına uygun planlanmalıdır.
+
 
 ---
 
@@ -541,9 +858,9 @@ Admin-only route guard
 ## 7. Route planı
 
 ```text
-/                         -> redirect /dashboard
+/                         -> role based redirect
 /auth/callback
-/dashboard
+/dashboard                 -> basic_user dashboard
 /lookup
 /dictionary
 /dictionary/:userLearningItemId
@@ -554,6 +871,7 @@ Admin-only route guard
 /quizzes/:quizSessionId/summary
 /statistics
 /statistics/difficult-items
+/admin/dashboard           -> admin landing page
 /admin/analytics
 /profile
 /settings
@@ -563,7 +881,8 @@ Guard kuralları:
 
 ```text
 Authenticated: dashboard, lookup, dictionary, decks, quizzes, statistics, profile, settings
-Admin: admin analytics
+Role based redirect: admin -> /admin/dashboard, basic_user -> /dashboard
+Admin: admin dashboard and admin analytics
 ```
 
 ---
@@ -739,6 +1058,35 @@ Commit:
 chore: configure ngrx root store
 ```
 
+### F1D — Theme palette ve dark mode altyapısı
+
+Dosyalar:
+
+```text
+tailwind.config.*
+src/styles.css
+src/app/core/theme/theme.models.ts
+src/app/core/theme/theme.service.ts
+src/app/core/theme/theme.facade.ts
+src/app/shared/components/theme-toggle
+```
+
+Hedef:
+
+```text
+Coastal Blues renk paleti Tailwind theme içine eklenir.
+Tailwind darkMode: 'class' yapılır.
+Light/dark mode toggle çalışır.
+Tema tercihi localStorage'da wordix-theme key'iyle saklanır.
+Componentlerde hard-coded hex kullanımına izin verilmez.
+```
+
+Commit:
+
+```text
+feat: add wordix theme palette and dark mode
+```
+
 ## F2 — Clean Frontend Architecture iskeleti
 
 ### F2A — Core/shared/features klasörleri
@@ -789,6 +1137,39 @@ Commit:
 
 ```text
 feat: add application shell layout
+```
+
+### F2D — User/Admin shell ayrımı ve shared design system
+
+Dosyalar:
+
+```text
+core/layout/user-shell
+core/layout/admin-shell
+shared/components/button
+shared/components/card
+shared/components/input
+shared/components/badge
+shared/components/modal
+shared/components/spinner
+shared/components/empty-state
+shared/components/error-state
+shared/components/theme-toggle
+```
+
+Hedef:
+
+```text
+Basic user ve admin aynı Keycloak login'i kullanır ama farklı dashboard/shell yapısına yönlenir.
+Admin panel ayrı route/layout altında büyüyebilir.
+Shared componentler dark/light mode uyumlu olur.
+Modern Coastal Blues tasarım dili uygulanır.
+```
+
+Commit:
+
+```text
+feat: add user admin shells and design system base
 ```
 
 ## F3 — Environment ve HTTP altyapısı
@@ -1228,6 +1609,15 @@ feat: add admin analytics api and state
 
 ### F12B — Admin UI
 
+Hedef:
+
+```text
+Admin kendi Keycloak bilgileriyle aynı login ekranından giriş yapar.
+RoleGuard admin rolünü doğrular.
+Admin kullanıcı /admin/dashboard veya /admin/analytics ekranına yönlendirilir.
+Admin panel kullanıcı dashboardından bağımsız modern analytics panel olarak tasarlanır.
+```
+
 Commit:
 
 ```text
@@ -1396,6 +1786,8 @@ Sadece F0A'yı yap:
 - README.md başlangıç içeriğini hazırla.
 - .gitignore hazırla.
 - Kod üretme.
+- Tema kararını not et: Coastal Blues palette, light mode ve dark mode zorunlu.
+- Auth kararını not et: tek Keycloak login, role based redirect; admin -> admin dashboard, basic_user -> user dashboard.
 - Bitince değişen dosyaları ve sonraki fazı raporla.
 ```
 
@@ -1415,6 +1807,9 @@ Feature-based modüler
 SOLID prensiplerine uygun
 Geliştirilebilir ama mevcut modülleri bozmayacak
 Responsive ve production'a hazırlanabilir
+Light/dark mode destekli
+Modern Coastal Blues tasarım sistemine sahip
+Admin ve basic user panelleri role göre ayrılmış
 ```
 
 bir web uygulaması geliştirmektir.
