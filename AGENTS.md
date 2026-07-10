@@ -17,6 +17,25 @@ Codex şu sırayı izlemelidir:
 5. Her fazı küçük adımlarla uygula; bir faz bitmeden sonraki faza geçme.
 6. Her faz sonunda build/test çalıştır ve değişen dosyaları raporla.
 
+Canonical ürün kararları ve ertelenen işler:
+
+```text
+docs/PRODUCT_DECISIONS.md
+docs/DEFERRED_FEATURES.md
+```
+
+Kurallar:
+
+```text
+Figma/Make export yalnızca görsel referanstır; demo davranışları implementation kaynağı değildir.
+Her ekran production'a çıkacak gerçek uygulama yaklaşımıyla geliştirilir.
+Mock mutation, fake success, demo switcher ve backend desteği olmayan çalışan buton yapılmaz.
+Backend desteği bekleyen özellikler uygulamada Coming Soon olarak gösterilmez.
+Bu özellikler yalnızca docs/DEFERRED_FEATURES.md içinde takip edilir.
+Her fazdan önce kapsam/dosya/kabul kriteri raporlanır.
+Her fazdan sonra docs/phase-reports altında kısa faz raporu hazırlanır.
+```
+
 ---
 
 ## 1. Repository ve teknoloji bilgisi
@@ -62,13 +81,13 @@ wordix-api
 Frontend ileride Docker'a alınacaksa compose'a ayrıca `wordix-web` servisi eklenecektir.
 
 
-```markdown
 ## Figma ZIP Visual Reference
 
 This repository contains a Figma/Make generated React + Vite + Tailwind export under:
 
 ```text
 design/figma/react-reference
+```
 
 This export is only a visual reference. Codex must not copy React code into Angular.
 
@@ -85,12 +104,14 @@ Rules:
 
 Rebuild UI with Angular + Tailwind + NgRx.
 Preserve Clean Frontend Architecture.
-Support light mode and dark mode.
-Use one Keycloak login screen.
+Support light, dark and system theme modes.
+Use one Keycloak authentication entry with sign-in and registration actions.
 admin redirects to /admin/dashboard.
 basic_user redirects to /dashboard.
 No dead buttons.
 Backend Swagger/OpenAPI is behavior source of truth.
+Do not copy demo switchers, fake notifications, mock mutations or unsupported admin screens.
+Admin and user applications must have separate shells and navigation.
 
 ---
 
@@ -128,6 +149,7 @@ Zorunlu tema desteği:
 ```text
 Light mode olacak.
 Dark mode olacak.
+System mode olacak ve prefers-color-scheme değişiklikleri izlenecek.
 Tema toggle olacak.
 Kullanıcı tercihi localStorage içinde saklanacak.
 Tailwind darkMode: 'class' yaklaşımı kullanılacak.
@@ -143,10 +165,10 @@ wordix-theme
 Önerilen theme değerleri:
 
 ```ts
-export type WordixTheme = 'light' | 'dark';
+export type WordixTheme = 'light' | 'dark' | 'system';
 ```
 
-İleride `system` tema desteği eklenebilir ama ilk uygulamada light/dark yeterlidir.
+Kayıtlı tercih yoksa başlangıç değeri `system` olmalıdır. `system` tercihi işletim sistemi temasını canlı izler; uygulanan görünüm yine `dark` classı üzerinden yönetilir.
 
 ### 1.1.1 Coastal Blues renk paleti
 
@@ -308,7 +330,7 @@ Badge: status/role/progress/flag için reusable
 Toast/Snackbar: success/error/info/warning
 Skeleton/Spinner: API loading state için
 EmptyState/ErrorState: liste ve sayfa hataları için
-ThemeToggle: light/dark geçişi için
+ThemeToggle: light/dark/system geçişi için
 ```
 
 UI modernliği için önerilen görsel kurallar:
@@ -393,9 +415,9 @@ PagedResult<T>
 Frontend HTTP katmanı bu response formatlarını merkezi yönetmelidir.
 
 
-### 2.5 Admin ve basic user giriş davranışı
+### 2.5 Authentication, registration ve role redirect davranışı
 
-Tek bir Keycloak login ekranı olacaktır. Ayrı admin login ekranı yapılmayacaktır.
+Tek bir Keycloak authentication girişi olacaktır. Ayrı admin login ekranı yapılmayacaktır. Auth giriş yüzeyinde sign-in ve create-account aksiyonları bulunabilir; iki aksiyon da Keycloak akışını başlatır. Wordix API'ye credential gönderilmez.
 
 Akış:
 
@@ -404,16 +426,17 @@ Kullanıcı aynı login ekranından giriş yapar.
 Frontend token rollerini okur.
 Kullanıcı admin rolüne sahipse admin dashboard'a yönlendirilir.
 Kullanıcı basic_user rolüne sahipse user dashboard'a yönlendirilir.
+Create account aksiyonu Keycloak registration akışına gider.
 ```
 
 Roller:
 
 ```text
 basic_user -> /dashboard
-admin      -> /admin/dashboard veya /admin/analytics
+admin      -> /admin/dashboard
 ```
 
-Kullanıcı hem `admin` hem `basic_user` rolüne sahipse ilk davranış admin paneline yönlendirme olabilir. İleride "workspace switcher" eklenebilir.
+Kullanıcı hem `admin` hem `basic_user` rolüne sahipse admin paneline yönlendirilir.
 
 Kurallar:
 
@@ -423,6 +446,9 @@ Admin componentleri kullanıcı dashboard componentleriyle karıştırılmayacak
 Admin route'ları RoleGuard ile korunacak.
 Admin API service, admin-analytics feature altında tutulacak.
 Basic user route'ları admin dependency import etmeyecek.
+Admin shell user navigation veya user bottom nav içermeyecek.
+User/Admin demo switcher veya Back to User App yapılmayacak.
+Backend endpointi olmayan admin ekranı navigation'a eklenmeyecek.
 ```
 
 Admin panelin hedefi:
@@ -431,7 +457,8 @@ Admin panelin hedefi:
 Modern analytics dashboard
 Top lookups
 Most saved items
-Import/provider statistics
+Most wrong / quiz insights
+Provider statistics
 Admin-only cards/charts/tables
 ```
 
@@ -443,7 +470,7 @@ core/layout/admin-shell
 core/layout/user-shell
 ```
 
-Eğer ilk fazlarda iki ayrı shell erken gelirse, önce tek AppShell kullanılabilir; fakat route yapısı admin/user ayrımına uygun planlanmalıdır.
+User ve admin shell ayrımı başlangıçtan itibaren korunmalıdır. Ortak primitive componentler paylaşılabilir; navigation ve business page componentleri paylaşılmaz.
 
 
 ---
@@ -724,7 +751,7 @@ Swagger ile doğrulanacak endpoint grubu:
 
 ```text
 POST /api/user-dictionary
-GET /api/user-dictionary/me
+GET /api/user-dictionary
 GET /api/user-dictionary/{userLearningItemId}
 POST /api/user-dictionary/sentences
 ```
@@ -779,7 +806,7 @@ Flag badges
 ```text
 POST /api/decks
 GET /api/decks
-GET /api/decks/{deckId}
+GET /api/decks/{id}
 POST /api/decks/{deckId}/items
 DELETE /api/decks/{deckId}/items/{userLearningItemId}
 ```
@@ -798,10 +825,10 @@ Deck quiz start button
 ### 6.7 Quizzes
 
 ```text
-POST /api/quizzes/start
+POST /api/quizzes
 POST /api/quizzes/{quizSessionId}/answers
 GET /api/quizzes/{quizSessionId}/summary
-POST /api/quizzes/recommendations/{quizRecommendationItemId}/save
+POST /api/quizzes/recommendations/{quizRecommendationItemId}/save-to-dictionary
 ```
 
 UI:
@@ -872,7 +899,10 @@ Admin-only route guard
 /statistics
 /statistics/difficult-items
 /admin/dashboard           -> admin landing page
-/admin/analytics
+/admin/analytics/top-lookups
+/admin/analytics/most-saved
+/admin/analytics/quiz-insights
+/admin/analytics/provider
 /profile
 /settings
 ```
@@ -954,30 +984,34 @@ Sıradaki faza geçelim mi?
 
 ## F0 — Repository ve dokümantasyon
 
-### F0A — GitHub repository oluştur
+### F0A — Repository ve ürün kararları temeli
 
 Hedef:
 
 ```text
-wordix-frontend-web repo oluşturulur.
+wordix-frontend-web repository başlangıç dosyaları ve canonical ürün kararları hazırlanır.
 ```
 
 Adımlar:
 
 ```text
-GitHub'da yeni repo aç: wordix-frontend-web
 README.md ekle
 AGENTS.md ekle
 .gitignore ekle
+docs/PRODUCT_DECISIONS.md ekle
+docs/DEFERRED_FEATURES.md ekle
+docs/UI_SCREEN_INVENTORY.md ve docs/DESIGN_SYSTEM.md kararlarla uyumlu hale getir
+docs/phase-reports/F0A.md ekle
 Branch stratejisi belirle: main, develop, feature/*
 ```
 
 Kabul kriteri:
 
 ```text
-Repo GitHub'da görünür.
 AGENTS.md repo kökünde vardır.
 .env dosyası yoktur.
+Demo davranışları canonical plandan çıkarılmıştır.
+Backend desteği bekleyen özellikler ayrı backlogda tutulur.
 ```
 
 Commit:
@@ -1058,7 +1092,7 @@ Commit:
 chore: configure ngrx root store
 ```
 
-### F1D — Theme palette ve dark mode altyapısı
+### F1D — Theme palette ve light/dark/system altyapısı
 
 Dosyalar:
 
@@ -1077,6 +1111,7 @@ Hedef:
 Coastal Blues renk paleti Tailwind theme içine eklenir.
 Tailwind darkMode: 'class' yapılır.
 Light/dark mode toggle çalışır.
+System mode prefers-color-scheme değerini canlı izler.
 Tema tercihi localStorage'da wordix-theme key'iyle saklanır.
 Componentlerde hard-coded hex kullanımına izin verilmez.
 ```
@@ -1084,7 +1119,7 @@ Componentlerde hard-coded hex kullanımına izin verilmez.
 Commit:
 
 ```text
-feat: add wordix theme palette and dark mode
+feat: add wordix theme palette and theme modes
 ```
 
 ## F2 — Clean Frontend Architecture iskeleti
@@ -1369,7 +1404,11 @@ lookup-result-card
 lookup-meaning-list
 provider-badge
 save-to-dictionary-button
+add-to-deck-button
+deck-selection-dialog
 ```
+
+Lookup Add to Deck birleşik akıştır: item dictionary'de değilse gerçek save endpointi çağrılır, oluşan `userLearningItemId` ile seçilen deck'e eklenir. Bütün anlamları kaydetme ürün hedefidir; mevcut `selectedMeaningId` sözleşmesi değişmeden sahte çoklu-meaning davranışı uygulanmaz.
 
 Commit:
 
@@ -1409,6 +1448,8 @@ Componentler:
 dictionary-card
 dictionary-filters
 progress-badge
+add-to-deck-button
+deck-selection-dialog
 ```
 
 Commit:
@@ -1425,6 +1466,9 @@ Kabul kriteri:
 Lookup sonucundan dictionary save yapılır.
 Duplicate save hatası düzgün gösterilir.
 Başarılı save sonrası dictionary state güncellenir.
+Lookup sonucundan Add to Deck için save-if-needed -> deck selection -> add item sırası uygulanır.
+Sentence save ayrı endpoint kullanır.
+Backend tek selectedMeaningId istiyorsa bütün anlamları kaydetme destekleniyormuş gibi gösterilmez.
 ```
 
 Commit:
@@ -1484,6 +1528,16 @@ feat: add deck api and state
 
 ### F9B — Deck list/detail UI
 
+Kapsam:
+
+```text
+Create deck
+List decks
+Open deck detail
+```
+
+Deck edit/delete backend endpointleri gelene kadar component, button veya Coming Soon UI olarak eklenmez.
+
 Commit:
 
 ```text
@@ -1491,6 +1545,8 @@ feat: add deck management pages
 ```
 
 ### F9C — Deck item management
+
+Dictionary ve Lookup akışlarından kullanıcı deck seçebilir. Add/remove işlemleri gerçek backend endpointleriyle yürütülür.
 
 Commit:
 
@@ -1529,6 +1585,8 @@ deckId optional
 includeSystemRecommendations
 ```
 
+`difficulty` backend request sözleşmesine eklenene kadar formda gösterilmez ve frontend modeline varsayımla eklenmez.
+
 Commit:
 
 ```text
@@ -1545,6 +1603,14 @@ multiple-choice-question
 writing-question
 question-progress
 answer-feedback
+```
+
+Kurallar:
+
+```text
+Frontend cevap doğruluğunu hesaplamaz; backend answer response gerçek referanstır.
+Aktif quiz içinde normal exit/cancel aksiyonu gösterilmez.
+Browser close sonrası unanswered soruların finalization davranışı backend desteği gelene kadar frontend tarafından taklit edilmez.
 ```
 
 Commit:
@@ -1732,7 +1798,7 @@ docs: add frontend final documentation
 
 | Faz | Durum | Kısa açıklama |
 |---|---|---|
-| F0 | Beklemede | Repo + docs |
+| F0 | Devam ediyor | F0A tamamlandı; F0B sırada |
 | F1 | Beklemede | Angular + Tailwind + NgRx |
 | F2 | Beklemede | Clean frontend architecture |
 | F3 | Beklemede | HTTP + API contract |
@@ -1767,11 +1833,12 @@ Silinen dosyalar:
 Build sonucu:
 Test sonucu:
 Backend endpoint doğrulaması:
+Ürün kararları / deferred backlog değişikliği:
 Sıradaki faz:
 Risk / dikkat edilmesi gerekenler:
 ```
 
-Kullanıcı bu raporu ChatGPT'ye gönderirse ChatGPT kaldığı fazı anlayıp yönlendirme yapacaktır.
+Her faz sonunda aynı bilgi `docs/phase-reports/<FAZ>.md` altında kısa bir rapor olarak saklanır. Kullanıcı bu raporu ChatGPT'ye gönderirse ChatGPT kaldığı fazı anlayıp yönlendirme yapacaktır.
 
 ---
 
@@ -1786,8 +1853,10 @@ Sadece F0A'yı yap:
 - README.md başlangıç içeriğini hazırla.
 - .gitignore hazırla.
 - Kod üretme.
-- Tema kararını not et: Coastal Blues palette, light mode ve dark mode zorunlu.
-- Auth kararını not et: tek Keycloak login, role based redirect; admin -> admin dashboard, basic_user -> user dashboard.
+- Tema kararını not et: Coastal Blues palette; light, dark ve system zorunlu.
+- Auth kararını not et: tek Keycloak authentication girişi ve registration aksiyonu; admin -> admin dashboard, basic_user -> user dashboard.
+- Production-first kararlarını docs/PRODUCT_DECISIONS.md içinde kaydet.
+- Backend desteği bekleyen işleri docs/DEFERRED_FEATURES.md içinde tut; uygulamada Coming Soon gösterme.
 - Bitince değişen dosyaları ve sonraki fazı raporla.
 ```
 
@@ -1807,9 +1876,10 @@ Feature-based modüler
 SOLID prensiplerine uygun
 Geliştirilebilir ama mevcut modülleri bozmayacak
 Responsive ve production'a hazırlanabilir
-Light/dark mode destekli
+Light/dark/system mode destekli
 Modern Coastal Blues tasarım sistemine sahip
 Admin ve basic user panelleri role göre ayrılmış
+Demo davranışlarından arındırılmış ve production-first
 ```
 
 bir web uygulaması geliştirmektir.
