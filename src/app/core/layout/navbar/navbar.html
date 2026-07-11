@@ -1,0 +1,25 @@
+<!-- Shell içeriği kayarken görünür kalan responsive üst başlık alanıdır. -->
+<header
+  class="sticky top-0 z-30 flex min-h-16 items-center gap-4 border-b border-wx-border bg-wx-surface/95 px-4 backdrop-blur-xl md:px-6"
+>
+  <!-- Mobil ekranda sidebar gizlendiği için Wordix marka kimliğini burada gösterir. -->
+  <div class="flex items-center gap-2 md:hidden" aria-label="Wordix">
+    <span
+      class="flex size-8 items-center justify-center rounded-xl bg-yale-blue-bright text-sm font-black text-white shadow-sm"
+      aria-hidden="true"
+    >
+      W
+    </span>
+    <span class="font-extrabold tracking-tight text-wx-text">Wordix</span>
+  </div>
+
+  <!-- Masaüstünde kullanıcının bulunduğu sayfa bağlamını açıklar. -->
+  <h1 class="hidden min-w-0 truncate text-lg font-bold text-wx-text md:block">
+    {{ pageTitle() }}
+  </h1>
+
+  <!-- Gerçek localStorage ve system preference akışına bağlı tema kontrolüdür. -->
+  <div class="ml-auto">
+    <wx-theme-toggle [theme]="theme()" (themeChange)="changeTheme($event)" />
+  </div>
+</header>

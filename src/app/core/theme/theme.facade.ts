@@ -1,3 +1,4 @@
+/** Exposes the core theme service through a small component-facing API. */
 import { Injectable, inject } from '@angular/core';
 
 import { WordixTheme } from './theme.models';

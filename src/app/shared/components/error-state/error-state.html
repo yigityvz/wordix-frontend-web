@@ -1,0 +1,25 @@
+<!-- Recoverable hata bilgisini alert semantiğiyle ve opsiyonel gerçek retry aksiyonuyla sunar. -->
+<section class="flex flex-col items-center justify-center px-6 py-16 text-center" role="alert">
+  <!-- Semantic error tokenı kullanan dekoratif işaret durumu görsel olarak ayırır. -->
+  <span
+    class="mb-4 flex size-16 items-center justify-center rounded-2xl bg-wx-error/10 text-2xl font-bold text-wx-error"
+    aria-hidden="true"
+  >
+    !
+  </span>
+
+  <!-- Güvenli hata başlığı kullanıcıya ne olduğunu bildirir. -->
+  <h2 class="text-lg font-bold text-wx-text">{{ title() }}</h2>
+
+  <!-- Opsiyonel açıklama yalnızca parent anlamlı mesaj verdiğinde gösterilir. -->
+  @if (description(); as detail) {
+    <p class="mt-2 max-w-md text-sm text-wx-text-muted">{{ detail }}</p>
+  }
+
+  <!-- Gerçek retry akışı bulunan ekranlar etiketi vererek aksiyonu aktif eder. -->
+  @if (retryLabel(); as label) {
+    <div class="mt-5">
+      <wx-button variant="secondary" (activated)="requestRetry()">{{ label }}</wx-button>
+    </div>
+  }
+</section>

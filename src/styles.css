@@ -1,3 +1,7 @@
+/*
+ * Wordix global tasarım tokenlarını ve temel stillerini tanımlar.
+ * Coastal Blues paletini merkezileştirerek componentlerin kendi renklerini üretmesini engeller.
+ */
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -126,6 +130,10 @@
   --color-wx-text-muted: var(--wx-text-muted);
   --color-wx-accent: var(--wx-accent);
   --color-wx-focus: var(--wx-focus);
+  --color-wx-success: var(--wx-success);
+  --color-wx-warning: var(--wx-warning);
+  --color-wx-error: var(--wx-error);
+  --color-wx-info: var(--wx-info);
 }
 
 :root {
@@ -140,6 +148,10 @@
   --wx-text-muted: #468faf;
   --wx-accent: #0277ca;
   --wx-focus: #2c7da0;
+  --wx-success: #059669;
+  --wx-warning: #d97706;
+  --wx-error: #dc2626;
+  --wx-info: #0277ca;
   color-scheme: light;
 }
 
@@ -155,6 +167,10 @@
   --wx-text-muted: #61a5c2;
   --wx-accent: #61a5c2;
   --wx-focus: #2c7da0;
+  --wx-success: #10b981;
+  --wx-warning: #f59e0b;
+  --wx-error: #f87171;
+  --wx-info: #61a5c2;
   color-scheme: dark;
 }
 

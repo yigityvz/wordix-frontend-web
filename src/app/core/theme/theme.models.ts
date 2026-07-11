@@ -1,3 +1,4 @@
+/** Defines canonical theme values and validation shared by the core theme infrastructure. */
 export type WordixTheme = 'light' | 'dark' | 'system';
 
 export type ResolvedWordixTheme = Exclude<WordixTheme, 'system'>;

@@ -1,0 +1,13 @@
+<!-- Parent tarafından verilen kısa etiketi semantic renk ve opsiyonel durum noktasıyla gösterir. -->
+<span
+  class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold"
+  [class]="variantClasses()"
+>
+  <!-- Dot yalnızca parent açtığında dekoratif durum işareti olarak gösterilir. -->
+  @if (dot()) {
+    <span class="size-1.5 rounded-full bg-current" aria-hidden="true"></span>
+  }
+
+  <!-- Generic badge metni business anlamını bilmeden render edilir. -->
+  <ng-content />
+</span>

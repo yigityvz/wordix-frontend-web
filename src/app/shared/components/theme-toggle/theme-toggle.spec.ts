@@ -1,3 +1,4 @@
+/** Verifies accessible rendering and emitted user intent for the shared theme selector. */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ThemeToggle } from './theme-toggle';

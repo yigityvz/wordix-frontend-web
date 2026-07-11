@@ -1,0 +1,11 @@
+<!-- Animasyon dekoratif tutulurken loading durumu role=status ile erişilebilir olarak duyurulur. -->
+<span class="inline-flex items-center gap-2 text-sm text-wx-text-muted" role="status">
+  <!-- Dönen halka semantic accent rengini kullanır ve screen reader tarafından atlanır. -->
+  <span
+    class="size-5 animate-spin rounded-full border-2 border-wx-border border-t-wx-accent"
+    aria-hidden="true"
+  ></span>
+
+  <!-- Parent tarafından verilen loading açıklaması sadece screen reader'a sunulur. -->
+  <span class="sr-only">{{ label() }}</span>
+</span>

@@ -1,0 +1,56 @@
+<!-- Yalnızca masaüstünde görünen ve izinli route listesini owning shell'den alan navigation alanıdır. -->
+<aside
+  class="relative hidden min-h-screen shrink-0 flex-col border-r border-wx-border bg-wx-surface/95 backdrop-blur-xl transition-[width] duration-200 md:flex"
+  [class.w-64]="!collapsed()"
+  [class.w-20]="collapsed()"
+>
+  <!-- Wordix logosu kompakt ve geniş sidebar modlarında ortak marka çapası sağlar. -->
+  <div class="flex min-h-16 items-center gap-3 border-b border-wx-border px-4">
+    <span
+      class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-yale-blue-bright text-sm font-black text-white shadow-sm"
+      aria-hidden="true"
+    >
+      W
+    </span>
+    <!-- Alan daraltıldığında metin gizlenerek icon alanı korunur. -->
+    @if (!collapsed()) {
+      <span class="truncate font-extrabold tracking-tight text-wx-text">Wordix</span>
+    }
+  </div>
+
+  <!-- Shell'in verdiği route kayıtları Angular Router linklerine dönüştürülür. -->
+  <nav class="flex-1 space-y-1 overflow-y-auto p-3" aria-label="Primary navigation">
+    <!-- Her route benzersiz path değeriyle izlenerek gereksiz DOM oluşturma önlenir. -->
+    @for (item of items(); track item.route) {
+      <a
+        class="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold text-wx-text-muted transition-colors hover:bg-wx-surface-muted hover:text-wx-text"
+        [routerLink]="item.route"
+        routerLinkActive="bg-yale-blue-bright text-white shadow-sm"
+        [routerLinkActiveOptions]="{ exact: false }"
+        [attr.title]="collapsed() ? item.label : null"
+      >
+        <span
+          class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-current/20 text-[10px] font-bold uppercase"
+          aria-hidden="true"
+        >
+          {{ item.shortLabel }}
+        </span>
+        <!-- Kompakt modda yalnızca kısa etiket, geniş modda okunabilir label gösterilir. -->
+        @if (!collapsed()) {
+          <span class="truncate">{{ item.label }}</span>
+        }
+      </a>
+    }
+  </nav>
+
+  <!-- Kullanıcıya sidebar genişliğini değiştiren gerçek local UI aksiyonu sunar. -->
+  <button
+    type="button"
+    class="absolute -right-3 top-20 flex size-7 items-center justify-center rounded-full border border-wx-border bg-wx-surface text-sm font-bold text-wx-text-muted shadow-sm transition hover:text-wx-text"
+    [attr.aria-label]="collapsed() ? 'Expand navigation' : 'Collapse navigation'"
+    [attr.aria-expanded]="!collapsed()"
+    (click)="toggleCollapsed()"
+  >
+    {{ collapsed() ? '›' : '‹' }}
+  </button>
+</aside>

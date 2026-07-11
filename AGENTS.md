@@ -80,7 +80,6 @@ wordix-api
 
 Frontend ileride Docker'a alınacaksa compose'a ayrıca `wordix-web` servisi eklenecektir.
 
-
 ## Figma ZIP Visual Reference
 
 This repository contains a Figma/Make generated React + Vite + Tailwind export under:
@@ -345,7 +344,6 @@ micro interaction hover/transition
 dark mode contrast kontrolü
 ```
 
-
 ---
 
 ## 2. Backend mimarisinden gelen kalıcı kurallar
@@ -414,7 +412,6 @@ PagedResult<T>
 
 Frontend HTTP katmanı bu response formatlarını merkezi yönetmelidir.
 
-
 ### 2.5 Authentication, registration ve role redirect davranışı
 
 Tek bir Keycloak authentication girişi olacaktır. Ayrı admin login ekranı yapılmayacaktır. Auth giriş yüzeyinde sign-in ve create-account aksiyonları bulunabilir; iki aksiyon da Keycloak akışını başlatır. Wordix API'ye credential gönderilmez.
@@ -471,7 +468,6 @@ core/layout/user-shell
 ```
 
 User ve admin shell ayrımı başlangıçtan itibaren korunmalıdır. Ortak primitive componentler paylaşılabilir; navigation ve business page componentleri paylaşılmaz.
-
 
 ---
 
@@ -930,6 +926,35 @@ Dependency Inversion: Component concrete HTTP service bilmez; facade kullanır.
 ---
 
 ## 9. Codex kullanım kuralları
+
+### 9.1 Dosya açıklama başlığı standardı
+
+Codex tarafından oluşturulan veya anlamlı biçimde değiştirilen her kaynak ve yapılandırma dosyası, dosya formatı yorum satırını destekliyorsa en üstte kısa bir açıklama taşımalıdır.
+
+Açıklama şunları belirtmelidir:
+
+```text
+Dosyanın temel sorumluluğu
+Neden ayrı bir dosya olarak bulunduğu
+Varsa hangi mimari katmana veya akışa hizmet ettiği
+```
+
+Kurallar:
+
+```text
+TypeScript ve JavaScript dosyaları /** ... */ dokümantasyon yorumu kullanır.
+CSS dosyaları /* ... */ yorumu kullanır.
+HTML template dosyaları <!-- ... --> yorumu kullanır.
+JSONC/yorum destekleyen config dosyaları // veya /* ... */ kullanabilir.
+Markdown dosyalarında ilk başlık ve giriş paragrafı dosyanın amacını açıklar.
+Strict JSON, lockfile, binary, generated output ve yorumun formatı bozacağı dosyalar bu kuralın istisnasıdır.
+Yorumlar implementationı tekrar etmez; sorumluluk ve oluşturulma nedenini kısa ve güncel tutar.
+Tüm açıklama yorumları Türkçe yazılır.
+Her fonksiyon/metot, input, output, signal, computed state ve önemli sabit kendi sorumluluğunu açıklayan yorum taşır.
+Koşul, döngü, state mutation, event ve browser/API etkileşimi gibi işlevsel kod bloklarının hemen üstünde neden yapıldığını açıklayan yorum bulunur.
+HTML template içindeki brand, navigation, content, action, loading, empty ve error gibi işlevsel UI blokları Türkçe HTML yorumlarıyla ayrılır.
+Yorum yoğunluğu kodu tekrar etmek yerine akışı adım adım anlaşılır kılmalıdır.
+```
 
 İlk prompt:
 
@@ -1796,26 +1821,26 @@ docs: add frontend final documentation
 
 ## 11. Faz takip tablosu
 
-| Faz | Durum | Kısa açıklama |
-|---|---|---|
-| F0 | Devam ediyor | F0A tamamlandı; F0B sırada |
-| F1 | Beklemede | Angular + Tailwind + NgRx |
-| F2 | Beklemede | Clean frontend architecture |
-| F3 | Beklemede | HTTP + API contract |
-| F4 | Beklemede | Keycloak auth |
-| F5 | Beklemede | Profile + dashboard |
-| F6 | Beklemede | Lookup |
-| F7 | Beklemede | Dictionary |
-| F8 | Beklemede | Notes/Flags |
-| F9 | Beklemede | Decks |
-| F10 | Beklemede | Quizzes |
-| F11 | Beklemede | Statistics |
-| F12 | Beklemede | Admin analytics |
-| F13 | Beklemede | UX hardening |
-| F14 | Beklemede | Responsive/a11y |
-| F15 | Beklemede | Tests |
-| F16 | Beklemede | Docker |
-| F17 | Beklemede | Final docs |
+| Faz | Durum        | Kısa açıklama               |
+| --- | ------------ | --------------------------- |
+| F0  | Devam ediyor | F0A tamamlandı; F0B sırada  |
+| F1  | Beklemede    | Angular + Tailwind + NgRx   |
+| F2  | Beklemede    | Clean frontend architecture |
+| F3  | Beklemede    | HTTP + API contract         |
+| F4  | Beklemede    | Keycloak auth               |
+| F5  | Beklemede    | Profile + dashboard         |
+| F6  | Beklemede    | Lookup                      |
+| F7  | Beklemede    | Dictionary                  |
+| F8  | Beklemede    | Notes/Flags                 |
+| F9  | Beklemede    | Decks                       |
+| F10 | Beklemede    | Quizzes                     |
+| F11 | Beklemede    | Statistics                  |
+| F12 | Beklemede    | Admin analytics             |
+| F13 | Beklemede    | UX hardening                |
+| F14 | Beklemede    | Responsive/a11y             |
+| F15 | Beklemede    | Tests                       |
+| F16 | Beklemede    | Docker                      |
+| F17 | Beklemede    | Final docs                  |
 
 ---
 
@@ -1839,6 +1864,8 @@ Risk / dikkat edilmesi gerekenler:
 ```
 
 Her faz sonunda aynı bilgi `docs/phase-reports/<FAZ>.md` altında kısa bir rapor olarak saklanır. Kullanıcı bu raporu ChatGPT'ye gönderirse ChatGPT kaldığı fazı anlayıp yönlendirme yapacaktır.
+
+Her faz raporu ayrıca `Bu faz proje için neden önemli?` başlığı taşır. Bu bölüm yalnızca yapılan işleri tekrar etmez; fazın sonraki mimari ve ürün adımlarına hangi temeli sağladığını açıklar.
 
 ---
 

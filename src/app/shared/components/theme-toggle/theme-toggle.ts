@@ -1,3 +1,7 @@
+/**
+ * Generic light/dark/system selector with no dependency on Wordix core state.
+ * Remains reusable by emitting user intent while its parent owns theme orchestration.
+ */
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 export type ThemeToggleValue = 'light' | 'dark' | 'system';

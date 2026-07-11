@@ -1,0 +1,25 @@
+<!-- Veri bulunmayan durumda açıklayıcı ve erişilebilir merkezi geri bildirim sunar. -->
+<section class="flex flex-col items-center justify-center px-6 py-16 text-center">
+  <!-- Dekoratif işaret empty durumun görsel olarak hızlı fark edilmesini sağlar. -->
+  <span
+    class="mb-4 flex size-16 items-center justify-center rounded-2xl bg-wx-surface-muted text-2xl text-wx-text-muted"
+    aria-hidden="true"
+  >
+    —
+  </span>
+
+  <!-- Zorunlu başlık empty durumun temel nedenini bildirir. -->
+  <h2 class="text-lg font-bold text-wx-text">{{ title() }}</h2>
+
+  <!-- Opsiyonel detay yalnızca parent anlamlı açıklama verdiğinde gösterilir. -->
+  @if (description(); as detail) {
+    <p class="mt-2 max-w-md text-sm text-wx-text-muted">{{ detail }}</p>
+  }
+
+  <!-- Backend veya route ile gerçekten bağlanabilen aksiyon varsa buton oluşturulur. -->
+  @if (actionLabel(); as label) {
+    <div class="mt-5">
+      <wx-button (activated)="requestAction()">{{ label }}</wx-button>
+    </div>
+  }
+</section>

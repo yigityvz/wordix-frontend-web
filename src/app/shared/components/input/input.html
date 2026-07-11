@@ -1,0 +1,30 @@
+<!-- Label, native input ve yardımcı mesajları tek erişilebilir form control yapısında birleştirir. -->
+<div class="grid gap-1.5">
+  <!-- Label for/id ilişkisiyle tıklama ve screen-reader erişimi sağlar. -->
+  <label class="text-sm font-semibold text-wx-text" [for]="inputId">{{ label() }}</label>
+
+  <!-- Controlled native input güncel değeri parenttan alır ve her değişikliği output olarak yayınlar. -->
+  <input
+    class="min-h-11 w-full rounded-xl border bg-wx-surface px-3 text-sm text-wx-text outline-none transition placeholder:text-wx-text-muted disabled:cursor-not-allowed disabled:opacity-50"
+    [class.border-wx-error]="errorText()"
+    [class.border-wx-border]="!errorText()"
+    [id]="inputId"
+    [value]="value()"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    [autocomplete]="autocomplete()"
+    [attr.aria-invalid]="!!errorText()"
+    [attr.aria-describedby]="describedBy()"
+    (input)="handleInput($event)"
+  />
+
+  <!-- Validation hatası helper metninden öncelikli ve alert semantiğiyle gösterilir. -->
+  @if (errorText(); as error) {
+    <p class="text-xs font-medium text-wx-error" [id]="inputId + '-error'" role="alert">
+      {{ error }}
+    </p>
+  } @else if (helperText(); as helper) {
+    <!-- Hata olmadığında kullanıcıya alanın beklenen kullanımı açıklanır. -->
+    <p class="text-xs text-wx-text-muted" [id]="inputId + '-helper'">{{ helper }}</p>
+  }
+</div>

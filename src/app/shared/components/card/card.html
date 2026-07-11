@@ -1,0 +1,10 @@
+<!-- Feature içeriğini semantic surface, border, radius ve shadow ile saran generic card alanıdır. -->
+<section
+  class="rounded-2xl border border-wx-border bg-wx-surface shadow-sm transition"
+  [class]="paddingClass()"
+  [class.hover:-translate-y-0.5]="hoverable()"
+  [class.hover:shadow-md]="hoverable()"
+>
+  <!-- Card business içeriğini bilmeden parent tarafından verilen markup'ı render eder. -->
+  <ng-content />
+</section>

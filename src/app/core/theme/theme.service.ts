@@ -1,3 +1,7 @@
+/**
+ * Owns browser theme persistence, system preference observation, and the html.dark class.
+ * Isolates browser APIs from components so theme behavior remains testable and consistent.
+ */
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { DestroyRef, Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 

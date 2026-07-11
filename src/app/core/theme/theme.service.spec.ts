@@ -1,3 +1,4 @@
+/** Tests persistence, explicit selection, and live system-theme behavior of ThemeService. */
 import { TestBed } from '@angular/core/testing';
 
 import { WORDIX_THEME_STORAGE_KEY } from './theme.models';

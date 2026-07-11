@@ -1,0 +1,44 @@
+<!-- Dialog yalnızca parent open stateini true verdiğinde DOM'a eklenir. -->
+@if (open()) {
+  <!-- Backdrop tıklaması opsiyonel close davranışına, panel tıklaması ise içeriğe ayrılır. -->
+  <div
+    class="fixed inset-0 z-50 flex items-end justify-center bg-deep-space-blue-100/70 p-4 backdrop-blur-sm sm:items-center"
+    (click)="handleBackdropClick()"
+  >
+    <!-- Role, aria-modal ve labelledby ilişkisi screen reader'a gerçek dialog semantiği sağlar. -->
+    <section
+      #dialogPanel
+      class="flex max-h-[calc(100dvh-2rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-wx-border bg-wx-surface shadow-2xl"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="wx-modal-title"
+      tabindex="-1"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- Dialog başlığı ve her zaman gerçek close eventi üreten kapatma butonu aynı headerda tutulur. -->
+      <header class="flex items-center justify-between gap-4 border-b border-wx-border px-5 py-4">
+        <h2 id="wx-modal-title" class="text-base font-bold text-wx-text">{{ title() }}</h2>
+
+        <!-- Icon-only buton erişilebilir isim taşır ve parent stateine kapanma niyeti bildirir. -->
+        <button
+          type="button"
+          class="flex size-9 items-center justify-center rounded-xl text-xl text-wx-text-muted transition hover:bg-wx-surface-muted hover:text-wx-text"
+          aria-label="Close dialog"
+          (click)="requestClose()"
+        >
+          ×
+        </button>
+      </header>
+
+      <!-- Parent tarafından verilen form veya bilgi içeriği kaydırılabilir dialog body içinde render edilir. -->
+      <div class="flex-1 overflow-y-auto px-5 py-4">
+        <ng-content select=":not([modal-actions])" />
+      </div>
+
+      <!-- Modal aksiyonları ayrı slot ile footer semantiğinde ve sağa hizalı sunulur. -->
+      <footer class="flex justify-end gap-3 border-t border-wx-border px-5 py-4">
+        <ng-content select="[modal-actions]" />
+      </footer>
+    </section>
+  </div>
+}

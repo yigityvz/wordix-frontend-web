@@ -1,3 +1,4 @@
+/** Verifies that the Wordix root component can be created by the Angular test environment. */
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 
