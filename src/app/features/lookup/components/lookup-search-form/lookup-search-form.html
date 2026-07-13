@@ -1,0 +1,43 @@
+<!-- İngilizce-Türkçe lookup metnini erişilebilir form semantiğiyle toplar. -->
+<form class="space-y-6" (submit)="submitSearch($event)">
+  <!-- Dil çifti backend requestinde kullanılan gerçek en/tr kodlarını kullanıcıya okunabilir gösterir. -->
+  <div class="flex flex-wrap items-center gap-2" aria-label="Lookup language direction">
+    <span
+      class="rounded-full border border-wx-border bg-wx-surface-muted px-3 py-1.5 text-xs font-bold text-wx-text-secondary"
+    >
+      English · EN
+    </span>
+    <span class="text-sm font-black text-wx-accent" aria-hidden="true">→</span>
+    <span
+      class="rounded-full border border-wx-border bg-wx-surface-muted px-3 py-1.5 text-xs font-bold text-wx-text-secondary"
+    >
+      Turkish · TR
+    </span>
+  </div>
+
+  <!-- Shared input label, helper ve validation error ilişkisini merkezi component üzerinden sağlar. -->
+  <wx-input
+    label="Word, phrase or sentence"
+    placeholder="Enter something you want to learn…"
+    helperText="Search in English to get Turkish meanings or sentence translations."
+    [value]="query()"
+    [errorText]="validationError()"
+    [disabled]="loading()"
+    (valueChange)="updateQuery($event)"
+  />
+
+  <!-- Search gerçek API akışına, clear ise yalnızca local/feature state temizliğine bağlıdır. -->
+  <div class="grid gap-3 pt-1 sm:grid-cols-[1fr_auto] [&>wx-button>button]:w-full">
+    <wx-button type="submit" size="lg" [loading]="loading()">
+      {{ loading() ? 'Searching…' : 'Search Wordix' }}
+    </wx-button>
+    <wx-button
+      variant="ghost"
+      size="lg"
+      [disabled]="loading() || !query()"
+      (activated)="clearSearch()"
+    >
+      Clear
+    </wx-button>
+  </div>
+</form>

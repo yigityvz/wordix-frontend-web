@@ -1,0 +1,112 @@
+<!-- Backend sonucundaki meaning veya sentence translation içeriklerini kayıpsız gösterir. -->
+<div class="space-y-5">
+  @if (meanings().length > 0) {
+    <!-- Her meaning kendi çeviri, tanım, örnek, tür ve provider metadata alanlarını taşır. -->
+    @for (meaning of meanings(); track meaning.meaningId; let index = $index) {
+      <article
+        class="rounded-2xl border bg-wx-surface-muted/60 p-4 transition sm:p-5"
+        [class.border-wx-accent]="selectable() && selectedMeaningId() === meaning.meaningId"
+        [class.border-wx-border]="!selectable() || selectedMeaningId() !== meaning.meaningId"
+      >
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0 flex-1">
+            <p class="text-xs font-bold uppercase tracking-wider text-wx-text-muted">
+              Meaning {{ index + 1 }}
+              @if (meaning.partOfSpeech) {
+                · {{ meaning.partOfSpeech }}
+              }
+            </p>
+            <h3 class="mt-1 text-lg font-extrabold text-wx-text">
+              {{ meaning.translation ?? meaning.definition ?? 'Meaning text unavailable' }}
+            </h3>
+          </div>
+          <wx-provider-badge
+            [sourceProvider]="meaning.sourceProvider"
+            [contentSource]="meaning.contentSource"
+          />
+        </div>
+
+        @if (selectable()) {
+          <!-- Backend tek selectedMeaningId desteklediği için kullanıcı açıkça bir anlam seçer. -->
+          <label
+            class="mt-4 inline-flex cursor-pointer items-center gap-2 text-sm font-bold text-wx-text-secondary"
+          >
+            <input
+              type="radio"
+              name="dictionary-meaning"
+              class="size-4 accent-yale-blue-bright"
+              [checked]="selectedMeaningId() === meaning.meaningId"
+              (change)="selectMeaning(meaning.meaningId)"
+            />
+            Save this meaning
+          </label>
+        }
+
+        @if (meaning.definition && meaning.definition !== meaning.translation) {
+          <p class="mt-3 text-sm leading-6 text-wx-text-secondary">{{ meaning.definition }}</p>
+        }
+
+        @if (meaning.exampleSentence) {
+          <blockquote
+            class="mt-3 border-l-2 border-wx-accent pl-3 text-sm italic leading-6 text-wx-text-muted"
+          >
+            {{ meaning.exampleSentence }}
+          </blockquote>
+        }
+      </article>
+    }
+  } @else if (sentenceTranslations().length > 0) {
+    <!-- Sentence translation sonuçları provider ve lisans metadata alanlarıyla gösterilir. -->
+    @for (
+      translation of sentenceTranslations();
+      track translation.sentenceTranslationId ?? $index
+    ) {
+      <article
+        class="rounded-2xl border bg-wx-surface-muted/60 p-4 transition sm:p-5"
+        [class.border-wx-accent]="
+          selectable() && selectedTranslationText() === translation.translatedText
+        "
+        [class.border-wx-border]="
+          !selectable() || selectedTranslationText() !== translation.translatedText
+        "
+      >
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0 flex-1">
+            <p class="text-xs font-bold uppercase tracking-wider text-wx-text-muted">
+              Turkish translation
+            </p>
+            <p class="mt-2 text-lg font-bold leading-7 text-wx-text">
+              {{ translation.translatedText ?? 'Translation text unavailable' }}
+            </p>
+          </div>
+          <wx-provider-badge [sourceProvider]="translation.sourceProvider" />
+        </div>
+        @if (translation.license) {
+          <p class="mt-3 text-xs text-wx-text-muted">License: {{ translation.license }}</p>
+        }
+        @if (selectable() && translation.translatedText) {
+          <!-- Sentence endpointi translatedText istediği için kullanıcı gerçek çeviriyi açıkça seçer. -->
+          <label
+            class="mt-4 inline-flex cursor-pointer items-center gap-2 text-sm font-bold text-wx-text-secondary"
+          >
+            <input
+              type="radio"
+              name="dictionary-sentence-translation"
+              class="size-4 accent-yale-blue-bright"
+              [checked]="selectedTranslationText() === translation.translatedText"
+              (change)="selectTranslation(translation.translatedText)"
+            />
+            Save this translation
+          </label>
+        }
+      </article>
+    }
+  } @else {
+    <!-- Backend başarı döndürüp içerik vermediğinde sahte anlam üretmeden durumu açıklar. -->
+    <div
+      class="rounded-2xl border border-dashed border-wx-border p-6 text-center text-sm text-wx-text-muted"
+    >
+      Wordix returned this item without meaning or translation content.
+    </div>
+  }
+</div>

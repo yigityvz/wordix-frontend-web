@@ -42,8 +42,8 @@ export class AuthEffects {
   readonly login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.signInRequested),
-      exhaustMap(() =>
-        from(this.keycloakService.login()).pipe(
+      exhaustMap(({ returnUrl }) =>
+        from(this.keycloakService.login(returnUrl)).pipe(
           mergeMap(() => []),
           catchError(() => of(AuthActions.redirectFailure({ message: 'Giriş ekranı açılamadı.' }))),
         ),
@@ -55,8 +55,8 @@ export class AuthEffects {
   readonly register$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.registrationRequested),
-      exhaustMap(() =>
-        from(this.keycloakService.register()).pipe(
+      exhaustMap(({ returnUrl }) =>
+        from(this.keycloakService.register(returnUrl)).pipe(
           mergeMap(() => []),
           catchError(() => of(AuthActions.redirectFailure({ message: 'Kayıt ekranı açılamadı.' }))),
         ),

@@ -1,0 +1,50 @@
+<!-- Dictionary itemını responsive, tema uyumlu ve mutation içermeyen kartta gösterir. -->
+<wx-card padding="none">
+  <article class="p-4 sm:p-5">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <!-- Ana içerik gerçek display text ve seçili anlam/çeviri alanlarından gelir. -->
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-center gap-2">
+          <h2 class="truncate text-base font-extrabold text-wx-text sm:text-lg">{{ title() }}</h2>
+          <wx-badge variant="info">{{ typeLabel() }}</wx-badge>
+          <wx-badge [variant]="statusVariant()">{{ statusLabel() }}</wx-badge>
+
+          @if (item().isDifficult) {
+            <wx-badge variant="warning">Difficult</wx-badge>
+          }
+
+          @if (item().isFavorite) {
+            <wx-badge variant="warning">Favorite</wx-badge>
+          }
+        </div>
+
+        <p class="mt-2 text-sm leading-6 text-wx-text-secondary">{{ meaningText() }}</p>
+
+        @if (partOfSpeech(); as speech) {
+          <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-wx-text-muted">
+            {{ speech }}
+          </p>
+        }
+      </div>
+
+      <!-- Confidence bar backend learning progress değerini değişiklik yapmadan gösterir. -->
+      <div class="sm:w-40">
+        <p class="mb-2 text-xs font-bold uppercase tracking-wide text-wx-text-muted">Confidence</p>
+        <wx-dictionary-progress-badge [value]="item().learningConfidenceScore" />
+      </div>
+    </div>
+
+    <!-- İkincil metadata kullanıcıya kayıt zamanı, dil ve not sayısını açıklar. -->
+    <footer
+      class="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-wx-border pt-3 text-xs text-wx-text-muted"
+    >
+      <span>Saved {{ item().savedAt | date: 'mediumDate' }}</span>
+      @if (item().sourceLanguageCode; as language) {
+        <span class="uppercase">{{ language }}</span>
+      }
+      @if (item().noteCount > 0) {
+        <span>{{ item().noteCount }} {{ item().noteCount === 1 ? 'note' : 'notes' }}</span>
+      }
+    </footer>
+  </article>
+</wx-card>

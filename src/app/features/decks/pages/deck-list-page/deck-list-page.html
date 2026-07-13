@@ -1,0 +1,99 @@
+<!-- Gerçek deck collection lifecycle, local arama ve create mutationını responsive sayfada birleştirir. -->
+<div class="mx-auto max-w-6xl space-y-6">
+  <!-- Header yalnızca backend create endpointine bağlı gerçek New Deck aksiyonunu sunar. -->
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-sm font-bold uppercase tracking-[0.18em] text-wx-accent">
+        Learning collections
+      </p>
+      <h1 class="mt-2 text-3xl font-black tracking-tight text-wx-text sm:text-4xl">Decks</h1>
+      <p class="mt-2 text-sm text-wx-text-muted">
+        {{ totalCount() }} {{ totalCount() === 1 ? 'deck' : 'decks' }}
+      </p>
+    </div>
+    <wx-button (activated)="openCreateDialog()">New deck</wx-button>
+  </header>
+
+  @if (isLoading() && decks().length === 0) {
+    <!-- İlk yükleme yalnızca gerçek collection requesti sürerken gösterilir. -->
+    <wx-card padding="lg">
+      <div class="flex min-h-52 flex-col items-center justify-center gap-4 text-center">
+        <span
+          class="flex size-14 items-center justify-center rounded-2xl bg-wx-surface-muted text-xl font-black text-wx-accent"
+          aria-hidden="true"
+          >D</span
+        >
+        <div>
+          <p class="font-bold text-wx-text">Loading your decks</p>
+          <p class="mt-1 text-sm text-wx-text-muted">Fetching your learning collections…</p>
+        </div>
+        <wx-spinner label="Loading decks" />
+      </div>
+    </wx-card>
+  } @else if (error(); as errorMessage) {
+    <!-- Collection hatası merkezi normalize mesaj ve gerçek retry intentiyle gösterilir. -->
+    <wx-card padding="none">
+      <wx-error-state
+        title="Decks could not be loaded"
+        [description]="errorMessage"
+        retryLabel="Try again"
+        (retry)="retryCollection()"
+      />
+    </wx-card>
+  } @else if (decks().length === 0) {
+    <!-- Backend collection gerçekten boşsa create endpointine bağlı aksiyon sunulur. -->
+    <wx-card padding="none">
+      <wx-empty-state
+        title="No decks yet"
+        description="Create a deck to organize your dictionary items into focused collections."
+        actionLabel="Create your first deck"
+        (action)="openCreateDialog()"
+      />
+    </wx-card>
+  } @else {
+    <!-- Search yalnızca gerçek GET sonucunu local olarak filtreler. -->
+    <div class="max-w-md">
+      <label for="deck-search" class="sr-only">Search decks</label>
+      <input
+        id="deck-search"
+        type="search"
+        class="min-h-11 w-full rounded-xl border border-wx-border bg-wx-surface px-4 text-sm text-wx-text shadow-sm outline-none transition placeholder:text-wx-text-muted focus:border-wx-accent focus:ring-2 focus:ring-wx-accent/20"
+        placeholder="Search decks…"
+        [value]="query()"
+        (input)="updateQuery($any($event.target).value)"
+      />
+    </div>
+
+    @if (visibleDecks().length === 0) {
+      <!-- Local arama sonucu boşsa backend collection boşmuş gibi gösterilmez. -->
+      <wx-card padding="none">
+        <wx-empty-state
+          title="No matching decks"
+          description="Try another deck name or description."
+        />
+      </wx-card>
+    } @else {
+      <!-- Deck kartları yalnızca gerçek backend summary kayıtlarından üretilir. -->
+      <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-3" aria-label="Decks">
+        @for (deck of visibleDecks(); track deck.deckId) {
+          <a
+            class="block rounded-2xl focus-visible:outline-offset-4"
+            [routerLink]="['/decks', deck.deckId]"
+            [attr.aria-label]="'Open ' + (deck.name || 'deck')"
+          >
+            <wx-deck-card [deck]="deck" />
+          </a>
+        }
+      </section>
+    }
+  }
+
+  <!-- Create dialog yalnızca gerçek create NgRx lifecycle durumlarıyla çalışır. -->
+  <wx-create-deck-dialog
+    [open]="createDialogOpen()"
+    [loading]="isCreating()"
+    [error]="createError()"
+    (closed)="closeCreateDialog()"
+    (createRequested)="createDeck($event)"
+  />
+</div>

@@ -1,0 +1,52 @@
+<!-- Authorization Code + PKCE dönüşü işlenirken gerçek auth/profile durumlarını gösterir. -->
+<main class="flex min-h-dvh items-center justify-center bg-wx-bg px-4 py-10 text-wx-text">
+  <wx-card padding="lg">
+    <div class="w-full max-w-md text-center">
+      @if (authStatus() === 'error') {
+        <!-- Keycloak initialization hatası gerçek retry aksiyonuyla gösterilir. -->
+        <wx-error-state
+          title="Sign-in could not be completed"
+          [description]="authError() ?? 'Wordix Identity could not be reached.'"
+          retryLabel="Try again"
+          (retry)="retryAuthentication()"
+        />
+      } @else if (authStatus() === 'unauthenticated') {
+        <!-- Callback geçerli oturum üretmediyse korumalı içeriğe geçiş yapılmaz. -->
+        <div class="space-y-5 px-4 py-10" role="alert">
+          <div
+            class="mx-auto flex size-14 items-center justify-center rounded-2xl bg-wx-surface-muted text-xl font-black text-wx-accent"
+          >
+            W
+          </div>
+          <div>
+            <h1 class="text-xl font-black">No active session</h1>
+            <p class="mt-2 text-sm text-wx-text-muted">Return to the sign-in page to continue.</p>
+          </div>
+          <wx-button (activated)="goToLogin()">Back to sign in</wx-button>
+        </div>
+      } @else if (profileError(); as errorMessage) {
+        <!-- Backend profile hatası sahte rol fallbacki olmadan kullanıcıya sunulur. -->
+        <wx-error-state
+          title="Your account could not be loaded"
+          [description]="errorMessage"
+          retryLabel="Try again"
+          (retry)="retryProfile()"
+        />
+      } @else {
+        <!-- Auth ve profile lifecycle tamamlanana kadar erişilebilir gerçek loading durumu gösterilir. -->
+        <div class="flex min-h-60 flex-col items-center justify-center gap-5 px-8">
+          <div
+            class="flex size-16 items-center justify-center rounded-2xl bg-yale-blue-bright text-2xl font-black text-white shadow-lg shadow-yale-blue-bright/20"
+          >
+            W
+          </div>
+          <div>
+            <h1 class="text-xl font-black">Securing your workspace</h1>
+            <p class="mt-2 text-sm text-wx-text-muted">Verifying your account and permissions.</p>
+          </div>
+          <wx-spinner label="Verifying your Wordix account" />
+        </div>
+      }
+    </div>
+  </wx-card>
+</main>

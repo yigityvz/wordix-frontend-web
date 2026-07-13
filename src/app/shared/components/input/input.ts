@@ -9,6 +9,7 @@ let inputSequence = 0;
 
 @Component({
   selector: 'wx-input',
+  host: { class: 'block' },
   templateUrl: './input.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

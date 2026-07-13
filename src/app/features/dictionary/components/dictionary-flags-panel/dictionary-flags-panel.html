@@ -1,0 +1,107 @@
+<!-- Favorite ve Difficult backend flag durumlarını erişilebilir toggle kartlarıyla sunar. -->
+<wx-card padding="lg">
+  <section aria-labelledby="dictionary-flags-title">
+    <header>
+      <p class="text-xs font-black uppercase tracking-[0.18em] text-wx-accent">Learning signals</p>
+      <h2 id="dictionary-flags-title" class="mt-1 text-xl font-black text-wx-text">
+        Personal flags
+      </h2>
+      <p class="mt-1 text-sm text-wx-text-muted">
+        Mark this item for quick access or focused practice.
+      </p>
+    </header>
+
+    @if (loading()) {
+      <!-- Spinner yalnızca gerçek GET flags requesti sürerken gösterilir. -->
+      <div class="flex min-h-32 items-center justify-center">
+        <wx-spinner label="Loading personal flags" />
+      </div>
+    } @else if (error(); as errorMessage) {
+      <!-- Flags collection hatası detail içeriğini kapatmadan gerçek retry aksiyonu sunar. -->
+      <div class="mt-4 rounded-xl border border-wx-error/30 bg-wx-error/10 p-4" role="alert">
+        <p class="font-bold text-wx-error">Personal flags could not be loaded</p>
+        <p class="mt-1 text-sm text-wx-text-secondary">{{ errorMessage }}</p>
+        <div class="mt-3">
+          <wx-button variant="secondary" size="sm" (activated)="reload.emit()">Try again</wx-button>
+        </div>
+      </div>
+    } @else {
+      <!-- Native aria-pressed butonlar mevcut backend durumunu ve toggle semantiğini erişilebilir kılar. -->
+      <div class="mt-4 grid gap-3 sm:grid-cols-2">
+        <button
+          type="button"
+          class="group flex min-h-28 items-center gap-4 rounded-2xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wx-accent focus-visible:ring-offset-2 focus-visible:ring-offset-wx-surface disabled:cursor-wait disabled:opacity-60"
+          [class]="
+            favorite() ? 'border-wx-accent bg-wx-accent/10' : 'border-wx-border bg-wx-surface-muted'
+          "
+          [attr.aria-pressed]="favorite()"
+          [disabled]="mutating()"
+          (click)="toggleFavorite()"
+        >
+          <span
+            class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-wx-surface text-xl text-wx-accent shadow-sm"
+            aria-hidden="true"
+          >
+            ★
+          </span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-black text-wx-text">Favorite</span>
+            <span class="mt-1 block text-xs leading-5 text-wx-text-muted">
+              {{ favorite() ? 'Saved to your favorites' : 'Add to your favorites' }}
+            </span>
+          </span>
+          @if (mutatingFlagType() === 'Favorite') {
+            <wx-spinner label="Updating favorite flag" />
+          } @else {
+            <span class="text-lg font-black text-wx-accent" aria-hidden="true">
+              {{ favorite() ? '✓' : '+' }}
+            </span>
+          }
+        </button>
+
+        <button
+          type="button"
+          class="group flex min-h-28 items-center gap-4 rounded-2xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wx-accent focus-visible:ring-offset-2 focus-visible:ring-offset-wx-surface disabled:cursor-wait disabled:opacity-60"
+          [class]="
+            difficult()
+              ? 'border-wx-warning bg-wx-warning/10'
+              : 'border-wx-border bg-wx-surface-muted'
+          "
+          [attr.aria-pressed]="difficult()"
+          [disabled]="mutating()"
+          (click)="toggleDifficult()"
+        >
+          <span
+            class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-wx-surface text-xl text-wx-warning shadow-sm"
+            aria-hidden="true"
+          >
+            !
+          </span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-black text-wx-text">Difficult</span>
+            <span class="mt-1 block text-xs leading-5 text-wx-text-muted">
+              {{ difficult() ? 'Included in focused practice' : 'Mark for focused practice' }}
+            </span>
+          </span>
+          @if (mutatingFlagType() === 'Difficult') {
+            <wx-spinner label="Updating difficult flag" />
+          } @else {
+            <span class="text-lg font-black text-wx-warning" aria-hidden="true">
+              {{ difficult() ? '✓' : '+' }}
+            </span>
+          }
+        </button>
+      </div>
+
+      @if (mutationError(); as mutationErrorMessage) {
+        <!-- Mutation hatası optimistic state uygulamadan gerçek backend mesajını gösterir. -->
+        <p
+          class="mt-4 rounded-lg bg-wx-error/10 p-3 text-sm font-semibold text-wx-error"
+          role="alert"
+        >
+          {{ mutationErrorMessage }}
+        </p>
+      }
+    }
+  </section>
+</wx-card>

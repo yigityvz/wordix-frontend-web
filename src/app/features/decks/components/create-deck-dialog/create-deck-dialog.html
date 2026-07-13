@@ -1,0 +1,62 @@
+<!-- Create dialogu backend mutation lifecycle ve erişilebilir form alanlarıyla birleştirir. -->
+<wx-modal
+  [open]="open()"
+  title="Create new deck"
+  [closeOnBackdrop]="!loading()"
+  (closed)="requestClose()"
+>
+  <div class="space-y-4">
+    <!-- Name alanı backend create requestinin zorunlu kullanıcı girdisidir. -->
+    <div>
+      <label for="deck-name" class="block text-sm font-bold text-wx-text">Deck name</label>
+      <input
+        id="deck-name"
+        type="text"
+        class="mt-2 min-h-11 w-full rounded-xl border border-wx-border bg-wx-surface-muted px-3 text-sm text-wx-text outline-none transition placeholder:text-wx-text-muted focus:border-wx-accent focus:ring-2 focus:ring-wx-accent/20 disabled:cursor-wait disabled:opacity-60"
+        placeholder="e.g. Career and business"
+        autocomplete="off"
+        [formControl]="nameControl"
+        [readOnly]="loading()"
+        [attr.aria-invalid]="nameControl.invalid && nameControl.touched"
+        aria-describedby="deck-name-helper"
+      />
+      <p id="deck-name-helper" class="mt-1.5 text-xs text-wx-text-muted">
+        Choose a short name that describes this collection.
+      </p>
+      @if (nameControl.invalid && nameControl.touched) {
+        <p class="mt-1.5 text-sm font-semibold text-wx-error" role="alert">
+          Enter a deck name before creating it.
+        </p>
+      }
+    </div>
+
+    <!-- Description Swagger sözleşmesinde nullable olduğu için opsiyonel tutulur. -->
+    <div>
+      <label for="deck-description" class="block text-sm font-bold text-wx-text">
+        Description <span class="font-medium text-wx-text-muted">(optional)</span>
+      </label>
+      <textarea
+        id="deck-description"
+        rows="4"
+        class="mt-2 w-full resize-y rounded-xl border border-wx-border bg-wx-surface-muted px-3 py-2 text-sm text-wx-text outline-none transition placeholder:text-wx-text-muted focus:border-wx-accent focus:ring-2 focus:ring-wx-accent/20 disabled:cursor-wait disabled:opacity-60"
+        placeholder="What do you want to practice with this deck?"
+        [formControl]="descriptionControl"
+        [readOnly]="loading()"
+      ></textarea>
+    </div>
+
+    @if (error(); as errorMessage) {
+      <!-- Backend validation veya business hatası teknik detay sızdırmadan formda gösterilir. -->
+      <p class="rounded-lg bg-wx-error/10 p-3 text-sm font-semibold text-wx-error" role="alert">
+        {{ errorMessage }}
+      </p>
+    }
+  </div>
+
+  <div modal-actions>
+    <wx-button variant="ghost" [disabled]="loading()" (activated)="requestClose()">
+      Cancel
+    </wx-button>
+    <wx-button [loading]="loading()" (activated)="submit()">Create deck</wx-button>
+  </div>
+</wx-modal>

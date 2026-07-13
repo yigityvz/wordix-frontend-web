@@ -1,0 +1,20 @@
+<!-- Tanınan Wordix rolü olmayan hesabın korumalı alanlara erişemediğini açıklar. -->
+<main class="flex min-h-dvh items-center justify-center bg-wx-bg px-4 py-10 text-wx-text">
+  <wx-card padding="lg">
+    <section class="max-w-md py-8 text-center" role="alert">
+      <span
+        class="mx-auto flex size-16 items-center justify-center rounded-2xl bg-wx-error/10 text-2xl font-black text-wx-error"
+        aria-hidden="true"
+        >!</span
+      >
+      <h1 class="mt-5 text-2xl font-black">Access unavailable</h1>
+      <p class="mt-3 text-sm leading-6 text-wx-text-muted">
+        Your account does not have a Wordix application role. Contact an administrator if you
+        believe this is a mistake.
+      </p>
+      <div class="mt-6">
+        <wx-button variant="secondary" (activated)="signOut()">Sign out</wx-button>
+      </div>
+    </section>
+  </wx-card>
+</main>

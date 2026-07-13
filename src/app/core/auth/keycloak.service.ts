@@ -5,6 +5,7 @@ import Keycloak from 'keycloak-js';
 import { Observable, Subject } from 'rxjs';
 
 import { AppConfigService } from '../config/app-config.service';
+import { AuthNavigationService } from './auth-navigation.service';
 import { AuthUser, WordixRole, WORDIX_ROLES } from './auth.models';
 
 /** Testlerde adapter'ı değiştirebilmek ve client üretimini tek noktada tutmak için kullanılan DI tokenıdır. */
@@ -32,6 +33,9 @@ export class KeycloakService {
   /** Deploy base href değerine uygun redirect adresini üretmek için browser documentini kullanır. */
   private readonly document = inject(DOCUMENT);
 
+  /** Login öncesindeki güvenli uygulama içi dönüş adresini oturum boyunca korur. */
+  private readonly authNavigationService = inject(AuthNavigationService);
+
   /** Adapter callbacklerinden gelen oturum değişimlerini NgRx effect katmanına taşır. */
   private readonly sessionChangesSubject = new Subject<AuthUser | null>();
 
@@ -58,18 +62,20 @@ export class KeycloakService {
   }
 
   /** Kullanıcıyı tek Keycloak sign-in ekranına yönlendirir. */
-  login(): Promise<void> {
-    return this.client.login({ redirectUri: this.getRedirectUri() });
+  login(returnUrl: string | null = null): Promise<void> {
+    this.authNavigationService.rememberReturnUrl(returnUrl);
+    return this.client.login({ redirectUri: this.getAuthCallbackRedirectUri() });
   }
 
   /** Kullanıcıyı aynı public client üzerinden Keycloak registration akışına yönlendirir. */
-  register(): Promise<void> {
-    return this.client.register({ redirectUri: this.getRedirectUri() });
+  register(returnUrl: string | null = null): Promise<void> {
+    this.authNavigationService.rememberReturnUrl(returnUrl);
+    return this.client.register({ redirectUri: this.getAuthCallbackRedirectUri() });
   }
 
   /** Keycloak oturumunu sonlandırır ve kullanıcıyı uygulama giriş adresine döndürür. */
   logout(): Promise<void> {
-    return this.client.logout({ redirectUri: this.getRedirectUri() });
+    return this.client.logout({ redirectUri: this.getApplicationRootRedirectUri() });
   }
 
   /** F4B bearer interceptor için geçerli veya yenilenmiş access token sağlar. */
@@ -153,8 +159,13 @@ export class KeycloakService {
   }
 
   /** Uygulamanın base href değerini koruyan güvenli login/logout dönüş adresini üretir. */
-  private getRedirectUri(): string {
+  private getApplicationRootRedirectUri(): string {
     return new URL('.', this.document.baseURI).toString();
+  }
+
+  /** Authorization Code + PKCE sonucunun işlendiği gerçek Angular callback adresini üretir. */
+  private getAuthCallbackRedirectUri(): string {
+    return new URL('auth/callback', this.getApplicationRootRedirectUri()).toString();
   }
 }
 

@@ -1,0 +1,134 @@
+<!-- Detail lifecycle ve gerçek item panellerini responsive sayfa düzeninde birleştirir. -->
+<div class="mx-auto max-w-4xl space-y-5">
+  <!-- Back aksiyonu her durumda çalışan canonical dictionary route'una döner. -->
+  <a
+    routerLink="/dictionary"
+    class="inline-flex min-h-10 items-center gap-2 rounded-lg px-2 text-sm font-bold text-wx-accent transition hover:bg-wx-surface-muted"
+  >
+    <span aria-hidden="true">←</span>
+    Back to Dictionary
+  </a>
+
+  @if (routeError(); as routeErrorMessage) {
+    <!-- Geçersiz UUID için backend requesti üretmeden güvenli hata gösterilir. -->
+    <wx-card padding="none">
+      <wx-error-state title="Invalid dictionary item" [description]="routeErrorMessage" />
+    </wx-card>
+  } @else if (isLoading()) {
+    <!-- Loading görünümü yalnızca gerçek GET detail requesti sürerken gösterilir. -->
+    <wx-card padding="lg">
+      <div class="flex min-h-56 flex-col items-center justify-center gap-4 text-center">
+        <span
+          class="flex size-14 items-center justify-center rounded-2xl bg-wx-surface-muted text-xl font-black text-wx-accent"
+          aria-hidden="true"
+          >Aa</span
+        >
+        <div>
+          <p class="font-bold text-wx-text">Loading dictionary item</p>
+          <p class="mt-1 text-sm text-wx-text-muted">Fetching its selected content and progress…</p>
+        </div>
+        <wx-spinner label="Loading dictionary item" />
+      </div>
+    </wx-card>
+  } @else if (error(); as errorMessage) {
+    <!-- 400/403/404/500 ve network hataları gerçek retry intentiyle gösterilir. -->
+    <wx-card padding="none">
+      <wx-error-state
+        title="Dictionary item could not be loaded"
+        [description]="errorMessage"
+        retryLabel="Try again"
+        (retry)="retryDetail()"
+      />
+    </wx-card>
+  } @else if (item(); as dictionaryItem) {
+    <!-- Hero backend detail alanlarını mutation veya sahte aksiyon eklemeden özetler. -->
+    <wx-card padding="lg">
+      <header>
+        <div class="flex flex-wrap items-center gap-2">
+          <wx-badge variant="info">{{ dictionaryItem.itemType ?? 'Item' }}</wx-badge>
+          <wx-badge variant="neutral">{{ dictionaryItem.learningStatus ?? 'Saved' }}</wx-badge>
+          @if (dictionaryItem.isFavorite) {
+            <wx-badge variant="warning">Favorite</wx-badge>
+          }
+          @if (dictionaryItem.isDifficult) {
+            <wx-badge variant="warning">Difficult</wx-badge>
+          }
+        </div>
+
+        <h1 class="mt-4 break-words text-3xl font-black tracking-tight text-wx-text sm:text-5xl">
+          {{ title() }}
+        </h1>
+
+        <!-- Metadata yalnızca backend detail responseundaki güvenli alanlardan oluşturulur. -->
+        <div
+          class="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-wx-border pt-4 text-xs font-semibold text-wx-text-muted"
+        >
+          <span>Saved {{ dictionaryItem.savedAt | date: 'mediumDate' }}</span>
+          @if (dictionaryItem.sourceLanguageCode; as language) {
+            <span class="uppercase">Source: {{ language }}</span>
+          }
+          <span>
+            {{ dictionaryItem.noteCount }}
+            {{ dictionaryItem.noteCount === 1 ? 'note' : 'notes' }}
+          </span>
+          <span>{{ dictionaryItem.isActive ? 'Active item' : 'Inactive item' }}</span>
+        </div>
+
+        <!-- Dictionary item yalnızca gerçek deck collection ve add endpoint akışına bağlanır. -->
+        <div class="mt-5">
+          <wx-button variant="secondary" (activated)="openDeckDialog()">Add to Deck</wx-button>
+        </div>
+      </header>
+    </wx-card>
+
+    <!-- Content ve progress panelleri geniş ekranda dengeli grid, mobilde tek kolon kullanır. -->
+    <div class="grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,0.75fr)]">
+      <wx-dictionary-meaning-panel [item]="dictionaryItem" />
+      <wx-learning-progress-panel [item]="dictionaryItem" />
+    </div>
+
+    <!-- Favorite ve Difficult kontrolleri yalnızca gerçek flags endpoint lifecyclelarıyla çalışır. -->
+    <wx-dictionary-flags-panel
+      [favorite]="hasFavoriteFlag()"
+      [difficult]="hasDifficultFlag()"
+      [loading]="areFlagsLoading()"
+      [error]="flagsError()"
+      [mutating]="isFlagMutating()"
+      [mutatingFlagType]="mutatingFlagType()"
+      [mutationError]="flagMutationError()"
+      (reload)="retryFlags()"
+      (toggleRequested)="toggleFlag($event)"
+      (mutationResetRequested)="clearFlagMutationState()"
+    />
+
+    <!-- Notes paneli yalnızca gerçek API lifecycle ve mutation intentleriyle çalışır. -->
+    <wx-dictionary-notes-panel
+      [notes]="notes()"
+      [loading]="areNotesLoading()"
+      [error]="notesError()"
+      [mutationStatus]="noteMutationStatus()"
+      [mutationError]="noteMutationError()"
+      (reload)="retryNotes()"
+      (createRequested)="createNote($event)"
+      (updateRequested)="updateNote($event)"
+      (deleteRequested)="deleteNote($event)"
+      (mutationResetRequested)="clearNoteMutationState()"
+    />
+  }
+</div>
+
+<!-- Seçim dialogu authenticated kullanıcının gerçek deck listesini ve mutation hatalarını sunar. -->
+<wx-option-selection-dialog
+  [open]="isDeckDialogOpen()"
+  title="Add dictionary item to a deck"
+  [options]="deckOptions()"
+  [loading]="areDecksLoading()"
+  [error]="deckCollectionError()"
+  [mutationLoading]="isAddingToDeck()"
+  [mutationError]="addToDeckError()"
+  emptyDescription="Create a deck from the Decks page before adding this item."
+  confirmLabel="Add to deck"
+  (closed)="closeDeckDialog()"
+  (reload)="reloadDecks()"
+  (confirmed)="addToDeck($event)"
+/>

@@ -1,0 +1,48 @@
+<!-- Arama, sıralama ve filtre chiplerini responsive tek kontrol grubu içinde sunar. -->
+<section aria-label="Dictionary controls" class="space-y-4">
+  <!-- Search ve sort dar ekranda alt alta, geniş ekranda aynı satırda çalışır. -->
+  <div class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_13rem] sm:items-end">
+    <wx-input
+      label="Search dictionary"
+      placeholder="Search saved words and meanings…"
+      autocomplete="off"
+      [value]="query()"
+      (valueChange)="updateQuery($event)"
+    />
+
+    <label class="grid gap-1.5 text-sm font-semibold text-wx-text">
+      Sort by
+      <select
+        class="min-h-11 rounded-xl border border-wx-border bg-wx-surface px-3 text-sm font-semibold text-wx-text outline-none transition focus:border-wx-focus"
+        [value]="sort()"
+        (change)="updateSort($event)"
+      >
+        <option value="recent">Recently added</option>
+        <option value="confidence">Lowest confidence</option>
+        <option value="alphabetical">A to Z</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- Filter chipleri gerçek koleksiyon sayılarıyla ve erişilebilir pressed state ile gösterilir. -->
+  <div class="flex flex-wrap gap-2" aria-label="Filter dictionary items">
+    @for (option of filterOptions(); track option.value) {
+      <button
+        type="button"
+        class="inline-flex min-h-9 items-center gap-2 rounded-full border px-3 text-xs font-bold transition active:scale-[0.98]"
+        [class.border-transparent]="filter() === option.value"
+        [class.bg-yale-blue-bright]="filter() === option.value"
+        [class.text-white]="filter() === option.value"
+        [class.border-wx-border]="filter() !== option.value"
+        [class.bg-wx-surface]="filter() !== option.value"
+        [class.text-wx-text-secondary]="filter() !== option.value"
+        [class.hover:bg-wx-surface-muted]="filter() !== option.value"
+        [attr.aria-pressed]="filter() === option.value"
+        (click)="selectFilter(option.value)"
+      >
+        {{ option.label }}
+        <span class="tabular-nums opacity-70">{{ option.count }}</span>
+      </button>
+    }
+  </div>
+</section>

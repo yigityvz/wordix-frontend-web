@@ -1,0 +1,121 @@
+<!-- Settings contains only preferences that are fully supported by the production application. -->
+<div class="mx-auto max-w-4xl space-y-6">
+  <header>
+    <p class="text-xs font-extrabold uppercase tracking-[0.2em] text-wx-accent">Preferences</p>
+    <h2 class="mt-2 text-3xl font-black tracking-tight text-wx-text sm:text-4xl">Settings</h2>
+    <p class="mt-2 max-w-2xl text-sm leading-6 text-wx-text-muted sm:text-base">
+      Personalize how Wordix looks on this browser. Your choice is applied immediately.
+    </p>
+  </header>
+
+  <!-- Appearance is browser-local and backed by the existing ThemeService storage contract. -->
+  <section
+    class="rounded-3xl border border-wx-border bg-wx-surface p-5 shadow-sm sm:p-7"
+    aria-labelledby="appearance-heading"
+  >
+    <div
+      class="flex flex-col gap-2 border-b border-wx-border pb-5 sm:flex-row sm:items-end sm:justify-between"
+    >
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-wx-text-muted">Appearance</p>
+        <h3 id="appearance-heading" class="mt-1 text-xl font-extrabold text-wx-text">
+          Choose your theme
+        </h3>
+      </div>
+      <p class="text-sm text-wx-text-muted">
+        Active view: <span class="font-bold capitalize text-wx-text">{{ resolvedTheme() }}</span>
+      </p>
+    </div>
+
+    <div class="mt-6 grid gap-5 md:grid-cols-3" role="group" aria-label="Theme preference">
+      @for (option of themeOptions; track option.value) {
+        <button
+          type="button"
+          class="group relative min-h-44 rounded-2xl border bg-wx-surface-muted p-5 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wx-accent focus-visible:ring-offset-2 focus-visible:ring-offset-wx-background"
+          [class.border-wx-accent]="selectedTheme() === option.value"
+          [class.shadow-md]="selectedTheme() === option.value"
+          [class.border-wx-border]="selectedTheme() !== option.value"
+          [class.hover:-translate-y-0.5]="selectedTheme() !== option.value"
+          [class.hover:border-wx-accent]="selectedTheme() !== option.value"
+          [attr.aria-pressed]="selectedTheme() === option.value"
+          (click)="selectTheme(option.value)"
+        >
+          <span class="flex items-start justify-between gap-3">
+            <span
+              class="flex size-11 items-center justify-center rounded-xl border border-wx-border bg-wx-surface text-wx-accent shadow-sm"
+            >
+              @switch (option.value) {
+                @case ('light') {
+                  <svg
+                    width="21"
+                    height="21"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="4" />
+                    <path
+                      d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"
+                    />
+                  </svg>
+                }
+                @case ('dark') {
+                  <svg
+                    width="21"
+                    height="21"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.6 6.6 0 0 0 21 12.8Z" />
+                  </svg>
+                }
+                @case ('system') {
+                  <svg
+                    width="21"
+                    height="21"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.9"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="3" y="4" width="18" height="13" rx="2" />
+                    <path d="M8 21h8M12 17v4" />
+                  </svg>
+                }
+              }
+            </span>
+            @if (selectedTheme() === option.value) {
+              <span
+                class="rounded-full bg-wx-accent px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide text-white"
+                >Selected</span
+              >
+            }
+          </span>
+          <span class="mt-5 block text-lg font-extrabold text-wx-text">{{ option.label }}</span>
+          <span class="mt-2 block text-sm leading-6 text-wx-text-muted">{{
+            option.description
+          }}</span>
+        </button>
+      }
+    </div>
+  </section>
+
+  <!-- Storage disclosure keeps the local-only behavior transparent without adding fake save actions. -->
+  <aside
+    class="rounded-2xl border border-wx-border bg-wx-surface-muted px-5 py-4 text-sm leading-6 text-wx-text-muted"
+  >
+    Theme preference is saved only in this browser and does not require a separate Save button.
+  </aside>
+</div>

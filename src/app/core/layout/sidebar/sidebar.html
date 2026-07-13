@@ -1,10 +1,10 @@
-<!-- Yalnızca masaüstünde görünen ve izinli route listesini owning shell'den alan navigation alanıdır. -->
+<!-- Desktop navigation remains fixed while the main application content scrolls. -->
 <aside
-  class="relative hidden min-h-screen shrink-0 flex-col border-r border-wx-border bg-wx-surface/95 backdrop-blur-xl transition-[width] duration-200 md:flex"
+  class="relative hidden h-screen shrink-0 flex-col overflow-hidden border-r border-wx-border bg-wx-surface/95 backdrop-blur-xl transition-[width] duration-200 md:flex"
   [class.w-64]="!collapsed()"
   [class.w-20]="collapsed()"
 >
-  <!-- Wordix logosu kompakt ve geniş sidebar modlarında ortak marka çapası sağlar. -->
+  <!-- Brand anchor is shared by full and compact sidebar modes. -->
   <div class="flex min-h-16 items-center gap-3 border-b border-wx-border px-4">
     <span
       class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-yale-blue-bright text-sm font-black text-white shadow-sm"
@@ -12,45 +12,130 @@
     >
       W
     </span>
-    <!-- Alan daraltıldığında metin gizlenerek icon alanı korunur. -->
     @if (!collapsed()) {
       <span class="truncate font-extrabold tracking-tight text-wx-text">Wordix</span>
     }
   </div>
 
-  <!-- Shell'in verdiği route kayıtları Angular Router linklerine dönüştürülür. -->
-  <nav class="flex-1 space-y-1 overflow-y-auto p-3" aria-label="Primary navigation">
-    <!-- Her route benzersiz path değeriyle izlenerek gereksiz DOM oluşturma önlenir. -->
-    @for (item of items(); track item.route) {
-      <a
-        class="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold text-wx-text-muted transition-colors hover:bg-wx-surface-muted hover:text-wx-text"
-        [routerLink]="item.route"
-        routerLinkActive="bg-yale-blue-bright text-white shadow-sm"
-        [routerLinkActiveOptions]="{ exact: false }"
-        [attr.title]="collapsed() ? item.label : null"
-      >
-        <span
-          class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-current/20 text-[10px] font-bold uppercase"
-          aria-hidden="true"
-        >
-          {{ item.shortLabel }}
-        </span>
-        <!-- Kompakt modda yalnızca kısa etiket, geniş modda okunabilir label gösterilir. -->
-        @if (!collapsed()) {
-          <span class="truncate">{{ item.label }}</span>
-        }
-      </a>
+  <!-- Shell-owned routes become real Angular Router links with canonical icons. -->
+  <nav class="min-h-0 flex-1 overflow-y-auto p-3" aria-label="Primary navigation">
+    @if (!collapsed()) {
+      <p class="px-3 pb-3 pt-1 text-xs font-extrabold uppercase tracking-[0.18em] text-wx-accent">
+        Navigation
+      </p>
     }
+    <div class="space-y-2">
+      @for (item of items(); track item.route) {
+        <a
+          class="group relative flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold text-wx-text-muted transition-all hover:bg-wx-surface-muted hover:text-wx-text"
+          [routerLink]="item.route"
+          routerLinkActive="bg-yale-blue-bright text-white shadow-sm"
+          [routerLinkActiveOptions]="{
+            exact: item.route === '/dashboard' || item.route === '/admin/dashboard',
+          }"
+          [attr.title]="collapsed() ? item.label : null"
+        >
+          <wx-navigation-icon [name]="item.icon" [size]="18" />
+          @if (!collapsed()) {
+            <span class="truncate">{{ item.label }}</span>
+          }
+        </a>
+      }
+    </div>
   </nav>
 
-  <!-- Kullanıcıya sidebar genişliğini değiştiren gerçek local UI aksiyonu sunar. -->
+  <!-- The real session summary opens the implemented settings route. -->
+  <div class="shrink-0 border-t border-wx-border p-3">
+    <a
+      [routerLink]="settingsRoute()"
+      routerLinkActive="ring-1 ring-wx-accent"
+      class="flex items-center gap-3 rounded-2xl bg-wx-surface-muted/70 p-3 transition hover:bg-wx-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wx-accent"
+      [attr.aria-label]="'Open settings for ' + displayName()"
+      [attr.title]="collapsed() ? 'Settings' : null"
+    >
+      <span
+        class="flex size-9 shrink-0 items-center justify-center rounded-full bg-cerulean-600 text-sm font-black text-white"
+        aria-hidden="true"
+      >
+        {{ userInitial() }}
+      </span>
+      @if (!collapsed()) {
+        <span class="min-w-0 flex-1">
+          <span class="block truncate text-sm font-extrabold text-wx-text">{{
+            displayName()
+          }}</span>
+          <span class="block truncate text-xs text-wx-text-muted">{{ roleLabel() }}</span>
+        </span>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="shrink-0 text-wx-text-muted"
+          aria-hidden="true"
+        >
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      }
+    </a>
+
+    <button
+      type="button"
+      class="mt-2 flex min-h-10 w-full items-center gap-3 rounded-xl px-3 text-sm font-bold text-wx-text-muted transition hover:bg-wx-danger/10 hover:text-wx-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wx-accent"
+      [class.justify-center]="collapsed()"
+      [attr.title]="collapsed() ? 'Sign out' : null"
+      aria-label="Sign out"
+      (click)="logout()"
+    >
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M10 17l5-5-5-5" />
+        <path d="M15 12H3" />
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+      </svg>
+      @if (!collapsed()) {
+        <span>Sign out</span>
+      }
+    </button>
+  </div>
+
+  <!-- Compact mode remains a browser-local presentation action. -->
   <button
     type="button"
-    class="absolute -right-3 top-20 flex size-7 items-center justify-center rounded-full border border-wx-border bg-wx-surface text-sm font-bold text-wx-text-muted shadow-sm transition hover:text-wx-text"
+    class="absolute -right-3 top-20 flex size-7 items-center justify-center rounded-full border border-wx-border bg-wx-surface text-wx-text-muted shadow-sm transition hover:scale-105 hover:text-wx-text"
     [attr.aria-label]="collapsed() ? 'Expand navigation' : 'Collapse navigation'"
     [attr.aria-expanded]="!collapsed()"
     (click)="toggleCollapsed()"
   >
-    {{ collapsed() ? '›' : '‹' }}
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      @if (collapsed()) {
+        <path d="m9 18 6-6-6-6" />
+      } @else {
+        <path d="m15 18-6-6 6-6" />
+      }
+    </svg>
   </button>
 </aside>

@@ -1,0 +1,340 @@
+<!-- Responsive learning dashboard uses only live profile and statistics data. -->
+<div class="space-y-6">
+  <!-- Gradient overview keeps the reference hierarchy while using real metrics. -->
+  <section
+    class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-yale-blue-bright via-rich-cerulean to-cerulean p-6 text-white shadow-lg md:p-8"
+  >
+    <div
+      class="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full bg-white/10 blur-2xl"
+    ></div>
+    <div class="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="text-sm font-semibold text-white/70">Learning overview</p>
+        <h1 class="mt-1 text-3xl font-black tracking-tight md:text-4xl">
+          @if (profile(); as currentProfile) {
+            {{ currentProfile.username ?? 'Wordix learner' }}
+          } @else {
+            Wordix learner
+          }
+        </h1>
+        <p class="mt-2 max-w-xl text-sm leading-6 text-white/75">
+          Continue your vocabulary practice with live progress from the Wordix API.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a
+            routerLink="/quizzes/start"
+            class="inline-flex min-h-10 items-center justify-center rounded-xl bg-white px-4 text-sm font-bold text-yale-blue-dark transition hover:bg-light-blue-900"
+          >
+            Start review
+          </a>
+          <a
+            routerLink="/lookup"
+            class="inline-flex min-h-10 items-center justify-center rounded-xl border border-white/25 bg-white/10 px-4 text-sm font-bold text-white transition hover:bg-white/20"
+          >
+            Search a word
+          </a>
+          <button
+            type="button"
+            class="min-h-10 rounded-xl px-3 text-sm font-semibold text-white/75 transition hover:bg-white/10 hover:text-white"
+            (click)="logout()"
+          >
+            Sign out
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero metrics display only fields supplied by the learning summary endpoint. -->
+      @if (summary(); as learningSummary) {
+        <div class="grid grid-cols-3 gap-3 sm:min-w-[360px]">
+          <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
+            <p class="text-2xl font-black">{{ learningSummary.activeSavedItemCount }}</p>
+            <p class="mt-1 text-xs font-semibold text-white/65">Saved items</p>
+          </div>
+          <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
+            <p class="text-2xl font-black">{{ learningSummary.reviewDueItemCount }}</p>
+            <p class="mt-1 text-xs font-semibold text-white/65">Due review</p>
+          </div>
+          <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
+            <p class="text-2xl font-black">{{ percentage(learningSummary.overallAccuracyRate) }}</p>
+            <p class="mt-1 text-xs font-semibold text-white/65">Accuracy</p>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  @if (profileError(); as errorMessage) {
+    <!-- Profile hatasi dashboard metrics akisini engellemeden kisa bir bilgilendirme sunar. -->
+    <p
+      class="rounded-xl border border-wx-warning/30 bg-wx-warning/10 px-4 py-3 text-sm text-wx-text"
+    >
+      Account details could not be refreshed: {{ errorMessage }}
+    </p>
+  }
+
+  <!-- Learning summary keeps loading, retry, and success states separate. -->
+  @if (summaryStatus() === 'loading') {
+    <div
+      class="flex min-h-36 items-center justify-center rounded-2xl border border-wx-border bg-wx-surface"
+    >
+      <wx-spinner label="Loading your dashboard statistics" />
+    </div>
+  } @else if (summaryError(); as errorMessage) {
+    <div class="rounded-2xl border border-wx-border bg-wx-surface">
+      <wx-error-state
+        title="Dashboard statistics could not be loaded"
+        [description]="errorMessage"
+        retryLabel="Try again"
+        (retry)="retrySummary()"
+      />
+    </div>
+  } @else if (summary(); as learningSummary) {
+    <!-- The four summary cards map directly to backend learning metrics. -->
+    <section class="grid grid-cols-2 gap-5 lg:grid-cols-4" aria-label="Learning summary">
+      <a
+        routerLink="/dictionary"
+        class="rounded-2xl border border-wx-border bg-wx-surface p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-wx-accent/40"
+      >
+        <span
+          class="flex size-10 items-center justify-center rounded-xl bg-wx-surface-muted text-wx-accent"
+        >
+          <svg
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22z" />
+            <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22z" />
+          </svg>
+        </span>
+        <p class="mt-4 text-2xl font-black text-wx-text">
+          {{ learningSummary.activeSavedItemCount }}
+        </p>
+        <p class="mt-1 text-xs font-semibold text-wx-text-muted">Saved in dictionary</p>
+      </a>
+      <a
+        routerLink="/quizzes/start"
+        class="rounded-2xl border border-wx-border bg-wx-surface p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-wx-accent/40"
+      >
+        <span
+          class="flex size-10 items-center justify-center rounded-xl bg-wx-warning/10 text-wx-warning"
+        >
+          <svg
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        </span>
+        <p class="mt-4 text-2xl font-black text-wx-text">
+          {{ learningSummary.reviewDueItemCount }}
+        </p>
+        <p class="mt-1 text-xs font-semibold text-wx-text-muted">Items due for review</p>
+      </a>
+      <div class="rounded-2xl border border-wx-border bg-wx-surface p-5 shadow-sm">
+        <span
+          class="flex size-10 items-center justify-center rounded-xl bg-wx-success/10 text-wx-success"
+        >
+          <svg
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 3v3M21 12h-3M12 21v-3M3 12h3" />
+          </svg>
+        </span>
+        <p class="mt-4 text-2xl font-black text-wx-text">
+          {{ percentage(learningSummary.overallAccuracyRate) }}
+        </p>
+        <p class="mt-1 text-xs font-semibold text-wx-text-muted">Overall quiz accuracy</p>
+      </div>
+      <a
+        routerLink="/statistics"
+        class="rounded-2xl border border-wx-border bg-wx-surface p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-wx-accent/40"
+      >
+        <span
+          class="flex size-10 items-center justify-center rounded-xl bg-wx-surface-muted text-wx-accent"
+        >
+          <svg
+            width="19"
+            height="19"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+          </svg>
+        </span>
+        <p class="mt-4 text-2xl font-black text-wx-text">
+          {{ percentage(learningSummary.averageConfidenceScore) }}
+        </p>
+        <p class="mt-1 text-xs font-semibold text-wx-text-muted">Average confidence</p>
+      </a>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-2">
+      <!-- Learning lifecycle dagilimi backend status adetlerinden hesaplanir. -->
+      <div class="rounded-2xl border border-wx-border bg-wx-surface p-6 shadow-sm">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-black text-wx-text">Learning progress</h2>
+            <p class="mt-1 text-sm text-wx-text-muted">
+              Current dictionary lifecycle distribution.
+            </p>
+          </div>
+          <a routerLink="/statistics" class="text-sm font-bold text-wx-accent hover:underline"
+            >View statistics</a
+          >
+        </div>
+        <div class="mt-6 space-y-5">
+          @for (
+            item of [
+              { label: 'New', value: learningSummary.newItemCount },
+              { label: 'Learning', value: learningSummary.learningItemCount },
+              { label: 'Reviewing', value: learningSummary.reviewingItemCount },
+              { label: 'Mastered', value: learningSummary.masteredItemCount },
+            ];
+            track item.label
+          ) {
+            <div>
+              <div class="mb-2 flex items-center justify-between text-sm">
+                <span class="font-semibold text-wx-text-secondary">{{ item.label }}</span>
+                <span class="font-black text-wx-text">{{ item.value }}</span>
+              </div>
+              <div class="h-2 overflow-hidden rounded-full bg-wx-surface-muted">
+                <div
+                  class="h-full rounded-full bg-wx-accent transition-all"
+                  [style.width.%]="
+                    progressPercentage(item.value, learningSummary.activeSavedItemCount)
+                  "
+                ></div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Difficult items render only the live paged endpoint result. -->
+      <div class="rounded-2xl border border-wx-border bg-wx-surface p-6 shadow-sm">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-black text-wx-text">Difficult items</h2>
+            <p class="mt-1 text-sm text-wx-text-muted">
+              Lowest-confidence items requiring attention.
+            </p>
+          </div>
+          <span class="rounded-full bg-wx-warning/10 px-3 py-1 text-xs font-bold text-wx-warning"
+            >{{ learningSummary.difficultItemCount }} total</span
+          >
+        </div>
+
+        @if (difficultStatus() === 'loading') {
+          <div class="flex min-h-44 items-center justify-center">
+            <wx-spinner label="Loading difficult items" />
+          </div>
+        } @else if (difficultError(); as errorMessage) {
+          <wx-error-state
+            title="Difficult items could not be loaded"
+            [description]="errorMessage"
+            retryLabel="Try again"
+            (retry)="retryDifficultItems()"
+          />
+        } @else if (difficultItems(); as page) {
+          @if (page.items.length === 0) {
+            <div class="mt-6 rounded-xl bg-wx-surface-muted p-5 text-center">
+              <p class="font-bold text-wx-text">No difficult items yet</p>
+              <p class="mt-1 text-sm text-wx-text-muted">
+                Keep practicing and Wordix will surface items that need attention.
+              </p>
+            </div>
+          } @else {
+            <div class="mt-5 space-y-2">
+              @for (item of page.items; track item.userLearningItemId) {
+                <a
+                  [routerLink]="['/dictionary', item.userLearningItemId]"
+                  class="flex items-center gap-3 rounded-xl p-3 transition hover:bg-wx-surface-muted"
+                >
+                  <span
+                    class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-wx-warning/10 font-black text-wx-warning"
+                    >{{ (item.displayText ?? '?').charAt(0).toUpperCase() }}</span
+                  >
+                  <span class="min-w-0 flex-1">
+                    <span class="block truncate text-sm font-bold text-wx-text">{{
+                      item.displayText ?? 'Learning item'
+                    }}</span>
+                    <span class="block truncate text-xs text-wx-text-muted">{{
+                      item.primaryMeaning ?? item.difficultyReason ?? 'Meaning unavailable'
+                    }}</span>
+                  </span>
+                  <span class="text-xs font-black text-wx-text-secondary">{{
+                    percentage(item.confidenceScore)
+                  }}</span>
+                </a>
+              }
+            </div>
+          }
+          <a
+            routerLink="/quizzes/start"
+            class="mt-5 flex min-h-10 w-full items-center justify-center rounded-xl border border-wx-border bg-wx-surface-muted text-sm font-bold text-wx-text transition hover:bg-wx-surface"
+          >
+            Practice difficult items
+          </a>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- Every quick action targets an implemented route; no demo button is present. -->
+  <section>
+    <h2 class="text-lg font-black text-wx-text">Quick actions</h2>
+    <div class="mt-5 grid gap-5 sm:grid-cols-3">
+      <a
+        routerLink="/lookup"
+        class="rounded-2xl border border-wx-border bg-wx-surface p-5 transition hover:-translate-y-0.5 hover:border-wx-accent/40"
+      >
+        <p class="font-black text-wx-text">Look up a word</p>
+        <p class="mt-1 text-sm text-wx-text-muted">Search the live Wordix lookup service.</p>
+      </a>
+      <a
+        routerLink="/decks"
+        class="rounded-2xl border border-wx-border bg-wx-surface p-5 transition hover:-translate-y-0.5 hover:border-wx-accent/40"
+      >
+        <p class="font-black text-wx-text">Open your decks</p>
+        <p class="mt-1 text-sm text-wx-text-muted">Organize and review saved vocabulary.</p>
+      </a>
+      <a
+        routerLink="/statistics"
+        class="rounded-2xl border border-wx-border bg-wx-surface p-5 transition hover:-translate-y-0.5 hover:border-wx-accent/40"
+      >
+        <p class="font-black text-wx-text">Explore analytics</p>
+        <p class="mt-1 text-sm text-wx-text-muted">Inspect detailed learning performance.</p>
+      </a>
+    </div>
+  </section>
+</div>

@@ -60,6 +60,32 @@ describe('KeycloakService', () => {
     expect(client.updateToken).toHaveBeenCalledWith(30);
   });
 
+  /** Login ve registration işlemlerinin kök yerine gerçek Angular callback route'una döndüğünü doğrular. */
+  it('uses the Angular callback route for login and registration', async () => {
+    const service = TestBed.inject(KeycloakService);
+
+    await service.login('/dictionary');
+    await service.register('/decks');
+
+    expect(client.login).toHaveBeenCalledWith({
+      redirectUri: expect.stringMatching(/\/auth\/callback$/),
+    });
+    expect(client.register).toHaveBeenCalledWith({
+      redirectUri: expect.stringMatching(/\/auth\/callback$/),
+    });
+  });
+
+  /** Logout sonrasında callback yerine public uygulama köküne dönüldüğünü doğrular. */
+  it('returns to the application root after logout', async () => {
+    const service = TestBed.inject(KeycloakService);
+
+    await service.logout();
+
+    expect(client.logout).toHaveBeenCalledWith({
+      redirectUri: expect.not.stringMatching(/\/auth\/callback$/),
+    });
+  });
+
   // Keycloak logout callbackinin store effectine unauthenticated session olayı gönderdiğini doğrular.
   it('publishes a cleared session when Keycloak reports logout', async () => {
     const service = TestBed.inject(KeycloakService);

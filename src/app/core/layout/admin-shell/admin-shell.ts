@@ -3,17 +3,17 @@
  * User navigation ve business sayfalarını admin panelinden kesin olarak ayırır.
  */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-
 import { AppShell } from '../app-shell/app-shell';
 import { ShellNavigationItem } from '../navigation.models';
 
-/** Yalnızca Swagger snapshotında backend desteği bulunan admin analytics sayfalarıdır. */
+/** Yalnızca canlı Swagger desteği olan admin analytics sayfalarını navigation'a açar. */
 const ADMIN_NAVIGATION_ITEMS: readonly ShellNavigationItem[] = [
-  { label: 'Admin Dashboard', route: '/admin/dashboard', shortLabel: 'AD' },
-  { label: 'Top Lookups', route: '/admin/analytics/top-lookups', shortLabel: 'TL' },
-  { label: 'Most Saved', route: '/admin/analytics/most-saved', shortLabel: 'MS' },
-  { label: 'Quiz Insights', route: '/admin/analytics/quiz-insights', shortLabel: 'QI' },
-  { label: 'Provider', route: '/admin/analytics/provider', shortLabel: 'PV' },
+  { label: 'Dashboard', route: '/admin/dashboard', icon: 'dashboard' },
+  { label: 'Top Lookups', route: '/admin/analytics/top-lookups', icon: 'trending' },
+  { label: 'Most Saved', route: '/admin/analytics/most-saved', icon: 'saved' },
+  { label: 'Quiz Insights', route: '/admin/analytics/quiz-insights', icon: 'wrong' },
+  { label: 'Provider Stats', route: '/admin/analytics/provider', icon: 'provider' },
+  { label: 'Settings', route: '/admin/settings', icon: 'settings' },
 ];
 
 @Component({

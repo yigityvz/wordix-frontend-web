@@ -1,0 +1,105 @@
+<!-- Gerçek collection lifecycle ile local liste kontrollerini premium responsive sayfada birleştirir. -->
+<div class="mx-auto max-w-5xl space-y-6">
+  <!-- Header yalnızca çalışan Lookup navigation aksiyonunu sunar. -->
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-sm font-bold uppercase tracking-[0.18em] text-wx-accent">Your library</p>
+      <h1 class="mt-2 text-3xl font-black tracking-tight text-wx-text sm:text-4xl">Dictionary</h1>
+      <p class="mt-2 text-sm text-wx-text-muted">
+        {{ totalCount() }} {{ totalCount() === 1 ? 'saved item' : 'saved items' }}
+      </p>
+    </div>
+
+    <a
+      routerLink="/lookup"
+      class="inline-flex min-h-11 items-center justify-center rounded-xl bg-yale-blue-bright px-4 text-sm font-bold text-white shadow-sm transition hover:bg-yale-blue active:scale-[0.98]"
+    >
+      Open Lookup
+    </a>
+  </header>
+
+  @if (isLoading() && items().length === 0) {
+    <!-- İlk yükleme yalnızca gerçek collection requesti sürerken gösterilir. -->
+    <wx-card padding="lg">
+      <div class="flex min-h-52 flex-col items-center justify-center gap-4 text-center">
+        <span
+          class="flex size-14 items-center justify-center rounded-2xl bg-wx-surface-muted text-xl font-black text-wx-accent"
+          aria-hidden="true"
+          >Aa</span
+        >
+        <div>
+          <p class="font-bold text-wx-text">Loading your dictionary</p>
+          <p class="mt-1 text-sm text-wx-text-muted">Fetching your saved learning items…</p>
+        </div>
+        <wx-spinner label="Loading dictionary" />
+      </div>
+    </wx-card>
+  } @else if (error(); as errorMessage) {
+    <!-- API hatası merkezi normalize mesaj ve gerçek retry intentiyle gösterilir. -->
+    <wx-card padding="none">
+      <wx-error-state
+        title="Dictionary could not be loaded"
+        [description]="errorMessage"
+        retryLabel="Try again"
+        (retry)="retryCollection()"
+      />
+    </wx-card>
+  } @else if (items().length === 0) {
+    <!-- Backend koleksiyonu gerçekten boşsa Lookup route'u geçerli sonraki adım olur. -->
+    <wx-card padding="none">
+      <wx-empty-state
+        title="Your dictionary is empty"
+        description="Search for your first word, phrase or sentence in Lookup to begin."
+      />
+      <div class="flex justify-center pb-10">
+        <a
+          routerLink="/lookup"
+          class="inline-flex min-h-11 items-center justify-center rounded-xl bg-yale-blue-bright px-4 text-sm font-bold text-white transition hover:bg-yale-blue"
+        >
+          Go to Lookup
+        </a>
+      </div>
+    </wx-card>
+  } @else {
+    <!-- Local kontroller gerçek GET sonucunu değişiklik yapmadan filtreler ve sıralar. -->
+    <wx-card padding="md">
+      <wx-dictionary-filters
+        [items]="items()"
+        [query]="query()"
+        [filter]="filter()"
+        [sort]="sort()"
+        (queryChange)="updateQuery($event)"
+        (filterChange)="updateFilter($event)"
+        (sortChange)="updateSort($event)"
+      />
+    </wx-card>
+
+    @if (visibleItems().length === 0) {
+      <!-- Local search/filter sonucu boşsa backend koleksiyonu boşmış gibi gösterilmez. -->
+      <wx-card padding="none">
+        <wx-empty-state
+          title="No matching items"
+          description="Try another search term or reset the selected filters."
+          actionLabel="Reset filters"
+          (action)="resetControls()"
+        />
+      </wx-card>
+    } @else {
+      <!-- Kartlar yalnızca gerçek backend collection itemlarından üretilir. -->
+      <section class="space-y-5" aria-label="Dictionary items">
+        @for (item of visibleItems(); track item.userLearningItemId) {
+          <!-- Her kart canonical userLearningItemId ile gerçek detail route'una gider. -->
+          <a
+            class="block rounded-2xl transition focus-visible:outline-offset-4"
+            [routerLink]="['/dictionary', item.userLearningItemId]"
+            [attr.aria-label]="
+              'Open ' + (item.displayText ?? item.normalizedText ?? 'dictionary item')
+            "
+          >
+            <wx-dictionary-card [item]="item" />
+          </a>
+        }
+      </section>
+    }
+  }
+</div>

@@ -51,13 +51,13 @@ export class AuthFacade {
   }
 
   /** Kullanıcının Keycloak sign-in ekranına gitme niyetini yayınlar. */
-  login(): void {
-    this.store.dispatch(AuthActions.signInRequested());
+  login(returnUrl: string | null = null): void {
+    this.store.dispatch(AuthActions.signInRequested({ returnUrl }));
   }
 
   /** Kullanıcının Keycloak create-account ekranına gitme niyetini yayınlar. */
-  register(): void {
-    this.store.dispatch(AuthActions.registrationRequested());
+  register(returnUrl: string | null = null): void {
+    this.store.dispatch(AuthActions.registrationRequested({ returnUrl }));
   }
 
   /** Kullanıcının Keycloak oturumunu kapatma niyetini yayınlar. */

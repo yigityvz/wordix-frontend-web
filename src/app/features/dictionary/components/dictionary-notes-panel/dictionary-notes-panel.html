@@ -1,0 +1,137 @@
+<!-- Notes collection lifecycle ve gerçek mutation dialoglarını tek feature panelinde birleştirir. -->
+<wx-card padding="lg">
+  <section aria-labelledby="dictionary-notes-title">
+    <!-- Panel başlığı gerçek create aksiyonunu not sayısıyla birlikte sunar. -->
+    <header class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <p class="text-xs font-black uppercase tracking-[0.18em] text-wx-accent">Personal notes</p>
+        <h2 id="dictionary-notes-title" class="mt-1 text-xl font-black text-wx-text">
+          Notes <span class="text-wx-text-muted">({{ notes().length }})</span>
+        </h2>
+      </div>
+      <wx-button size="sm" (activated)="openCreateDialog()">Add note</wx-button>
+    </header>
+
+    @if (loading()) {
+      <!-- Spinner yalnızca gerçek GET notes requesti sürerken gösterilir. -->
+      <div class="flex min-h-32 items-center justify-center">
+        <wx-spinner label="Loading notes" />
+      </div>
+    } @else if (error(); as errorMessage) {
+      <!-- Notes hatası detail içeriğini kapatmadan recoverable retry aksiyonu sunar. -->
+      <div class="mt-4 rounded-xl border border-wx-error/30 bg-wx-error/10 p-4" role="alert">
+        <p class="font-bold text-wx-error">Notes could not be loaded</p>
+        <p class="mt-1 text-sm text-wx-text-secondary">{{ errorMessage }}</p>
+        <div class="mt-3">
+          <wx-button variant="secondary" size="sm" (activated)="reload.emit()">Try again</wx-button>
+        </div>
+      </div>
+    } @else if (notes().length === 0) {
+      <!-- Boş notes collection kullanıcıyı gerçek create akışına yönlendirir. -->
+      <div
+        class="mt-4 rounded-xl border border-dashed border-wx-border bg-wx-surface-muted p-5 text-center"
+      >
+        <p class="font-bold text-wx-text">No notes yet</p>
+        <p class="mt-1 text-sm text-wx-text-muted">Add context, reminders, or a usage tip.</p>
+      </div>
+    } @else {
+      <!-- Backend notları create sırası korunarak responsive listede sunulur. -->
+      <ul class="mt-4 space-y-3">
+        @for (note of notes(); track note.userLearningNoteId) {
+          <li class="rounded-xl border border-wx-border bg-wx-surface-muted p-4">
+            <p class="whitespace-pre-wrap break-words text-sm leading-6 text-wx-text">
+              {{ note.noteText }}
+            </p>
+            <div
+              class="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-wx-border pt-3"
+            >
+              <p class="text-xs font-semibold text-wx-text-muted">
+                {{ note.updatedAt ? 'Updated' : 'Created' }}
+                {{ note.updatedAt ?? note.createdAt | date: 'medium' }}
+              </p>
+              <div class="flex gap-2">
+                <wx-button variant="ghost" size="sm" (activated)="openEditDialog(note)"
+                  >Edit</wx-button
+                >
+                <wx-button variant="danger" size="sm" (activated)="openDeleteDialog(note)"
+                  >Delete</wx-button
+                >
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</wx-card>
+
+<!-- Aynı erişilebilir editor create ve edit requestlerini ortak validation ile üretir. -->
+<wx-modal
+  [open]="editorOpen()"
+  [title]="editingNote() ? 'Edit note' : 'Add note'"
+  [closeOnBackdrop]="mutationStatus() !== 'loading'"
+  (closed)="closeEditor()"
+>
+  <label for="dictionary-note-text" class="block text-sm font-bold text-wx-text">Note</label>
+  <textarea
+    id="dictionary-note-text"
+    rows="6"
+    class="mt-2 w-full resize-y rounded-xl border border-wx-border bg-wx-surface px-3 py-2 text-sm text-wx-text outline-none transition placeholder:text-wx-text-muted focus:border-wx-accent focus:ring-2 focus:ring-wx-accent/20 disabled:cursor-not-allowed disabled:opacity-60"
+    placeholder="Write a useful reminder…"
+    [formControl]="noteTextControl"
+    [readOnly]="mutationStatus() === 'loading'"
+    [attr.aria-invalid]="noteTextControl.invalid && noteTextControl.touched"
+    aria-describedby="dictionary-note-helper"
+  ></textarea>
+  <p id="dictionary-note-helper" class="mt-2 text-xs text-wx-text-muted">A note cannot be empty.</p>
+  @if (noteTextControl.invalid && noteTextControl.touched) {
+    <p class="mt-2 text-sm font-semibold text-wx-error" role="alert">Enter a note before saving.</p>
+  }
+  @if (mutationError(); as mutationErrorMessage) {
+    <p class="mt-3 rounded-lg bg-wx-error/10 p-3 text-sm font-semibold text-wx-error" role="alert">
+      {{ mutationErrorMessage }}
+    </p>
+  }
+  <div modal-actions>
+    <wx-button
+      variant="ghost"
+      [disabled]="mutationStatus() === 'loading'"
+      (activated)="closeEditor()"
+      >Cancel</wx-button
+    >
+    <wx-button [loading]="mutationStatus() === 'loading'" (activated)="submitEditor()"
+      >Save note</wx-button
+    >
+  </div>
+</wx-modal>
+
+<!-- Delete işlemi geri alınamayacağı için ayrı confirmation dialogu kullanır. -->
+<wx-modal
+  [open]="deleteTarget() !== null"
+  title="Delete note"
+  [closeOnBackdrop]="mutationStatus() !== 'loading'"
+  (closed)="closeDeleteDialog()"
+>
+  <p class="text-sm leading-6 text-wx-text-secondary">
+    This note will be permanently removed from your dictionary item.
+  </p>
+  @if (mutationError(); as mutationErrorMessage) {
+    <p class="mt-3 rounded-lg bg-wx-error/10 p-3 text-sm font-semibold text-wx-error" role="alert">
+      {{ mutationErrorMessage }}
+    </p>
+  }
+  <div modal-actions>
+    <wx-button
+      variant="ghost"
+      [disabled]="mutationStatus() === 'loading'"
+      (activated)="closeDeleteDialog()"
+      >Cancel</wx-button
+    >
+    <wx-button
+      variant="danger"
+      [loading]="mutationStatus() === 'loading'"
+      (activated)="confirmDelete()"
+      >Delete note</wx-button
+    >
+  </div>
+</wx-modal>

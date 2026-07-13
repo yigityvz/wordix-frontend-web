@@ -1,0 +1,90 @@
+<!-- Search, loading, error ve gerçek result durumlarını tek responsive lookup sayfasında birleştirir. -->
+<div class="mx-auto max-w-3xl space-y-6">
+  <!-- Sayfa başlığı Figma kompozisyonunu korurken demo öneri veya recent-search verisi göstermez. -->
+  <header>
+    <p class="text-sm font-bold uppercase tracking-[0.18em] text-wx-accent">Discover</p>
+    <h1 class="mt-2 text-3xl font-black tracking-tight text-wx-text sm:text-4xl">Smart Lookup</h1>
+    <p class="mt-2 max-w-2xl text-sm leading-6 text-wx-text-muted sm:text-base">
+      Search an English word, phrase or full sentence and get its real Turkish content from Wordix.
+    </p>
+  </header>
+
+  <!-- Form yalnızca gerçek POST /api/lookups actionını ve local clear niyetini üretir. -->
+  <wx-card padding="lg">
+    <wx-lookup-search-form
+      [loading]="isLoading()"
+      (search)="search($event)"
+      (cleared)="clearSearch()"
+    />
+  </wx-card>
+
+  @if (isLoading()) {
+    <!-- Fake timer yerine gerçek NgRx request lifecycle boyunca loading yüzeyi gösterilir. -->
+    <wx-card padding="lg">
+      <div class="flex min-h-44 flex-col items-center justify-center gap-4 text-center">
+        <span
+          class="flex size-14 items-center justify-center rounded-2xl bg-wx-surface-muted text-xl font-black text-wx-accent"
+          aria-hidden="true"
+          >W</span
+        >
+        <div>
+          <p class="font-bold text-wx-text">Searching Wordix</p>
+          <p class="mt-1 text-sm text-wx-text-muted">Checking meanings and translations…</p>
+        </div>
+        <wx-spinner label="Searching Wordix" />
+      </div>
+    </wx-card>
+  } @else if (error(); as errorMessage) {
+    <!-- Backend 400/404/500 veya network hatası merkezi normalize mesaj ve gerçek retry aksiyonuyla gösterilir. -->
+    <wx-card padding="none">
+      <wx-error-state
+        title="Lookup could not be completed"
+        [description]="errorMessage"
+        [retryLabel]="request() ? 'Try again' : undefined"
+        (retry)="retrySearch()"
+      />
+    </wx-card>
+  } @else if (result(); as lookupResult) {
+    <!-- Yalnızca backend success sonucundan mapper ile üretilen model render edilir. -->
+    <wx-lookup-result-card
+      [result]="lookupResult"
+      [saved]="isCurrentResultSaved()"
+      [saveLoading]="isSaving()"
+      [saveError]="currentSaveError()"
+      (saveRequested)="saveToDictionary($event)"
+      (addToDeckRequested)="openDeckDialog($event)"
+    />
+  } @else {
+    <!-- İlk açılışta Figma'daki mock recent/popular listeler yerine tarafsız başlangıç durumu sunulur. -->
+    <wx-card padding="lg">
+      <div class="flex flex-col items-center px-4 py-8 text-center">
+        <span
+          class="flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br from-yale-blue-bright to-cerulean text-2xl font-black text-white shadow-lg shadow-yale-blue-bright/15"
+          aria-hidden="true"
+          >Aa</span
+        >
+        <h2 class="mt-5 text-lg font-extrabold text-wx-text">What would you like to learn?</h2>
+        <p class="mt-2 max-w-md text-sm leading-6 text-wx-text-muted">
+          Enter a word, phrase or sentence above. Your result will appear here with its real source
+          information.
+        </p>
+      </div>
+    </wx-card>
+  }
+</div>
+
+<!-- Deck selection yalnızca gerçek collection ve birleşik save/add mutation lifecyclelarıyla çalışır. -->
+<wx-option-selection-dialog
+  [open]="isDeckDialogOpen()"
+  title="Add result to a deck"
+  [options]="deckOptions()"
+  [loading]="areDecksLoading()"
+  [error]="deckCollectionError()"
+  [mutationLoading]="isDeckFlowLoading()"
+  [mutationError]="currentDeckFlowError()"
+  emptyDescription="Create a deck from the Decks page before adding this result."
+  confirmLabel="Add to deck"
+  (closed)="closeDeckDialog()"
+  (reload)="reloadDecks()"
+  (confirmed)="addCurrentResultToDeck($event)"
+/>

@@ -1,0 +1,22 @@
+<!-- Confidence skorunu hem metin hem progressbar semantiğiyle kullanıcıya gösterir. -->
+<div class="flex min-w-32 items-center gap-2.5">
+  <!-- Görsel bar semantic tema tokenlarından beslenir. -->
+  <div
+    class="h-2 flex-1 overflow-hidden rounded-full bg-wx-surface-muted"
+    role="progressbar"
+    aria-label="Learning confidence"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    [attr.aria-valuenow]="percentage()"
+  >
+    <span
+      class="block h-full rounded-full bg-gradient-to-r from-cerulean to-yale-blue-bright transition-[width]"
+      [style.width.%]="normalizedValue()"
+    ></span>
+  </div>
+
+  <!-- Yüzde, renk algısından bağımsız metinsel karşılık sağlar. -->
+  <span class="w-9 text-right text-xs font-bold tabular-nums text-wx-text-secondary">
+    {{ percentage() }}%
+  </span>
+</div>

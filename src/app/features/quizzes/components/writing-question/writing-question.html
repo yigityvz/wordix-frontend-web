@@ -1,0 +1,5 @@
+﻿<!-- Writing cevabını label, sayaç ve backend max-length sınırıyla toplar. -->
+<label for="quiz-writing-answer" class="text-sm font-bold text-wx-text">Your answer</label>
+<textarea id="quiz-writing-answer" rows="5" maxlength="1000" class="mt-2 w-full resize-y rounded-2xl border border-wx-border bg-wx-surface-muted p-4 text-base text-wx-text outline-none transition placeholder:text-wx-text-muted focus:border-wx-accent focus:ring-2 focus:ring-wx-focus disabled:cursor-not-allowed disabled:opacity-60" placeholder="Type your answer…" [value]="answer()" [disabled]="disabled()" (input)="updateAnswer($any($event.target).value)"></textarea>
+<div class="mt-2 flex items-center justify-between gap-4"><span class="text-xs text-wx-text-muted">The backend evaluates your submitted answer.</span><span class="text-xs font-semibold text-wx-text-muted">{{ answer().length }}/1000</span></div>
+<div class="mt-6 flex justify-end"><wx-button size="lg" [loading]="loading()" [disabled]="disabled() || !answer().trim()" (activated)="submitAnswer()">Submit answer</wx-button></div>

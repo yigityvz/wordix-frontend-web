@@ -1,0 +1,22 @@
+<!-- Save lifecycle durumunu tek erişilebilir aksiyon ve açıklama alanında gösterir. -->
+<div class="space-y-2" aria-live="polite">
+  @if (saved()) {
+    <!-- Backend lookup veya save success state'i doğrulamadan başarı etiketi gösterilmez. -->
+    <div
+      class="inline-flex min-h-10 items-center rounded-xl border border-wx-success/30 bg-wx-success/10 px-4 text-sm font-bold text-wx-success"
+      role="status"
+    >
+      Saved to Dictionary
+    </div>
+  } @else {
+    <!-- Loading ve eksik request alanları native disabled sözleşmesiyle tekrar submiti engeller. -->
+    <wx-button size="sm" [loading]="loading()" [disabled]="disabled()" (activated)="requestSave()">
+      {{ loading() ? 'Saving…' : 'Save to Dictionary' }}
+    </wx-button>
+  }
+
+  @if (error(); as errorMessage) {
+    <!-- Duplicate dahil backend hataları fake success yerine kullanıcıya açıkça gösterilir. -->
+    <p class="max-w-md text-sm font-medium text-wx-error" role="alert">{{ errorMessage }}</p>
+  }
+</div>

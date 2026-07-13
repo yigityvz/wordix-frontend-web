@@ -24,6 +24,9 @@ export class Navbar {
   /** Seçili tercihi template'e salt okunur signal olarak açar. */
   protected readonly theme = this.themeFacade.theme;
 
+  /** Exposes the resolved visual mode used by the theme icon. */
+  protected readonly resolvedTheme = this.themeFacade.resolvedTheme;
+
   /** Theme toggle tarafından yayınlanan kullanıcı tercihini merkezi facade'e iletir. */
   protected changeTheme(theme: WordixTheme): void {
     // Tercihin saklanması ve html.dark yönetimi ThemeService içinde tek noktadan yapılır.

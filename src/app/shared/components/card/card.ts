@@ -8,6 +8,7 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 
 @Component({
   selector: 'wx-card',
+  host: { class: 'block' },
   templateUrl: './card.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

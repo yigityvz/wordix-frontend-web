@@ -1,0 +1,16 @@
+<!-- Deck item gerçek content alanlarıyla kompakt ve responsive satır kartında sunulur. -->
+<article
+  class="group flex items-center gap-3 rounded-2xl border border-wx-border bg-wx-surface p-4 shadow-sm transition hover:border-wx-accent/40 hover:bg-wx-surface-muted"
+>
+  <span
+    class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-wx-surface-muted text-sm font-black uppercase text-wx-accent"
+    aria-hidden="true"
+  >
+    {{ title().charAt(0) || 'A' }}
+  </span>
+  <div class="min-w-0 flex-1">
+    <h3 class="truncate text-sm font-black text-wx-text">{{ title() }}</h3>
+    <p class="mt-1 truncate text-xs text-wx-text-muted">{{ secondaryText() }}</p>
+  </div>
+  <span class="text-xs font-bold text-wx-text-muted" aria-hidden="true">→</span>
+</article>

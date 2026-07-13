@@ -1,0 +1,85 @@
+<!-- Generic seçenek collectionını erişilebilir tekli seçim ve gerçek lifecycle durumlarıyla sunar. -->
+<wx-modal
+  [open]="open()"
+  [title]="title()"
+  [closeOnBackdrop]="!mutationLoading()"
+  (closed)="closed.emit()"
+>
+  @if (loading()) {
+    <!-- Collection yalnızca gerçek request sürerken spinner ile temsil edilir. -->
+    <div class="flex min-h-36 flex-col items-center justify-center gap-3 text-center">
+      <wx-spinner label="Loading options" />
+      <p class="text-sm font-semibold text-wx-text-muted">Loading your options…</p>
+    </div>
+  } @else if (error(); as errorMessage) {
+    <!-- Normalize backend hatası gizlenmez ve gerçek retry outputu sunulur. -->
+    <div class="rounded-2xl border border-wx-error/30 bg-wx-error/10 p-4">
+      <p class="text-sm font-semibold text-wx-error">{{ errorMessage }}</p>
+      <div class="mt-3">
+        <wx-button variant="secondary" size="sm" (activated)="reload.emit()">Try again</wx-button>
+      </div>
+    </div>
+  } @else if (options().length === 0) {
+    <!-- Boş collection için sahte seçenek veya çalışan görünmeyen aksiyon üretilmez. -->
+    <div
+      class="rounded-2xl border border-dashed border-wx-border bg-wx-surface-muted p-5 text-center"
+    >
+      <p class="text-sm font-semibold text-wx-text-muted">{{ emptyDescription() }}</p>
+    </div>
+  } @else {
+    <!-- Her seçenek native radio ile klavye ve screen reader erişimine açık tutulur. -->
+    <fieldset class="space-y-2" [disabled]="mutationLoading()">
+      <legend class="sr-only">Available options</legend>
+      @for (option of options(); track option.id) {
+        <label
+          class="flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition"
+          [class.border-wx-accent]="selectedId() === option.id"
+          [class.bg-wx-surface-muted]="selectedId() === option.id"
+          [class.border-wx-border]="selectedId() !== option.id"
+        >
+          <input
+            type="radio"
+            name="wx-selection-dialog-option"
+            class="mt-1 size-4 accent-yale-blue-bright"
+            [value]="option.id"
+            [checked]="selectedId() === option.id"
+            (change)="select(option.id)"
+          />
+          <span class="min-w-0 flex-1">
+            <span class="block break-words text-sm font-bold text-wx-text">{{ option.title }}</span>
+            @if (option.description) {
+              <span class="mt-1 block break-words text-xs leading-5 text-wx-text-muted">{{
+                option.description
+              }}</span>
+            }
+            @if (option.meta) {
+              <span class="mt-2 block text-xs font-bold text-wx-accent">{{ option.meta }}</span>
+            }
+          </span>
+        </label>
+      }
+    </fieldset>
+  }
+
+  @if (mutationError(); as mutationErrorMessage) {
+    <!-- Mutation hatası seçim korunurken kullanıcıya açıkça gösterilir. -->
+    <p
+      class="mt-4 rounded-xl border border-wx-error/30 bg-wx-error/10 px-4 py-3 text-sm font-semibold text-wx-error"
+    >
+      {{ mutationErrorMessage }}
+    </p>
+  }
+
+  <div modal-actions>
+    <wx-button variant="ghost" [disabled]="mutationLoading()" (activated)="closed.emit()"
+      >Cancel</wx-button
+    >
+    <wx-button
+      [loading]="mutationLoading()"
+      [disabled]="loading() || !!error() || options().length === 0 || !selectedId()"
+      (activated)="confirmSelection()"
+    >
+      {{ confirmLabel() }}
+    </wx-button>
+  </div>
+</wx-modal>

@@ -1,15 +1,15 @@
-/**
+﻿/**
  * Dokunmatik ekranlar için kompakt alt navigation alanını sunar.
  * Route sahipliğini shell'den alır ve mobil alanı en fazla beş birincil bağlantıyla sınırlar.
  */
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-
+import { NavigationIcon } from '../navigation-icon/navigation-icon';
 import { ShellNavigationItem } from '../navigation.models';
 
 @Component({
   selector: 'wx-mobile-nav',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [NavigationIcon, RouterLink, RouterLinkActive],
   templateUrl: './mobile-nav.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

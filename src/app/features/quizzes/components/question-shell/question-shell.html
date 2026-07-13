@@ -1,0 +1,9 @@
+﻿<!-- Multiple-choice ve writing rendererlarının ortak soru yüzeyidir. -->
+<wx-card padding="lg">
+  <div class="flex flex-wrap items-center gap-2">
+    @if (questionType()) { <span class="rounded-lg bg-wx-surface-muted px-2.5 py-1 text-xs font-bold text-wx-text-muted">{{ questionType() }}</span> }
+    @if (isSystemRecommended()) { <span class="rounded-lg bg-wx-accent/10 px-2.5 py-1 text-xs font-bold text-wx-accent">Recommended</span> }
+  </div>
+  <h1 class="mt-5 text-2xl font-black leading-tight text-wx-text sm:text-3xl">{{ questionText() }}</h1>
+  <div class="mt-6"><ng-content /></div>
+</wx-card>

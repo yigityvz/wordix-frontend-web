@@ -1,0 +1,7 @@
+﻿<!-- Learning summary aggregate değerlerini semantic kartlarda gösterir. -->
+<section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Learning summary">
+  <wx-card><p class="text-sm font-bold text-wx-text-muted">Saved items</p><p class="mt-2 text-3xl font-black text-wx-text">{{ summary().activeSavedItemCount }}</p><p class="mt-1 text-xs text-wx-text-muted">{{ summary().totalSavedItemCount }} total · {{ summary().reviewDueItemCount }} due</p></wx-card>
+  <wx-card><p class="text-sm font-bold text-wx-text-muted">Overall accuracy</p><p class="mt-2 text-3xl font-black text-wx-accent">{{ rate(summary().overallAccuracyRate) }}</p><p class="mt-1 text-xs text-wx-text-muted">{{ summary().totalCorrectAnswerCount }} correct · {{ summary().totalIncorrectAnswerCount }} wrong</p></wx-card>
+  <wx-card><p class="text-sm font-bold text-wx-text-muted">Mastered</p><p class="mt-2 text-3xl font-black text-wx-success">{{ summary().masteredItemCount }}</p><p class="mt-1 text-xs text-wx-text-muted">{{ summary().learnedItemCount }} learned · {{ summary().learningItemCount }} learning</p></wx-card>
+  <wx-card><p class="text-sm font-bold text-wx-text-muted">Average confidence</p><p class="mt-2 text-3xl font-black text-wx-text">{{ summary().averageConfidenceScore.toFixed(0) }}</p><p class="mt-1 text-xs text-wx-text-muted">{{ summary().difficultItemCount }} difficult · {{ summary().favoriteItemCount }} favorites</p></wx-card>
+</section>
