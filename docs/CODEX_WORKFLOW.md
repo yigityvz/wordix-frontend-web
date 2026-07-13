@@ -57,7 +57,7 @@ Riskler/açık bağımlılıklar:
 Sıradaki faz:
 ```
 
-Ayrı faz raporu dosyası yalnızca kullanıcı özellikle isterse oluşturulur. Normal durumda sohbet içindeki kısa rapor yeterlidir.
+Her faz sonunda sohbet içindeki kısa özete ek olarak `docs/phase-reports/<FAZ>.md` dosyasında kısa bir kalıcı faz raporu oluşturulur.
 
 ## Swagger çalışma kuralı
 

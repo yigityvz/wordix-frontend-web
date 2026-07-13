@@ -1,6 +1,6 @@
 # Wordix API Contract Snapshot
 
-Snapshot tarihi: 2026-07-10
+Snapshot tarihi: 2026-07-13
 
 Kaynak: `http://localhost:5000/swagger/v1/swagger.json`
 
@@ -8,11 +8,37 @@ API title/version: Wordix API / v1
 
 Security scheme: Bearer JWT
 
+Doğrulanan canlı kapsam: 36 path, 41 HTTP operasyonu ve 112 component schema.
+
 Bu dosya frontend planlama snapshotıdır. Her API fazında canlı Swagger yeniden kontrol edilir; bu belge canlı sözleşmenin yerine geçmez.
 
 ## Global contract
 
 Başarılı response modelleri genel olarak `ApiResponse<T>` wrapperı içindedir. Hata response modeli `ErrorResponse` olarak tanımlıdır. Liste/pagination gerektiren bazı sonuçlar `PagedResult<T>` ile sarılır.
+
+Canlı Swagger'a göre ortak başarılı response alanları:
+
+```text
+success: boolean
+message: string | null
+data: T
+timestamp: date-time string
+```
+
+`ErrorResponse` alanları:
+
+```text
+success: boolean
+statusCode: integer
+errorCode: string | null
+message: string | null
+detail: string | null
+traceId: string | null
+validationErrors: ValidationError[] | null
+timestamp: date-time string
+```
+
+Her `ValidationError`, nullable `propertyName`, `errorMessage` ve `errorCode` alanlarını taşır. Sayfalanmış sonuçlar `items`, `pageNumber`, `pageSize`, `totalCount`, `totalPages`, `hasPreviousPage` ve `hasNextPage` alanlarını kullanır.
 
 Frontend ortak HTTP katmanı şu durumları normalize eder:
 
@@ -211,7 +237,21 @@ Desteklenen frontend admin ekranları yalnızca bu aggregate analytics verilerin
 
 ## Import endpoints
 
-Swagger içinde `/api/imports/...` altında admin operasyon endpointleri vardır. Figma'daki import job listesi, raw log, progress ve retry UI'ları için gerekli read/retry sözleşmesi bulunmadığından frontend kapsamına alınmaz.
+Swagger içinde aşağıdaki admin operasyon endpointleri vardır:
+
+```text
+POST /api/imports/cefr-words
+POST /api/imports/meanings/kaikki/parse-test
+POST /api/imports/meanings/kaikki/enrich
+POST /api/imports/translations/azure/test
+POST /api/imports/phrases/provider-create-test
+POST /api/imports/examples/tatoeba/parse-test
+POST /api/imports/examples/tatoeba/enrich
+POST /api/imports/meanings/freedict/enrich
+POST /api/imports/meanings/missing/azure-backfill
+```
+
+Bunlar doğrudan operasyon başlatan endpointlerdir. Figma'daki import job listesi, raw log, progress ve retry UI'ları için gerekli read/retry sözleşmesi bulunmadığından frontend kapsamına alınmaz ve admin navigation'a eklenmez.
 
 ## Bilinen sözleşme farkları
 
