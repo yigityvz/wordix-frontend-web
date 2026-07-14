@@ -1,9 +1,127 @@
 ﻿/** Bu dosya, canlı Swagger'daki user-statistics response payloadlarını transport katmanı için tanımlar. */
-export interface UserLearningSummaryResponseDto { readonly totalSavedItemCount:number; readonly activeSavedItemCount:number; readonly wordCount:number; readonly phraseCount:number; readonly sentenceCount:number; readonly newItemCount:number; readonly learningItemCount:number; readonly reviewingItemCount:number; readonly learnedItemCount:number; readonly masteredItemCount:number; readonly reviewDueItemCount:number; readonly averageConfidenceScore:number; readonly favoriteItemCount:number; readonly difficultItemCount:number; readonly wantMorePracticeItemCount:number; readonly ignoredItemCount:number; readonly totalCorrectAnswerCount:number; readonly totalIncorrectAnswerCount:number; readonly totalPartiallyCorrectAnswerCount:number; readonly totalSkippedAnswerCount:number; readonly overallAccuracyRate:number; readonly lastReviewedAt:string|null; readonly nextReviewDate:string|null; readonly lastQuizStartedAt:string|null; readonly generatedAt:string; }
-export interface QuizStatisticsResponseDto { readonly from:string|null; readonly to:string|null; readonly quizType:string|null; readonly quizSourceType:string|null; readonly quizContentMode:string|null; readonly difficultyGroup:string|null; readonly totalQuizSessionCount:number; readonly completedQuizSessionCount:number; readonly inProgressQuizSessionCount:number; readonly cancelledQuizSessionCount:number; readonly testQuizSessionCount:number; readonly writingQuizSessionCount:number; readonly mixedQuizSessionCount:number; readonly userDictionaryQuizSessionCount:number; readonly deckQuizSessionCount:number; readonly difficultItemsQuizSessionCount:number; readonly systemRecommendationsQuizSessionCount:number; readonly totalQuestionCount:number; readonly systemRecommendedQuestionCount:number; readonly totalAnswerCount:number; readonly correctAnswerCount:number; readonly incorrectAnswerCount:number; readonly partiallyCorrectAnswerCount:number; readonly skippedAnswerCount:number; readonly systemRecommendedCorrectAnswerCount:number; readonly systemRecommendedIncorrectAnswerCount:number; readonly accuracyRate:number; readonly averageResponseTimeMs:number; readonly lastQuizStartedAt:string|null; readonly lastAnsweredAt:string|null; readonly generatedAt:string; }
-export interface DifficultLearningItemResponseDto { readonly userLearningItemId:string; readonly learningItemId:string; readonly itemType:string|null; readonly displayText:string|null; readonly primaryMeaning:string|null; readonly learningStatus:string|null; readonly confidenceScore:number; readonly correctCount:number; readonly wrongCount:number; readonly consecutiveWrongCount:number; readonly repetitionLevel:number; readonly isManuallyMarkedDifficult:boolean; readonly isProgressDifficult:boolean; readonly difficultyReason:string|null; readonly savedAt:string; readonly lastReviewedAt:string|null; readonly nextReviewDate:string|null; }
-export interface DifficultLearningItemsPagedResponseDto { readonly items:readonly DifficultLearningItemResponseDto[]|null; readonly pageNumber:number; readonly pageSize:number; readonly totalCount:number; readonly totalPages:number; readonly hasPreviousPage:boolean; readonly hasNextPage:boolean; }
-export interface DeckStatisticsItemResponseDto { readonly deckId:string; readonly deckName:string|null; readonly description:string|null; readonly isActive:boolean; readonly itemCount:number; readonly activeItemCount:number; readonly averageConfidenceScore:number; readonly dueReviewItemCount:number; readonly difficultItemCount:number; readonly quizSessionCount:number; readonly completedQuizSessionCount:number; readonly totalAnswerCount:number; readonly correctAnswerCount:number; readonly incorrectAnswerCount:number; readonly accuracyRate:number; readonly lastQuizStartedAt:string|null; readonly lastItemAddedAt:string|null; }
-export interface DeckStatisticsResponseDto { readonly totalDeckCount:number; readonly activeDeckCount:number; readonly generatedAt:string; readonly items:readonly DeckStatisticsItemResponseDto[]|null; }
-export interface ConfidenceScoreBucketResponseDto { readonly label:string|null; readonly minScore:number; readonly maxScore:number; readonly itemCount:number; readonly percentage:number; }
-export interface ConfidenceScoreDistributionResponseDto { readonly totalItemCount:number; readonly averageConfidenceScore:number; readonly generatedAt:string; readonly buckets:readonly ConfidenceScoreBucketResponseDto[]|null; }
+export interface UserLearningSummaryResponseDto {
+  readonly totalSavedItemCount: number;
+  readonly activeSavedItemCount: number;
+  readonly wordCount: number;
+  readonly phraseCount: number;
+  readonly sentenceCount: number;
+  readonly newItemCount: number;
+  readonly learningItemCount: number;
+  readonly reviewingItemCount: number;
+  readonly learnedItemCount: number;
+  readonly masteredItemCount: number;
+  readonly reviewDueItemCount: number;
+  readonly averageConfidenceScore: number;
+  readonly favoriteItemCount: number;
+  readonly difficultItemCount: number;
+  readonly wantMorePracticeItemCount: number;
+  readonly ignoredItemCount: number;
+  readonly totalCorrectAnswerCount: number;
+  readonly totalIncorrectAnswerCount: number;
+  readonly totalPartiallyCorrectAnswerCount: number;
+  readonly totalSkippedAnswerCount: number;
+  readonly overallAccuracyRate: number;
+  readonly lastReviewedAt: string | null;
+  readonly nextReviewDate: string | null;
+  readonly lastQuizStartedAt: string | null;
+  readonly generatedAt: string;
+}
+export interface QuizStatisticsResponseDto {
+  readonly from: string | null;
+  readonly to: string | null;
+  readonly quizType: string | null;
+  readonly quizSourceType: string | null;
+  readonly quizContentMode: string | null;
+  readonly difficultyGroup: string | null;
+  readonly totalQuizSessionCount: number;
+  readonly completedQuizSessionCount: number;
+  readonly inProgressQuizSessionCount: number;
+  readonly cancelledQuizSessionCount: number;
+  readonly testQuizSessionCount: number;
+  readonly writingQuizSessionCount: number;
+  readonly mixedQuizSessionCount: number;
+  readonly userDictionaryQuizSessionCount: number;
+  readonly deckQuizSessionCount: number;
+  readonly difficultItemsQuizSessionCount: number;
+  readonly systemRecommendationsQuizSessionCount: number;
+  readonly totalQuestionCount: number;
+  readonly systemRecommendedQuestionCount: number;
+  readonly totalAnswerCount: number;
+  readonly correctAnswerCount: number;
+  readonly incorrectAnswerCount: number;
+  readonly partiallyCorrectAnswerCount: number;
+  readonly skippedAnswerCount: number;
+  readonly systemRecommendedCorrectAnswerCount: number;
+  readonly systemRecommendedIncorrectAnswerCount: number;
+  readonly accuracyRate: number;
+  readonly averageResponseTimeMs: number;
+  readonly lastQuizStartedAt: string | null;
+  readonly lastAnsweredAt: string | null;
+  readonly generatedAt: string;
+}
+export interface DifficultLearningItemResponseDto {
+  readonly userLearningItemId: string;
+  readonly learningItemId: string;
+  readonly itemType: string | null;
+  readonly displayText: string | null;
+  readonly primaryMeaning: string | null;
+  readonly learningStatus: string | null;
+  readonly confidenceScore: number;
+  readonly correctCount: number;
+  readonly wrongCount: number;
+  readonly consecutiveWrongCount: number;
+  readonly repetitionLevel: number;
+  readonly isManuallyMarkedDifficult: boolean;
+  readonly isProgressDifficult: boolean;
+  readonly difficultyReason: string | null;
+  readonly savedAt: string;
+  readonly lastReviewedAt: string | null;
+  readonly nextReviewDate: string | null;
+}
+export interface DifficultLearningItemsPagedResponseDto {
+  readonly items: readonly DifficultLearningItemResponseDto[] | null;
+  readonly pageNumber: number;
+  readonly pageSize: number;
+  readonly totalCount: number;
+  readonly totalPages: number;
+  readonly hasPreviousPage: boolean;
+  readonly hasNextPage: boolean;
+}
+export interface DeckStatisticsItemResponseDto {
+  readonly deckId: string;
+  readonly deckName: string | null;
+  readonly description: string | null;
+  readonly isActive: boolean;
+  readonly itemCount: number;
+  readonly activeItemCount: number;
+  readonly averageConfidenceScore: number;
+  readonly dueReviewItemCount: number;
+  readonly difficultItemCount: number;
+  readonly quizSessionCount: number;
+  readonly completedQuizSessionCount: number;
+  readonly totalAnswerCount: number;
+  readonly correctAnswerCount: number;
+  readonly incorrectAnswerCount: number;
+  readonly accuracyRate: number;
+  readonly lastQuizStartedAt: string | null;
+  readonly lastItemAddedAt: string | null;
+}
+export interface DeckStatisticsResponseDto {
+  readonly totalDeckCount: number;
+  readonly activeDeckCount: number;
+  readonly generatedAt: string;
+  readonly items: readonly DeckStatisticsItemResponseDto[] | null;
+}
+export interface ConfidenceScoreBucketResponseDto {
+  readonly label: string | null;
+  readonly minScore: number;
+  readonly maxScore: number;
+  readonly itemCount: number;
+  readonly percentage: number;
+}
+export interface ConfidenceScoreDistributionResponseDto {
+  readonly totalItemCount: number;
+  readonly averageConfidenceScore: number;
+  readonly generatedAt: string;
+  readonly buckets: readonly ConfidenceScoreBucketResponseDto[] | null;
+}

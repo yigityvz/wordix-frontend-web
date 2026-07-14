@@ -1,10 +1,125 @@
 ﻿/** Bu dosya, canlı Swagger'daki admin analytics response payloadlarını transport katmanı için tanımlar. */
-export interface AdminDashboardAnalyticsResponseDto { readonly lookupCount:number;readonly uniqueLookupUserCount:number;readonly databaseLookupCount:number;readonly providerLookupCount:number;readonly providerCreatedLookupCount:number;readonly dictionarySaveCount:number;readonly activeDictionarySaveCount:number;readonly uniqueDictionaryUserCount:number;readonly quizSessionCount:number;readonly quizAnswerCount:number;readonly correctAnswerCount:number;readonly wrongAnswerCount:number;readonly averageAccuracyRate:number;readonly systemRecommendedQuestionCount:number;readonly systemRecommendedWrongAnswerCount:number;readonly providerRequestCount:number;readonly providerSuccessCount:number;readonly providerFailureCount:number;readonly providerTimeoutCount:number;readonly providerRateLimitedCount:number;readonly providerServedFromCacheCount:number;readonly averageProviderDurationMs:number;readonly externalCacheEntryCount:number;readonly activeExternalCacheEntryCount:number;readonly externalCacheHitCount:number;readonly importJobCount:number;readonly completedImportJobCount:number;readonly failedImportJobCount:number;readonly runningImportJobCount:number;readonly lastLookupAt:string|null;readonly lastDictionarySaveAt:string|null;readonly lastQuizStartedAt:string|null;readonly lastProviderRequestAt:string|null;readonly lastImportJobAt:string|null;readonly generatedAt:string; }
-export interface TopSearchedItemResponseDto {readonly queryText:string|null;readonly normalizedQueryText:string|null;readonly inputType:string|null;readonly searchCount:number;readonly uniqueUserCount:number;readonly databaseHitCount:number;readonly providerUsageCount:number;readonly providerCreatedCount:number;readonly notFoundCount:number;readonly learningItemId:string|null;readonly lastSearchedAt:string;}
-export interface TopSearchesAnalyticsResponseDto {readonly from:string|null;readonly to:string|null;readonly limit:number;readonly generatedAt:string;readonly items:readonly TopSearchedItemResponseDto[]|null;}
-export interface TopSavedLearningItemResponseDto {readonly learningItemId:string;readonly itemType:string|null;readonly displayText:string|null;readonly primaryMeaning:string|null;readonly saveCount:number;readonly activeSaveCount:number;readonly uniqueUserCount:number;readonly contentSource:string|null;readonly qualityStatus:string|null;readonly cefrLevel:string|null;readonly difficultyGroup:string|null;readonly lastSavedAt:string;}
-export interface TopSavedLearningItemsAnalyticsResponseDto {readonly from:string|null;readonly to:string|null;readonly limit:number;readonly generatedAt:string;readonly items:readonly TopSavedLearningItemResponseDto[]|null;}
-export interface MostWrongLearningItemResponseDto {readonly learningItemId:string;readonly itemType:string|null;readonly displayText:string|null;readonly wrongAnswerCount:number;readonly correctAnswerCount:number;readonly totalAnswerCount:number;readonly wrongRate:number;readonly averageResponseTimeInMilliseconds:number;readonly systemRecommendedWrongAnswerCount:number;readonly lastWrongAt:string;}
-export interface MostWrongLearningItemsAnalyticsResponseDto {readonly from:string|null;readonly to:string|null;readonly limit:number;readonly generatedAt:string;readonly items:readonly MostWrongLearningItemResponseDto[]|null;}
-export interface ProviderStatItemResponseDto {readonly providerName:string|null;readonly providerType:string|null;readonly operationName:string|null;readonly totalRequestCount:number;readonly succeededCount:number;readonly failedCount:number;readonly timeoutCount:number;readonly rateLimitedCount:number;readonly servedFromCacheCount:number;readonly averageDurationMs:number;readonly cacheEntryCount:number;readonly cacheHitCount:number;readonly importJobCount:number;readonly failedImportJobCount:number;readonly lastRequestAt:string|null;}
-export interface ProviderStatsAnalyticsResponseDto {readonly from:string|null;readonly to:string|null;readonly generatedAt:string;readonly totalProviderRequestCount:number;readonly totalExternalCacheEntryCount:number;readonly totalExternalCacheHitCount:number;readonly totalImportJobCount:number;readonly items:readonly ProviderStatItemResponseDto[]|null;}
+export interface AdminDashboardAnalyticsResponseDto {
+  readonly lookupCount: number;
+  readonly uniqueLookupUserCount: number;
+  readonly databaseLookupCount: number;
+  readonly providerLookupCount: number;
+  readonly providerCreatedLookupCount: number;
+  readonly dictionarySaveCount: number;
+  readonly activeDictionarySaveCount: number;
+  readonly uniqueDictionaryUserCount: number;
+  readonly quizSessionCount: number;
+  readonly quizAnswerCount: number;
+  readonly correctAnswerCount: number;
+  readonly wrongAnswerCount: number;
+  readonly averageAccuracyRate: number;
+  readonly systemRecommendedQuestionCount: number;
+  readonly systemRecommendedWrongAnswerCount: number;
+  readonly providerRequestCount: number;
+  readonly providerSuccessCount: number;
+  readonly providerFailureCount: number;
+  readonly providerTimeoutCount: number;
+  readonly providerRateLimitedCount: number;
+  readonly providerServedFromCacheCount: number;
+  readonly averageProviderDurationMs: number;
+  readonly externalCacheEntryCount: number;
+  readonly activeExternalCacheEntryCount: number;
+  readonly externalCacheHitCount: number;
+  readonly importJobCount: number;
+  readonly completedImportJobCount: number;
+  readonly failedImportJobCount: number;
+  readonly runningImportJobCount: number;
+  readonly lastLookupAt: string | null;
+  readonly lastDictionarySaveAt: string | null;
+  readonly lastQuizStartedAt: string | null;
+  readonly lastProviderRequestAt: string | null;
+  readonly lastImportJobAt: string | null;
+  readonly generatedAt: string;
+}
+export interface TopSearchedItemResponseDto {
+  readonly queryText: string | null;
+  readonly normalizedQueryText: string | null;
+  readonly inputType: string | null;
+  readonly searchCount: number;
+  readonly uniqueUserCount: number;
+  readonly databaseHitCount: number;
+  readonly providerUsageCount: number;
+  readonly providerCreatedCount: number;
+  readonly notFoundCount: number;
+  readonly learningItemId: string | null;
+  readonly lastSearchedAt: string;
+}
+export interface TopSearchesAnalyticsResponseDto {
+  readonly from: string | null;
+  readonly to: string | null;
+  readonly limit: number;
+  readonly generatedAt: string;
+  readonly items: readonly TopSearchedItemResponseDto[] | null;
+}
+export interface TopSavedLearningItemResponseDto {
+  readonly learningItemId: string;
+  readonly itemType: string | null;
+  readonly displayText: string | null;
+  readonly primaryMeaning: string | null;
+  readonly saveCount: number;
+  readonly activeSaveCount: number;
+  readonly uniqueUserCount: number;
+  readonly contentSource: string | null;
+  readonly qualityStatus: string | null;
+  readonly cefrLevel: string | null;
+  readonly difficultyGroup: string | null;
+  readonly lastSavedAt: string;
+}
+export interface TopSavedLearningItemsAnalyticsResponseDto {
+  readonly from: string | null;
+  readonly to: string | null;
+  readonly limit: number;
+  readonly generatedAt: string;
+  readonly items: readonly TopSavedLearningItemResponseDto[] | null;
+}
+export interface MostWrongLearningItemResponseDto {
+  readonly learningItemId: string;
+  readonly itemType: string | null;
+  readonly displayText: string | null;
+  readonly wrongAnswerCount: number;
+  readonly correctAnswerCount: number;
+  readonly totalAnswerCount: number;
+  readonly wrongRate: number;
+  readonly averageResponseTimeInMilliseconds: number;
+  readonly systemRecommendedWrongAnswerCount: number;
+  readonly lastWrongAt: string;
+}
+export interface MostWrongLearningItemsAnalyticsResponseDto {
+  readonly from: string | null;
+  readonly to: string | null;
+  readonly limit: number;
+  readonly generatedAt: string;
+  readonly items: readonly MostWrongLearningItemResponseDto[] | null;
+}
+export interface ProviderStatItemResponseDto {
+  readonly providerName: string | null;
+  readonly providerType: string | null;
+  readonly operationName: string | null;
+  readonly totalRequestCount: number;
+  readonly succeededCount: number;
+  readonly failedCount: number;
+  readonly timeoutCount: number;
+  readonly rateLimitedCount: number;
+  readonly servedFromCacheCount: number;
+  readonly averageDurationMs: number;
+  readonly cacheEntryCount: number;
+  readonly cacheHitCount: number;
+  readonly importJobCount: number;
+  readonly failedImportJobCount: number;
+  readonly lastRequestAt: string | null;
+}
+export interface ProviderStatsAnalyticsResponseDto {
+  readonly from: string | null;
+  readonly to: string | null;
+  readonly generatedAt: string;
+  readonly totalProviderRequestCount: number;
+  readonly totalExternalCacheEntryCount: number;
+  readonly totalExternalCacheHitCount: number;
+  readonly totalImportJobCount: number;
+  readonly items: readonly ProviderStatItemResponseDto[] | null;
+}

@@ -1,3 +1,35 @@
 ﻿<!-- Backend quiz aggregate değerlerini responsive panelde gösterir. -->
-<wx-card padding="lg"><div class="flex flex-wrap items-start justify-between gap-3"><div><h2 class="text-xl font-black text-wx-text">Quiz performance</h2><p class="mt-1 text-sm text-wx-text-muted">{{ date(statistics().from) }} — {{ statistics().to ? date(statistics().to) : 'now' }}</p></div><p class="text-3xl font-black text-wx-accent">{{ rate(statistics().accuracyRate) }}</p></div><div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"><div class="rounded-xl bg-wx-surface-muted p-4"><p class="text-xs font-bold text-wx-text-muted">Sessions</p><p class="mt-1 text-2xl font-black text-wx-text">{{ statistics().totalQuizSessionCount }}</p></div><div class="rounded-xl bg-wx-surface-muted p-4"><p class="text-xs font-bold text-wx-text-muted">Answers</p><p class="mt-1 text-2xl font-black text-wx-text">{{ statistics().totalAnswerCount }}</p></div><div class="rounded-xl bg-wx-surface-muted p-4"><p class="text-xs font-bold text-wx-text-muted">Correct / wrong</p><p class="mt-1 text-2xl font-black text-wx-text"><span class="text-wx-success">{{ statistics().correctAnswerCount }}</span> / <span class="text-wx-error">{{ statistics().incorrectAnswerCount }}</span></p></div><div class="rounded-xl bg-wx-surface-muted p-4"><p class="text-xs font-bold text-wx-text-muted">Average response</p><p class="mt-1 text-2xl font-black text-wx-text">{{ duration(statistics().averageResponseTimeMs) }}</p></div></div></wx-card>
-
+<wx-card padding="lg"
+  ><div class="flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <h2 class="text-xl font-black text-wx-text">Quiz performance</h2>
+      <p class="mt-1 text-sm text-wx-text-muted">
+        {{ date(statistics().from) }} — {{ statistics().to ? date(statistics().to) : 'now' }}
+      </p>
+    </div>
+    <p class="text-3xl font-black text-wx-accent">{{ rate(statistics().accuracyRate) }}</p>
+  </div>
+  <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="rounded-xl bg-wx-surface-muted p-4">
+      <p class="text-xs font-bold text-wx-text-muted">Sessions</p>
+      <p class="mt-1 text-2xl font-black text-wx-text">{{ statistics().totalQuizSessionCount }}</p>
+    </div>
+    <div class="rounded-xl bg-wx-surface-muted p-4">
+      <p class="text-xs font-bold text-wx-text-muted">Answers</p>
+      <p class="mt-1 text-2xl font-black text-wx-text">{{ statistics().totalAnswerCount }}</p>
+    </div>
+    <div class="rounded-xl bg-wx-surface-muted p-4">
+      <p class="text-xs font-bold text-wx-text-muted">Correct / wrong</p>
+      <p class="mt-1 text-2xl font-black text-wx-text">
+        <span class="text-wx-success">{{ statistics().correctAnswerCount }}</span> /
+        <span class="text-wx-error">{{ statistics().incorrectAnswerCount }}</span>
+      </p>
+    </div>
+    <div class="rounded-xl bg-wx-surface-muted p-4">
+      <p class="text-xs font-bold text-wx-text-muted">Average response</p>
+      <p class="mt-1 text-2xl font-black text-wx-text">
+        {{ duration(statistics().averageResponseTimeMs) }}
+      </p>
+    </div>
+  </div></wx-card
+>

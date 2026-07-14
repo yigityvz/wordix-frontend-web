@@ -15,6 +15,7 @@ describe('AuthNavigationService', () => {
   /** Uygulama içi route'un saklanıp yalnızca bir kez tüketildiğini doğrular. */
   it('stores and consumes a safe internal return URL once', () => {
     const service = TestBed.inject(AuthNavigationService);
+
     service.rememberReturnUrl('/dictionary?filter=favorite');
 
     expect(service.consumeReturnUrl()).toBe('/dictionary?filter=favorite');

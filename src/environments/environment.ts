@@ -4,11 +4,8 @@
  */
 import { AppConfig } from '@core/config/app-config.model';
 
-/** Production bundle içine alınan typesafe ve salt-okunur uygulama ayarlarıdır. */
+/** Varsayılan bundle içine alınan typesafe ve salt-okunur uygulama ayarlarıdır. */
 export const environment = {
-  // Production optimizasyonu ve davranışlarının aktif olduğunu uygulamaya bildirir.
-  production: true,
-
   // Wordix API endpointlerinin türetileceği public API kök adresidir.
   apiBaseUrl: 'http://localhost:5000/api',
 

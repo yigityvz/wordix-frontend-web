@@ -29,27 +29,27 @@ Bu plan production uygulamasının route, rol, data ve UI state sınırlarını 
 
 ## Route matrix
 
-| Route | Rol | Shell | Ana data kaynağı |
-|---|---|---|---|
-| `/` | Public | Auth | Keycloak actions |
-| `/auth/callback` | Public callback | Auth | Keycloak + `/api/profile/me` |
-| `/dashboard` | `basic_user` | User | Learning summary + dictionary/statistics |
-| `/lookup` | Authenticated | User | `/api/lookups` |
-| `/dictionary` | Authenticated | User | `/api/user-dictionary` |
-| `/dictionary/:userLearningItemId` | Authenticated | User | Dictionary detail, notes, flags |
-| `/decks` | Authenticated | User | `/api/decks` |
-| `/decks/:deckId` | Authenticated | User | `/api/decks/{id}` |
-| `/quizzes/start` | Authenticated | User | Quiz config + decks when needed |
-| `/quizzes/:quizSessionId/play` | Authenticated | User | Quiz session + answer endpoint |
-| `/quizzes/:quizSessionId/summary` | Authenticated | User | Quiz summary endpoint |
-| `/statistics` | Authenticated | User | User statistics endpoints |
-| `/profile` | Authenticated | User | `/api/profile/me` |
-| `/settings` | Authenticated | User | Browser-local theme |
-| `/admin/dashboard` | `admin` | Admin | Admin dashboard analytics |
-| `/admin/analytics/top-lookups` | `admin` | Admin | Admin top searches |
-| `/admin/analytics/most-saved` | `admin` | Admin | Admin top saved |
-| `/admin/analytics/quiz-insights` | `admin` | Admin | Admin most wrong |
-| `/admin/analytics/provider` | `admin` | Admin | Admin provider stats |
+| Route                             | Rol             | Shell | Ana data kaynağı                         |
+| --------------------------------- | --------------- | ----- | ---------------------------------------- |
+| `/`                               | Public          | Auth  | Keycloak actions                         |
+| `/auth/callback`                  | Public callback | Auth  | Keycloak + `/api/profile/me`             |
+| `/dashboard`                      | `basic_user`    | User  | Learning summary + dictionary/statistics |
+| `/lookup`                         | Authenticated   | User  | `/api/lookups`                           |
+| `/dictionary`                     | Authenticated   | User  | `/api/user-dictionary`                   |
+| `/dictionary/:userLearningItemId` | Authenticated   | User  | Dictionary detail, notes, flags          |
+| `/decks`                          | Authenticated   | User  | `/api/decks`                             |
+| `/decks/:deckId`                  | Authenticated   | User  | `/api/decks/{id}`                        |
+| `/quizzes/start`                  | Authenticated   | User  | Quiz config + decks when needed          |
+| `/quizzes/:quizSessionId/play`    | Authenticated   | User  | Quiz session + answer endpoint           |
+| `/quizzes/:quizSessionId/summary` | Authenticated   | User  | Quiz summary endpoint                    |
+| `/statistics`                     | Authenticated   | User  | User statistics endpoints                |
+| `/profile`                        | Authenticated   | User  | `/api/profile/me`                        |
+| `/settings`                       | Authenticated   | User  | Browser-local theme                      |
+| `/admin/dashboard`                | `admin`         | Admin | Admin dashboard analytics                |
+| `/admin/analytics/top-lookups`    | `admin`         | Admin | Admin top searches                       |
+| `/admin/analytics/most-saved`     | `admin`         | Admin | Admin top saved                          |
+| `/admin/analytics/quiz-insights`  | `admin`         | Admin | Admin most wrong                         |
+| `/admin/analytics/provider`       | `admin`         | Admin | Admin provider stats                     |
 
 ## Authentication entry
 

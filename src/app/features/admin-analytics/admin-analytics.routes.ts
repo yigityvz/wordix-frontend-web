@@ -26,16 +26,12 @@ export const ADMIN_ANALYTICS_ROUTES: Routes = [
       {
         path: 'analytics/most-saved',
         loadComponent: () =>
-          import('./pages/top-saved-page/top-saved-page').then(
-            (module) => module.TopSavedPage,
-          ),
+          import('./pages/top-saved-page/top-saved-page').then((module) => module.TopSavedPage),
       },
       {
         path: 'analytics/quiz-insights',
         loadComponent: () =>
-          import('./pages/most-wrong-page/most-wrong-page').then(
-            (module) => module.MostWrongPage,
-          ),
+          import('./pages/most-wrong-page/most-wrong-page').then((module) => module.MostWrongPage),
       },
       {
         path: 'analytics/provider',

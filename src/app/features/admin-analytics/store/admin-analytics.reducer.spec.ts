@@ -21,7 +21,13 @@ describe('adminAnalyticsReducer', () => {
 
   /** Clear actionı feature state'ini canonical başlangıca döndürür. */
   it('clears all admin analytics state', () => {
-    const dirtyState = { ...initialAdminAnalyticsState, providerStatsStatus: 'error' as const, providerStatsError: 'x' };
-    expect(adminAnalyticsReducer(dirtyState, AdminAnalyticsActions.clear())).toEqual(initialAdminAnalyticsState);
+    const dirtyState = {
+      ...initialAdminAnalyticsState,
+      providerStatsStatus: 'error' as const,
+      providerStatsError: 'x',
+    };
+    expect(adminAnalyticsReducer(dirtyState, AdminAnalyticsActions.clear())).toEqual(
+      initialAdminAnalyticsState,
+    );
   });
 });

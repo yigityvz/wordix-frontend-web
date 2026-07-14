@@ -6,7 +6,10 @@ import { ErrorState } from '@shared/components/error-state/error-state';
 import { Spinner } from '@shared/components/spinner/spinner';
 import { ProfileFacade } from '../../../profile/facades/profile.facade';
 import { AdminAnalyticsFacade } from '../../facades/admin-analytics.facade';
-import { createAdminDateRangeQuery, createAdminListQuery } from '../../mappers/admin-analytics-query.mapper';
+import {
+  createAdminDateRangeQuery,
+  createAdminListQuery,
+} from '../../mappers/admin-analytics-query.mapper';
 
 /** Beş canlı admin endpointini production analytics landing ekranında birleştirir. */
 @Component({

@@ -1,4 +1,7 @@
-/** Bu dosya, dictionary effects'in API sonuçlarını collection, save ve notes lifecycle actionlarına çevirdiğini doğrular. */
+/**
+ * Bu dosya, dictionary effects'in API sonuçlarını collection, save ve notes lifecycle
+ * actionlarına çevirdiğini doğrular.
+ */
 import { TestBed } from '@angular/core/testing';
 import { ApiError } from '@core/errors/api-error.model';
 import { Actions } from '@ngrx/effects';

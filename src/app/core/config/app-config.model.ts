@@ -17,9 +17,6 @@ export interface KeycloakAppConfig {
 
 /** Uygulamanın environment bağımsız public runtime configuration sözleşmesidir. */
 export interface AppConfig {
-  /** Production optimizasyon ve davranışlarının aktif olup olmadığını belirtir. */
-  readonly production: boolean;
-
   /** Feature API servislerinin endpoint yollarını birleştireceği Wordix API kök adresidir. */
   readonly apiBaseUrl: string;
 

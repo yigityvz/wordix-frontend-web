@@ -1,7 +1,17 @@
 ﻿/** Bu dosya, admin analytics mapperlarının nullable backend collectionlarını normalize ettiğini doğrular. */
 import { describe, expect, it } from 'vitest';
-import { MostWrongLearningItemsAnalyticsResponseDto, ProviderStatsAnalyticsResponseDto, TopSavedLearningItemsAnalyticsResponseDto, TopSearchesAnalyticsResponseDto } from '../models/admin-analytics-api.models';
-import { mapMostWrong, mapProviderStats, mapTopSaved, mapTopSearches } from './admin-analytics.mapper';
+import {
+  MostWrongLearningItemsAnalyticsResponseDto,
+  ProviderStatsAnalyticsResponseDto,
+  TopSavedLearningItemsAnalyticsResponseDto,
+  TopSearchesAnalyticsResponseDto,
+} from '../models/admin-analytics-api.models';
+import {
+  mapMostWrong,
+  mapProviderStats,
+  mapTopSaved,
+  mapTopSearches,
+} from './admin-analytics.mapper';
 
 /** Dört nullable collection mapperının state contractını sınar. */
 describe('admin analytics mappers', () => {

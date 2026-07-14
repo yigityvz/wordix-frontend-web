@@ -1,4 +1,7 @@
-﻿/** Bu dosya, credential toplamadan gerÃ§ek Keycloak sign-in ve registration akÄ±ÅŸlarÄ±nÄ± baÅŸlatan giriÅŸ sayfasÄ±dÄ±r. */
+/**
+ * Bu dosya, credential toplamadan gerçek Keycloak sign-in ve registration akışlarını
+ * başlatan giriş sayfasıdır.
+ */
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthFacade } from '@core/auth/auth.facade';
@@ -7,7 +10,7 @@ import { WordixTheme } from '@core/theme/theme.models';
 import { Button } from '@shared/components/button/button';
 import { ThemeToggle } from '@shared/components/theme-toggle/theme-toggle';
 
-/** Wordix API'ye kullanÄ±cÄ± adÄ± veya parola gÃ¶ndermeyen tek public auth giriÅŸ yÃ¼zeyidir. */
+/** Wordix API'ye kullanıcı adı veya parola göndermeyen tek public auth giriş yüzeyidir. */
 @Component({
   selector: 'wx-login-page',
   imports: [Button, ThemeToggle],
@@ -15,58 +18,57 @@ import { ThemeToggle } from '@shared/components/theme-toggle/theme-toggle';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPage {
-  /** Sign-in, registration ve mevcut session state'ini auth altyapÄ±sÄ±na baÄŸlar. */
+  /** Sign-in, registration ve mevcut session state'ini auth altyapısına bağlar. */
   private readonly authFacade = inject(AuthFacade);
 
-  /** Login sonrasÄ± guard tarafÄ±ndan iletilen iÃ§ route bilgisini okur. */
+  /** Login sonrası guard tarafından iletilen iç route bilgisini okur. */
   private readonly route = inject(ActivatedRoute);
 
-  /** AÃ§Ä±k bir Keycloak oturumu varsa callback Ã§Ã¶zÃ¼m ekranÄ±na taÅŸÄ±r. */
+  /** Açık bir Keycloak oturumu varsa callback çözüm ekranına taşır. */
   private readonly router = inject(Router);
 
-  /** Light, dark ve system tercihini mevcut tema altyapÄ±sÄ±na baÄŸlar. */
+  /** Light, dark ve system tercihini mevcut tema altyapısına bağlar. */
   private readonly themeFacade = inject(ThemeFacade);
 
-  /** GiriÅŸ butonlarÄ±nÄ±n auth initialization boyunca devre dÄ±ÅŸÄ± kalmasÄ±nÄ± saÄŸlayan status signalidir. */
+  /** Giriş butonlarının auth initialization boyunca devre dışı kalmasını sağlayan status signalidir. */
   protected readonly authStatus = this.authFacade.status;
 
-  /** GerÃ§ek Keycloak yÃ¶nlendirme veya initialization hatasÄ±nÄ± kullanÄ±cÄ±ya sunar. */
+  /** Gerçek Keycloak yönlendirme veya initialization hatasını kullanıcıya sunar. */
   protected readonly authError = this.authFacade.error;
 
-  /** Tema seÃ§icinin gÃ¼ncel tercihini template'e sunar. */
+  /** Tema seçicinin güncel tercihini template'e sunar. */
   protected readonly theme = this.themeFacade.theme;
 
   /** System tercihinin çözüldüğü görünümü tema ikonuna sunar. */
   protected readonly resolvedTheme = this.themeFacade.resolvedTheme;
 
-  /** Guard query parametresindeki dÃ¶nÃ¼ÅŸ adresini Keycloak akÄ±ÅŸÄ±na iletir. */
+  /** Guard query parametresindeki dönüş adresini Keycloak akışına iletir. */
   private readonly returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
 
-  /** Mevcut oturumla root route aÃ§Ä±ldÄ±ÄŸÄ±nda rol/profile Ã§Ã¶zÃ¼mÃ¼nÃ¼ callback sayfasÄ±nda tamamlar. */
+  /** Mevcut oturumla root route açıldığında rol/profile çözümünü callback sayfasında tamamlar. */
   private readonly authenticatedRedirect = effect(() => {
     if (this.authFacade.isAuthenticated()) {
       void this.router.navigateByUrl('/auth/callback');
     }
   });
 
-  /** KullanÄ±cÄ±yÄ± Authorization Code + S256 PKCE kullanan gerÃ§ek Keycloak login ekranÄ±na gÃ¶nderir. */
+  /** Kullanıcıyı Authorization Code + S256 PKCE kullanan gerçek Keycloak login ekranına gönderir. */
   protected signIn(): void {
     this.authFacade.login(this.returnUrl);
   }
 
-  /** KullanÄ±cÄ±yÄ± aynÄ± public client Ã¼zerindeki gerÃ§ek Keycloak registration ekranÄ±na gÃ¶nderir. */
+  /** Kullanıcıyı aynı public client üzerindeki gerçek Keycloak registration ekranına gönderir. */
   protected createAccount(): void {
     this.authFacade.register(this.returnUrl);
   }
 
-  /** Auth servisinin geÃ§ici initialization hatasÄ±ndan sonra gerÃ§ek SSO kontrolÃ¼nÃ¼ yeniden baÅŸlatÄ±r. */
+  /** Auth servisinin geçici initialization hatasından sonra gerçek SSO kontrolünü yeniden başlatır. */
   protected retryAuthentication(): void {
     this.authFacade.initialize();
   }
 
-  /** KullanÄ±cÄ±nÄ±n light, dark veya system tercihini kalÄ±cÄ± tema servisine iletir. */
+  /** Kullanıcının light, dark veya system tercihini kalıcı tema servisine iletir. */
   protected setTheme(theme: WordixTheme): void {
     this.themeFacade.setTheme(theme);
   }
 }
-

@@ -5,7 +5,12 @@ import { Button } from '@shared/components/button/button';
 import { QuizAnswerResult, SavedQuizRecommendation } from '../../models/quiz.models';
 
 /** Doğruluk hesabı yapmadan answer ve recommendation mutation durumunu görselleştirir. */
-@Component({ selector: 'wx-answer-feedback', imports: [Button, RouterLink], templateUrl: './answer-feedback.html', changeDetection: ChangeDetectionStrategy.OnPush })
+@Component({
+  selector: 'wx-answer-feedback',
+  imports: [Button, RouterLink],
+  templateUrl: './answer-feedback.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
 export class AnswerFeedback {
   /** Backend answer endpointinden map edilen sonuçtur. */
   readonly result = input.required<QuizAnswerResult>();
@@ -22,7 +27,11 @@ export class AnswerFeedback {
   /** Uygun recommendation UUID'si için save intentini parent sayfaya yayınlar. */
   readonly saveRecommendationRequested = output<void>();
   /** Kullanıcının ilerleme niyetini parent sayfaya iletir. */
-  protected continueQuiz(): void { this.continueRequested.emit(); }
+  protected continueQuiz(): void {
+    this.continueRequested.emit();
+  }
   /** Kullanıcının gerçek dictionary save niyetini parent sayfaya iletir. */
-  protected saveRecommendation(): void { this.saveRecommendationRequested.emit(); }
+  protected saveRecommendation(): void {
+    this.saveRecommendationRequested.emit();
+  }
 }

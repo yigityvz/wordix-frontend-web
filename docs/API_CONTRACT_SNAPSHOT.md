@@ -42,21 +42,21 @@ Her `ValidationError`, nullable `propertyName`, `errorMessage` ve `errorCode` al
 
 Frontend ortak HTTP katmanı şu durumları normalize eder:
 
-| Status | Frontend davranışı |
-|---|---|
-| 400 | Validation/business error mapping |
-| 401 | Session/authentication recovery |
-| 403 | Forbidden state veya route |
-| 404 | Feature not-found state |
-| 500 | Generic server error, güvenli loglama |
+| Status | Frontend davranışı                    |
+| ------ | ------------------------------------- |
+| 400    | Validation/business error mapping     |
+| 401    | Session/authentication recovery       |
+| 403    | Forbidden state veya route            |
+| 404    | Feature not-found state               |
+| 500    | Generic server error, güvenli loglama |
 
 Tüm protected requestler access token taşır. Frontend ownership için `userId`, `keycloakUserId`, `userProfileId` veya `ownerId` göndermez.
 
 ## Profile
 
-| Method | Path | Response payload |
-|---|---|---|
-| GET | `/api/profile/me` | `CurrentUserInfoResponse` |
+| Method | Path              | Response payload          |
+| ------ | ----------------- | ------------------------- |
+| GET    | `/api/profile/me` | `CurrentUserInfoResponse` |
 
 `CurrentUserInfoResponse` alanları:
 
@@ -72,9 +72,9 @@ roles[]
 
 ## Lookup
 
-| Method | Path | Request | Response payload |
-|---|---|---|---|
-| POST | `/api/lookups` | `LookupRequest` | `LookupResponse` |
+| Method | Path           | Request         | Response payload |
+| ------ | -------------- | --------------- | ---------------- |
+| POST   | `/api/lookups` | `LookupRequest` | `LookupResponse` |
 
 `LookupRequest`:
 
@@ -103,12 +103,12 @@ Her meaning `meaningId`, translation, definition, example, part-of-speech ve sou
 
 ## User Dictionary
 
-| Method | Path | Request | Response payload |
-|---|---|---|---|
-| GET | `/api/user-dictionary` | — | `GetMyDictionaryResponse` |
-| POST | `/api/user-dictionary` | `SaveLearningItemRequest` | `SaveLearningItemResponse` |
-| POST | `/api/user-dictionary/sentences` | `SaveSentenceToDictionaryRequest` | `SaveSentenceToDictionaryResponse` |
-| GET | `/api/user-dictionary/{id}` | path `id` | `UserDictionaryItemResponse` |
+| Method | Path                             | Request                           | Response payload                   |
+| ------ | -------------------------------- | --------------------------------- | ---------------------------------- |
+| GET    | `/api/user-dictionary`           | —                                 | `GetMyDictionaryResponse`          |
+| POST   | `/api/user-dictionary`           | `SaveLearningItemRequest`         | `SaveLearningItemResponse`         |
+| POST   | `/api/user-dictionary/sentences` | `SaveSentenceToDictionaryRequest` | `SaveSentenceToDictionaryResponse` |
+| GET    | `/api/user-dictionary/{id}`      | path `id`                         | `UserDictionaryItemResponse`       |
 
 `SaveLearningItemRequest`:
 
@@ -134,34 +134,34 @@ Contract gap: ürün hedefi word/phrase sonucunu bütün anlamlarıyla kaydetmek
 
 ## Notes
 
-| Method | Path | Request | Response payload |
-|---|---|---|---|
-| GET | `/api/user-dictionary/{userLearningItemId}/notes` | — | `GetUserLearningNotesResponse` |
-| POST | `/api/user-dictionary/{userLearningItemId}/notes` | `CreateUserLearningNoteRequest` | `UserLearningNoteResponse` |
-| PUT | `/api/user-dictionary/notes/{noteId}` | `UpdateUserLearningNoteRequest` | `UserLearningNoteResponse` |
-| DELETE | `/api/user-dictionary/notes/{noteId}` | — | `UserLearningNoteResponse` |
+| Method | Path                                              | Request                         | Response payload               |
+| ------ | ------------------------------------------------- | ------------------------------- | ------------------------------ |
+| GET    | `/api/user-dictionary/{userLearningItemId}/notes` | —                               | `GetUserLearningNotesResponse` |
+| POST   | `/api/user-dictionary/{userLearningItemId}/notes` | `CreateUserLearningNoteRequest` | `UserLearningNoteResponse`     |
+| PUT    | `/api/user-dictionary/notes/{noteId}`             | `UpdateUserLearningNoteRequest` | `UserLearningNoteResponse`     |
+| DELETE | `/api/user-dictionary/notes/{noteId}`             | —                               | `UserLearningNoteResponse`     |
 
 Create/update request alanı `noteText`tir.
 
 ## Flags
 
-| Method | Path | Request | Response payload |
-|---|---|---|---|
-| GET | `/api/user-dictionary/{userLearningItemId}/flags` | — | `GetUserLearningFlagsResponse` |
-| POST | `/api/user-dictionary/{userLearningItemId}/flags` | `SetUserLearningFlagRequest` | `UserLearningFlagResponse` |
-| DELETE | `/api/user-dictionary/{userLearningItemId}/flags/{flagType}` | — | `UserLearningFlagResponse` |
+| Method | Path                                                         | Request                      | Response payload               |
+| ------ | ------------------------------------------------------------ | ---------------------------- | ------------------------------ |
+| GET    | `/api/user-dictionary/{userLearningItemId}/flags`            | —                            | `GetUserLearningFlagsResponse` |
+| POST   | `/api/user-dictionary/{userLearningItemId}/flags`            | `SetUserLearningFlagRequest` | `UserLearningFlagResponse`     |
+| DELETE | `/api/user-dictionary/{userLearningItemId}/flags/{flagType}` | —                            | `UserLearningFlagResponse`     |
 
 `SetUserLearningFlagRequest` alanı `flagType`tir. Desteklenen flag değerleri backend enum/sözleşmesinden doğrulanmalıdır.
 
 ## Decks
 
-| Method | Path | Request | Response payload |
-|---|---|---|---|
-| GET | `/api/decks` | — | `GetMyDecksResponse` |
-| POST | `/api/decks` | `CreateDeckRequest` | `CreateDeckResponse` |
-| GET | `/api/decks/{id}` | path `id` | `DeckDetailResponse` |
-| POST | `/api/decks/{deckId}/items` | `AddItemToDeckRequest` | `AddItemToDeckResponse` |
-| DELETE | `/api/decks/{deckId}/items/{userLearningItemId}` | — | `RemoveItemFromDeckResponse` |
+| Method | Path                                             | Request                | Response payload             |
+| ------ | ------------------------------------------------ | ---------------------- | ---------------------------- |
+| GET    | `/api/decks`                                     | —                      | `GetMyDecksResponse`         |
+| POST   | `/api/decks`                                     | `CreateDeckRequest`    | `CreateDeckResponse`         |
+| GET    | `/api/decks/{id}`                                | path `id`              | `DeckDetailResponse`         |
+| POST   | `/api/decks/{deckId}/items`                      | `AddItemToDeckRequest` | `AddItemToDeckResponse`      |
+| DELETE | `/api/decks/{deckId}/items/{userLearningItemId}` | —                      | `RemoveItemFromDeckResponse` |
 
 Requests:
 
@@ -174,12 +174,12 @@ Deck update/delete endpointi yoktur. Lookup sonucundan deck'e ekleme için önce
 
 ## Quizzes
 
-| Method | Path | Request | Response payload |
-|---|---|---|---|
-| POST | `/api/quizzes` | `StartQuizRequest` | `StartQuizResponse` |
-| POST | `/api/quizzes/{quizSessionId}/answers` | `SubmitQuizAnswerRequest` | `SubmitQuizAnswerResponse` |
-| GET | `/api/quizzes/{quizSessionId}/summary` | — | `QuizSummaryResponse` |
-| POST | `/api/quizzes/recommendations/{quizRecommendationItemId}/save-to-dictionary` | — | `SaveRecommendedItemToDictionaryResponse` |
+| Method | Path                                                                         | Request                   | Response payload                          |
+| ------ | ---------------------------------------------------------------------------- | ------------------------- | ----------------------------------------- |
+| POST   | `/api/quizzes`                                                               | `StartQuizRequest`        | `StartQuizResponse`                       |
+| POST   | `/api/quizzes/{quizSessionId}/answers`                                       | `SubmitQuizAnswerRequest` | `SubmitQuizAnswerResponse`                |
+| GET    | `/api/quizzes/{quizSessionId}/summary`                                       | —                         | `QuizSummaryResponse`                     |
+| POST   | `/api/quizzes/recommendations/{quizRecommendationItemId}/save-to-dictionary` | —                         | `SaveRecommendedItemToDictionaryResponse` |
 
 `StartQuizRequest`:
 
@@ -211,13 +211,13 @@ Contract gap: aktif quiz browser tarafından kapatıldığında unanswered sorul
 
 ## User Statistics
 
-| Method | Path | Query |
-|---|---|---|
-| GET | `/api/user-statistics/learning-summary` | — |
-| GET | `/api/user-statistics/quizzes` | `FromUtc`, `ToUtc`, `QuizType`, `QuizSourceType`, `QuizContentMode`, `DifficultyGroup` |
-| GET | `/api/user-statistics/difficult-items` | `PageNumber`, `PageSize`, `Source`, `SortBy`, `ItemType`, `LearningStatus` |
-| GET | `/api/user-statistics/decks` | — |
-| GET | `/api/user-statistics/confidence-distribution` | — |
+| Method | Path                                           | Query                                                                                  |
+| ------ | ---------------------------------------------- | -------------------------------------------------------------------------------------- |
+| GET    | `/api/user-statistics/learning-summary`        | —                                                                                      |
+| GET    | `/api/user-statistics/quizzes`                 | `FromUtc`, `ToUtc`, `QuizType`, `QuizSourceType`, `QuizContentMode`, `DifficultyGroup` |
+| GET    | `/api/user-statistics/difficult-items`         | `PageNumber`, `PageSize`, `Source`, `SortBy`, `ItemType`, `LearningStatus`             |
+| GET    | `/api/user-statistics/decks`                   | —                                                                                      |
+| GET    | `/api/user-statistics/confidence-distribution` | —                                                                                      |
 
 Dashboard ve statistics ekranları bu endpointleri kullanır. Streak alanı mevcut sözleşmede yoktur.
 
@@ -225,13 +225,13 @@ Dashboard ve statistics ekranları bu endpointleri kullanır. Streak alanı mevc
 
 Tüm endpointler admin backend authorization ve frontend RoleGuard gerektirir.
 
-| Method | Path | Query | Response payload |
-|---|---|---|---|
-| GET | `/api/admin/analytics/dashboard` | `FromUtc`, `ToUtc` | `AdminDashboardAnalyticsResponse` |
-| GET | `/api/admin/analytics/top-searches` | `FromUtc`, `ToUtc`, `Limit` | `TopSearchesAnalyticsResponse` |
-| GET | `/api/admin/analytics/top-saved` | `FromUtc`, `ToUtc`, `Limit` | `TopSavedLearningItemsAnalyticsResponse` |
-| GET | `/api/admin/analytics/most-wrong` | `FromUtc`, `ToUtc`, `Limit` | `MostWrongLearningItemsAnalyticsResponse` |
-| GET | `/api/admin/analytics/provider-stats` | `FromUtc`, `ToUtc` | `ProviderStatsAnalyticsResponse` |
+| Method | Path                                  | Query                       | Response payload                          |
+| ------ | ------------------------------------- | --------------------------- | ----------------------------------------- |
+| GET    | `/api/admin/analytics/dashboard`      | `FromUtc`, `ToUtc`          | `AdminDashboardAnalyticsResponse`         |
+| GET    | `/api/admin/analytics/top-searches`   | `FromUtc`, `ToUtc`, `Limit` | `TopSearchesAnalyticsResponse`            |
+| GET    | `/api/admin/analytics/top-saved`      | `FromUtc`, `ToUtc`, `Limit` | `TopSavedLearningItemsAnalyticsResponse`  |
+| GET    | `/api/admin/analytics/most-wrong`     | `FromUtc`, `ToUtc`, `Limit` | `MostWrongLearningItemsAnalyticsResponse` |
+| GET    | `/api/admin/analytics/provider-stats` | `FromUtc`, `ToUtc`          | `ProviderStatsAnalyticsResponse`          |
 
 Desteklenen frontend admin ekranları yalnızca bu aggregate analytics verilerini kullanır.
 

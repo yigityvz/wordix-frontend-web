@@ -1,10 +1,7 @@
 /** Bu dosya, canlı Swagger'daki quiz endpointlerinin gerçek HTTP entegrasyonunu yönetir. */
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { AppConfigService } from '@core/config/app-config.service';
-import { unwrapApiResponse } from '@core/http/api-response.mapper';
-import { ApiResponse } from '@core/http/models/api-response.model';
-import { map, Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { WordixApiService } from '@core/http/wordix-api.service';
+import { Observable } from 'rxjs';
 
 import {
   QuizSummaryResponseDto,
@@ -16,18 +13,11 @@ import { StartQuizRequest, SubmitQuizAnswerRequest } from '../models/quiz-reques
 
 /** Quiz endpointlerini component ve state katmanından izole eden feature API servisidir. */
 @Injectable()
-export class QuizApiService {
-  /** Interceptor zincirini kullanan Angular HTTP client üzerinden protected request gönderir. */
-  private readonly httpClient = inject(HttpClient);
-
-  /** Environment bazlı Wordix API adresini merkezi config servisinden okur. */
-  private readonly apiBaseUrl = inject(AppConfigService).apiBaseUrl.replace(/\/+$/, '');
-
+export class QuizApiService extends WordixApiService {
   /** Ownership alanı eklemeden yeni quiz sessionı gerçek start endpointinde oluşturur. */
   startQuiz(request: StartQuizRequest): Observable<StartQuizResponseDto> {
-    return this.httpClient
-      .post<ApiResponse<StartQuizResponseDto>>(`${this.apiBaseUrl}/quizzes`, request)
-      .pipe(map(unwrapApiResponse));
+    // Quiz start body ve response tipini merkezi Wordix POST adaptörü üzerinden taşır.
+    return this.postData<StartQuizRequest, StartQuizResponseDto>('quizzes', request);
   }
 
   /** Cevabı canonical session route'unda backend değerlendirmesine gönderir. */
@@ -35,35 +25,36 @@ export class QuizApiService {
     quizSessionId: string,
     request: SubmitQuizAnswerRequest,
   ): Observable<SubmitQuizAnswerResponseDto> {
+    // Route kimliğini path segmentine eklemeden önce güvenli URL encoding uygular.
     const encodedSessionId = encodeURIComponent(quizSessionId);
-    return this.httpClient
-      .post<ApiResponse<SubmitQuizAnswerResponseDto>>(
-        `${this.apiBaseUrl}/quizzes/${encodedSessionId}/answers`,
-        request,
-      )
-      .pipe(map(unwrapApiResponse));
+
+    // Cevap doğruluğunu frontendde hesaplamadan backend operasyonuna iletir.
+    return this.postData<SubmitQuizAnswerRequest, SubmitQuizAnswerResponseDto>(
+      `quizzes/${encodedSessionId}/answers`,
+      request,
+    );
   }
 
   /** Canonical session UUID ile backend tarafından hesaplanan quiz özetini getirir. */
   getSummary(quizSessionId: string): Observable<QuizSummaryResponseDto> {
+    // Route kimliğini path segmentine eklemeden önce güvenli URL encoding uygular.
     const encodedSessionId = encodeURIComponent(quizSessionId);
-    return this.httpClient
-      .get<ApiResponse<QuizSummaryResponseDto>>(
-        `${this.apiBaseUrl}/quizzes/${encodedSessionId}/summary`,
-      )
-      .pipe(map(unwrapApiResponse));
+
+    // Backend tarafından hesaplanan summary payloadını merkezi GET adaptöründen alır.
+    return this.getData<QuizSummaryResponseDto>(`quizzes/${encodedSessionId}/summary`);
   }
 
   /** Recommendation itemını kendi canonical endpointiyle gerçek dictionary kaydına dönüştürür. */
   saveRecommendation(
     quizRecommendationItemId: string,
   ): Observable<SaveRecommendedItemToDictionaryResponseDto> {
+    // Recommendation kimliğini path segmentine eklemeden önce güvenli URL encoding uygular.
     const encodedRecommendationId = encodeURIComponent(quizRecommendationItemId);
-    return this.httpClient
-      .post<ApiResponse<SaveRecommendedItemToDictionaryResponseDto>>(
-        `${this.apiBaseUrl}/quizzes/recommendations/${encodedRecommendationId}/save-to-dictionary`,
-        null,
-      )
-      .pipe(map(unwrapApiResponse));
+
+    // Swagger'ın body istemeyen POST sözleşmesini açık null body ile korur.
+    return this.postData<null, SaveRecommendedItemToDictionaryResponseDto>(
+      `quizzes/recommendations/${encodedRecommendationId}/save-to-dictionary`,
+      null,
+    );
   }
 }

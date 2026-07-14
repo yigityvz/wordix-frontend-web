@@ -19,16 +19,16 @@ Angular uygulaması production kalitesinde, responsive, erişilebilir ve backend
 ## Coastal Blues palette
 
 ```ts
-deepSpaceBlue: '#012a4a'
-yaleBlueDark: '#013a63'
-yaleBlue: '#01497c'
-yaleBlueBright: '#014f86'
-richCerulean: '#2a6f97'
-cerulean: '#2c7da0'
-airForceBlue: '#468faf'
-steelBlue: '#61a5c2'
-skyBlueLight: '#89c2d9'
-lightBlue: '#a9d6e5'
+deepSpaceBlue: '#012a4a';
+yaleBlueDark: '#013a63';
+yaleBlue: '#01497c';
+yaleBlueBright: '#014f86';
+richCerulean: '#2a6f97';
+cerulean: '#2c7da0';
+airForceBlue: '#468faf';
+steelBlue: '#61a5c2';
+skyBlueLight: '#89c2d9';
+lightBlue: '#a9d6e5';
 ```
 
 Componentlerde doğrudan hex kullanılmaz. Palette renkleri Tailwind theme ve semantic tokenlar üzerinden tüketilir. Status, chart ve focus renkleri de tokenlaştırılır.

@@ -848,12 +848,14 @@ Eğer Stitch export, image link veya ekran isimleri verirse `docs/UI_SCREEN_INVE
 # UI Screen Inventory
 
 ## Auth
+
 - Auth / Login
 - Auth / Callback Loading
 - Auth / Forbidden
 - Auth / Unauthorized
 
 ## User
+
 - User / Dashboard / Light
 - User / Dashboard / Dark
 - User / Lookup / Empty
@@ -874,6 +876,7 @@ Eğer Stitch export, image link veya ekran isimleri verirse `docs/UI_SCREEN_INVE
 - User / Settings
 
 ## Admin
+
 - Admin / Dashboard / Light
 - Admin / Dashboard / Dark
 - Admin / Top Lookups
@@ -881,6 +884,7 @@ Eğer Stitch export, image link veya ekran isimleri verirse `docs/UI_SCREEN_INVE
 - Admin / Forbidden
 
 ## Shared States
+
 - Loading
 - Empty
 - Error
@@ -933,14 +937,17 @@ Codex `docs/DESIGN_SYSTEM.md` dosyasını şu başlıklarla oluşturmalıdır:
 # Wordix Design System
 
 ## Brand Personality
+
 Premium, modern, calm, intelligent, focused, trustworthy.
 
 ## Theme Modes
+
 - Light mode
 - Dark mode
 - System preference
 
 ## Color Tokens
+
 - deep-space-blue
 - yale-blue-dark
 - yale-blue
@@ -953,6 +960,7 @@ Premium, modern, calm, intelligent, focused, trustworthy.
 - light-blue
 
 ## Semantic Tokens
+
 - primary
 - secondary
 - surface
@@ -966,6 +974,7 @@ Premium, modern, calm, intelligent, focused, trustworthy.
 - info
 
 ## Typography
+
 - Display
 - Heading
 - Body
@@ -973,6 +982,7 @@ Premium, modern, calm, intelligent, focused, trustworthy.
 - Label
 
 ## Component Tokens
+
 - border radius
 - shadow
 - spacing
@@ -981,6 +991,7 @@ Premium, modern, calm, intelligent, focused, trustworthy.
 - animation duration
 
 ## Components
+
 - Button
 - Card
 - Badge
@@ -997,6 +1008,7 @@ Premium, modern, calm, intelligent, focused, trustworthy.
 - ThemeToggle
 
 ## Accessibility Rules
+
 - Contrast
 - Focus
 - Keyboard navigation
@@ -1009,7 +1021,7 @@ Premium, modern, calm, intelligent, focused, trustworthy.
 
 `AGENTS.md` sonuna veya tasarım bölümüne şunu ekle:
 
-```markdown
+````markdown
 ## UI Design Source of Truth
 
 Before implementing visual UI, Codex must read:
@@ -1019,6 +1031,7 @@ docs/UI_STITCH_MASTER_PROMPT.md
 docs/UI_SCREEN_INVENTORY.md
 docs/DESIGN_SYSTEM.md
 ```
+````
 
 The UI must support:
 
@@ -1044,7 +1057,8 @@ Or map it to the closest real backend-supported action
 ```
 
 Backend Swagger/OpenAPI remains the behavior source of truth. Stitch is the visual source of truth.
-```
+
+````
 
 ---
 
@@ -1076,7 +1090,7 @@ Amaç:
 - UI ekran listesi
 - Tasarım tokenları
 - Sonraki faz
-```
+````
 
 ---
 

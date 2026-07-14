@@ -1,4 +1,7 @@
-/** Bu dosya, dictionary mapperların nullable listeleri ve nested selected content alanlarını doğru dönüştürdüğünü doğrular. */
+/**
+ * Bu dosya, dictionary mapperların nullable listeleri ve nested selected content
+ * alanlarını doğru dönüştürdüğünü doğrular.
+ */
 import { describe, expect, it } from 'vitest';
 
 import { UserDictionaryItemResponseDto } from '../models/dictionary-api.models';

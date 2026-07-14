@@ -1,7 +1,83 @@
 ﻿<!-- En çok kaydedilen learning itemları backend metrikleriyle gösterir. -->
 <div class="space-y-6">
-  <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p class="text-sm font-bold uppercase tracking-[0.18em] text-wx-accent">Admin analytics</p><h1 class="mt-2 text-3xl font-black text-wx-text">Most saved</h1><p class="mt-2 text-sm text-wx-text-muted">Learning items users save most often.</p></div><div class="flex gap-2">@for(days of [7,30,90];track days){<button type="button" class="rounded-full border px-3 py-1.5 text-xs font-bold" [class.bg-wx-accent]="dateRangeDays()===days" [class.text-white]="dateRangeDays()===days" [class.border-wx-accent]="dateRangeDays()===days" [class.border-wx-border]="dateRangeDays()!==days" (click)="selectDateRange(days)">{{days}}d</button>}</div></header>
-  @if(status()==='loading'){<div class="flex min-h-56 items-center justify-center rounded-2xl border border-wx-border bg-wx-surface"><wx-spinner label="Loading most saved items" /></div>}@else if(error();as message){<div class="rounded-2xl border border-wx-border bg-wx-surface"><wx-error-state title="Most saved items could not be loaded" [description]="message" retryLabel="Try again" (retry)="load()" /></div>}@else if(analytics();as data){
-    <div class="overflow-hidden rounded-2xl border border-wx-border bg-wx-surface shadow-sm"><div class="overflow-x-auto"><table class="min-w-full text-left text-sm"><thead class="bg-wx-surface-muted text-xs uppercase tracking-wider text-wx-text-muted"><tr><th class="px-5 py-4">Item</th><th class="px-5 py-4">Saves</th><th class="px-5 py-4">Active</th><th class="px-5 py-4">Users</th><th class="px-5 py-4">Source</th><th class="px-5 py-4">Level</th></tr></thead><tbody class="divide-y divide-wx-border">@for(item of data.items;track item.learningItemId){<tr class="hover:bg-wx-surface-muted/60"><td class="px-5 py-4"><p class="font-bold text-wx-text">{{item.displayText??'Learning item'}}</p><p class="mt-1 max-w-sm truncate text-xs text-wx-text-muted">{{item.primaryMeaning??item.itemType??'Meaning unavailable'}}</p></td><td class="px-5 py-4 font-black text-wx-text">{{item.saveCount}}</td><td class="px-5 py-4 text-wx-text-secondary">{{item.activeSaveCount}}</td><td class="px-5 py-4 text-wx-text-secondary">{{item.uniqueUserCount}}</td><td class="px-5 py-4 text-wx-text-secondary">{{item.contentSource??'—'}}</td><td class="px-5 py-4 text-wx-text-secondary">{{item.cefrLevel??item.difficultyGroup??'—'}}</td></tr>}@empty{<tr><td colspan="6" class="px-5 py-12 text-center text-wx-text-muted">No dictionary save activity in this period.</td></tr>}</tbody></table></div></div>
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-sm font-bold uppercase tracking-[0.18em] text-wx-accent">Admin analytics</p>
+      <h1 class="mt-2 text-3xl font-black text-wx-text">Most saved</h1>
+      <p class="mt-2 text-sm text-wx-text-muted">Learning items users save most often.</p>
+    </div>
+    <div class="flex gap-2">
+      @for (days of [7, 30, 90]; track days) {
+        <button
+          type="button"
+          class="rounded-full border px-3 py-1.5 text-xs font-bold"
+          [class.bg-wx-accent]="dateRangeDays() === days"
+          [class.text-white]="dateRangeDays() === days"
+          [class.border-wx-accent]="dateRangeDays() === days"
+          [class.border-wx-border]="dateRangeDays() !== days"
+          (click)="selectDateRange(days)"
+        >
+          {{ days }}d
+        </button>
+      }
+    </div>
+  </header>
+  @if (status() === 'loading') {
+    <div
+      class="flex min-h-56 items-center justify-center rounded-2xl border border-wx-border bg-wx-surface"
+    >
+      <wx-spinner label="Loading most saved items" />
+    </div>
+  } @else if (error(); as message) {
+    <div class="rounded-2xl border border-wx-border bg-wx-surface">
+      <wx-error-state
+        title="Most saved items could not be loaded"
+        [description]="message"
+        retryLabel="Try again"
+        (retry)="load()"
+      />
+    </div>
+  } @else if (analytics(); as data) {
+    <div class="overflow-hidden rounded-2xl border border-wx-border bg-wx-surface shadow-sm">
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <thead class="bg-wx-surface-muted text-xs uppercase tracking-wider text-wx-text-muted">
+            <tr>
+              <th class="px-5 py-4">Item</th>
+              <th class="px-5 py-4">Saves</th>
+              <th class="px-5 py-4">Active</th>
+              <th class="px-5 py-4">Users</th>
+              <th class="px-5 py-4">Source</th>
+              <th class="px-5 py-4">Level</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-wx-border">
+            @for (item of data.items; track item.learningItemId) {
+              <tr class="hover:bg-wx-surface-muted/60">
+                <td class="px-5 py-4">
+                  <p class="font-bold text-wx-text">{{ item.displayText ?? 'Learning item' }}</p>
+                  <p class="mt-1 max-w-sm truncate text-xs text-wx-text-muted">
+                    {{ item.primaryMeaning ?? item.itemType ?? 'Meaning unavailable' }}
+                  </p>
+                </td>
+                <td class="px-5 py-4 font-black text-wx-text">{{ item.saveCount }}</td>
+                <td class="px-5 py-4 text-wx-text-secondary">{{ item.activeSaveCount }}</td>
+                <td class="px-5 py-4 text-wx-text-secondary">{{ item.uniqueUserCount }}</td>
+                <td class="px-5 py-4 text-wx-text-secondary">{{ item.contentSource ?? '—' }}</td>
+                <td class="px-5 py-4 text-wx-text-secondary">
+                  {{ item.cefrLevel ?? item.difficultyGroup ?? '—' }}
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="px-5 py-12 text-center text-wx-text-muted">
+                  No dictionary save activity in this period.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
   }
 </div>

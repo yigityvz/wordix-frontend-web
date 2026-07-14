@@ -6,7 +6,12 @@ import { AdminAnalyticsFacade } from '../../facades/admin-analytics.facade';
 import { createAdminListQuery } from '../../mappers/admin-analytics-query.mapper';
 
 /** En çok aranan sorguları canlı admin endpointinden sunar. */
-@Component({ selector: 'wx-top-searches-page', imports: [ErrorState, Spinner], templateUrl: './top-searches-page.html', changeDetection: ChangeDetectionStrategy.OnPush })
+@Component({
+  selector: 'wx-top-searches-page',
+  imports: [ErrorState, Spinner],
+  templateUrl: './top-searches-page.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
 export class TopSearchesPage implements OnInit {
   /** State ve backend intentlerini facade üzerinden yönetir. */
   private readonly facade = inject(AdminAnalyticsFacade);
@@ -16,11 +21,18 @@ export class TopSearchesPage implements OnInit {
   protected readonly error = this.facade.topSearchesError;
 
   /** Sayfa açılışında canonical limit ile gerçek endpointi çağırır. */
-  ngOnInit(): void { this.load(); }
+  ngOnInit(): void {
+    this.load();
+  }
 
   /** Tarih filtresini değiştirip backend sorgusunu yeniler. */
-  protected selectDateRange(days: number): void { this.dateRangeDays.set(days); this.load(); }
+  protected selectDateRange(days: number): void {
+    this.dateRangeDays.set(days);
+    this.load();
+  }
 
   /** Mevcut tarih filtresiyle gerçek top-searches isteğini gönderir. */
-  protected load(): void { this.facade.loadTopSearches(createAdminListQuery(this.dateRangeDays(), 20)); }
+  protected load(): void {
+    this.facade.loadTopSearches(createAdminListQuery(this.dateRangeDays(), 20));
+  }
 }

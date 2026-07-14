@@ -6,7 +6,12 @@ import { AdminAnalyticsFacade } from '../../facades/admin-analytics.facade';
 import { createAdminListQuery } from '../../mappers/admin-analytics-query.mapper';
 
 /** En çok kaydedilen learning itemları canlı admin endpointinden sunar. */
-@Component({ selector: 'wx-top-saved-page', imports: [ErrorState, Spinner], templateUrl: './top-saved-page.html', changeDetection: ChangeDetectionStrategy.OnPush })
+@Component({
+  selector: 'wx-top-saved-page',
+  imports: [ErrorState, Spinner],
+  templateUrl: './top-saved-page.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
 export class TopSavedPage implements OnInit {
   /** State ve backend intentlerini facade üzerinden yönetir. */
   private readonly facade = inject(AdminAnalyticsFacade);
@@ -16,11 +21,18 @@ export class TopSavedPage implements OnInit {
   protected readonly error = this.facade.topSavedError;
 
   /** Sayfa açılışında canonical limit ile gerçek endpointi çağırır. */
-  ngOnInit(): void { this.load(); }
+  ngOnInit(): void {
+    this.load();
+  }
 
   /** Tarih filtresini değiştirip backend sorgusunu yeniler. */
-  protected selectDateRange(days: number): void { this.dateRangeDays.set(days); this.load(); }
+  protected selectDateRange(days: number): void {
+    this.dateRangeDays.set(days);
+    this.load();
+  }
 
   /** Mevcut tarih filtresiyle gerçek top-saved isteğini gönderir. */
-  protected load(): void { this.facade.loadTopSaved(createAdminListQuery(this.dateRangeDays(), 20)); }
+  protected load(): void {
+    this.facade.loadTopSaved(createAdminListQuery(this.dateRangeDays(), 20));
+  }
 }

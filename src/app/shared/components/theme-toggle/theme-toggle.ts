@@ -37,7 +37,11 @@ export class ThemeToggle {
 
   /** Screen reader ve tooltip için mevcut ve sıradaki modu açıklar. */
   protected readonly accessibleLabel = computed(
-    () => this.themeLabel(this.theme()) + ' theme. Switch to ' + this.themeLabel(this.nextTheme()) + ' theme',
+    () =>
+      this.themeLabel(this.theme()) +
+      ' theme. Switch to ' +
+      this.themeLabel(this.nextTheme()) +
+      ' theme',
   );
 
   /** Tek ikon butonuna basıldığında sıradaki tema tercihini yayınlar. */

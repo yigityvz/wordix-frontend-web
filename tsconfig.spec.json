@@ -1,8 +1,9 @@
-/* Unit-test compiler entry that adds Vitest globals and includes Angular specification files. */
+/* Angular test dosyalarını Vitest global tipleriyle derleyen test compiler girişidir. */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
+    "rootDir": "./src",
     "types": ["vitest/globals"]
   },
   "include": ["src/**/*.d.ts", "src/**/*.spec.ts"]

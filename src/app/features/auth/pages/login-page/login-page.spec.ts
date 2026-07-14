@@ -1,4 +1,7 @@
-﻿/** Bu dosya, login ekranÄ±nÄ±n credential formu iÃ§ermediÄŸini ve gerÃ§ek auth facade aksiyonlarÄ±nÄ± Ã§aÄŸÄ±rdÄ±ÄŸÄ±nÄ± doÄŸrular. */
+/**
+ * Bu dosya, login ekranının credential formu içermediğini ve gerçek auth facade
+ * aksiyonlarını çağırdığını doğrular.
+ */
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,14 +11,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { LoginPage } from './login-page';
 
-/** Public auth yÃ¼zeyinin gÃ¼venli UI ve facade entegrasyonunu sÄ±nar. */
+/** Public auth yüzeyinin güvenli UI ve facade entegrasyonunu sınar. */
 describe('LoginPage', () => {
-  /** Her testte isolated component ve auth/theme baÄŸÄ±mlÄ±lÄ±klarÄ±nÄ± hazÄ±rlar. */
+  /** Her testte isolated component ve auth/theme bağımlılıklarını hazırlar. */
   let fixture: ComponentFixture<LoginPage>;
   const login = vi.fn();
   const register = vi.fn();
 
-  /** Componenti authenticated olmayan kararlÄ± auth state ile oluÅŸturur. */
+  /** Componenti authenticated olmayan kararlı auth state ile oluşturur. */
   beforeEach(async () => {
     login.mockClear();
     register.mockClear();
@@ -50,7 +53,7 @@ describe('LoginPage', () => {
     fixture.detectChanges();
   });
 
-  /** Wordix'in kullanÄ±cÄ± adÄ± veya parola alanÄ± toplamadÄ±ÄŸÄ±nÄ± doÄŸrular. */
+  /** Wordix'in kullanıcı adı veya parola alanı toplamadığını doğrular. */
   it('does not render credential inputs', () => {
     const element = fixture.nativeElement as HTMLElement;
 
@@ -58,7 +61,7 @@ describe('LoginPage', () => {
     expect(element.textContent).toContain('Continue with Keycloak');
   });
 
-  /** Sign-in butonunun gÃ¼venli returnUrl ile gerÃ§ek facade aksiyonunu baÅŸlattÄ±ÄŸÄ±nÄ± doÄŸrular. */
+  /** Sign-in butonunun güvenli returnUrl ile gerçek facade aksiyonunu başlattığını doğrular. */
   it('starts Keycloak sign-in with the requested return URL', () => {
     const buttons = fixture.nativeElement.querySelectorAll(
       'button',
@@ -71,7 +74,7 @@ describe('LoginPage', () => {
     expect(login).toHaveBeenCalledWith('/dictionary');
   });
 
-  /** Registration butonunun credential mutation yerine Keycloak facade aksiyonunu Ã§aÄŸÄ±rdÄ±ÄŸÄ±nÄ± doÄŸrular. */
+  /** Registration butonunun credential mutation yerine Keycloak facade aksiyonunu çağırdığını doğrular. */
   it('starts Keycloak registration', () => {
     const buttons = fixture.nativeElement.querySelectorAll(
       'button',
@@ -84,4 +87,3 @@ describe('LoginPage', () => {
     expect(register).toHaveBeenCalledWith('/dictionary');
   });
 });
-

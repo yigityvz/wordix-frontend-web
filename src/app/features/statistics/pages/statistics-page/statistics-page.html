@@ -1,15 +1,182 @@
 ﻿<!-- Beş gerçek statistics endpointinin loading, error ve data durumlarını tek responsive sayfada sunar. -->
 <div class="mx-auto max-w-6xl space-y-6">
-  <header class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"><div><p class="text-sm font-bold uppercase tracking-[0.18em] text-wx-accent">Learning analytics</p><h1 class="mt-2 text-3xl font-black tracking-tight text-wx-text sm:text-4xl">Statistics</h1><p class="mt-2 text-sm text-wx-text-muted">Your real learning and quiz performance from Wordix.</p></div><a routerLink="/quizzes/start" class="inline-flex min-h-11 items-center justify-center rounded-xl bg-yale-blue-bright px-4 text-sm font-bold text-white transition hover:bg-yale-blue">Start a quiz</a></header>
+  <header class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div>
+      <p class="text-sm font-bold uppercase tracking-[0.18em] text-wx-accent">Learning analytics</p>
+      <h1 class="mt-2 text-3xl font-black tracking-tight text-wx-text sm:text-4xl">Statistics</h1>
+      <p class="mt-2 text-sm text-wx-text-muted">
+        Your real learning and quiz performance from Wordix.
+      </p>
+    </div>
+    <a
+      routerLink="/quizzes/start"
+      class="inline-flex min-h-11 items-center justify-center rounded-xl bg-yale-blue-bright px-4 text-sm font-bold text-white transition hover:bg-yale-blue"
+      >Start a quiz</a
+    >
+  </header>
 
-  @if(learningSummaryStatus()==='loading'){<wx-card padding="lg"><div class="flex min-h-28 items-center justify-center"><wx-spinner label="Loading learning summary" /></div></wx-card>}@else if(learningSummaryError();as error){<wx-card padding="none"><wx-error-state title="Learning summary could not be loaded" [description]="error" retryLabel="Try again" (retry)="loadLearningSummary()" /></wx-card>}@else if(learningSummary();as summary){<wx-learning-summary-cards [summary]="summary" />}
+  @if (learningSummaryStatus() === 'loading') {
+    <wx-card padding="lg"
+      ><div class="flex min-h-28 items-center justify-center">
+        <wx-spinner label="Loading learning summary" /></div
+    ></wx-card>
+  } @else if (learningSummaryError(); as error) {
+    <wx-card padding="none"
+      ><wx-error-state
+        title="Learning summary could not be loaded"
+        [description]="error"
+        retryLabel="Try again"
+        (retry)="loadLearningSummary()"
+    /></wx-card>
+  } @else if (learningSummary(); as summary) {
+    <wx-learning-summary-cards [summary]="summary" />
+  }
 
-  <section class="space-y-4"><div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><h2 class="text-xl font-black text-wx-text">Quiz analytics</h2><p class="mt-1 text-sm text-wx-text-muted">Change only filters supported by the backend.</p></div><div class="flex flex-wrap gap-2">@for(days of [7,30,90];track days){<button type="button" class="rounded-full border px-3 py-1.5 text-xs font-bold transition" [class.border-wx-accent]="dateRangeDays()===days" [class.bg-wx-accent]="dateRangeDays()===days" [class.text-white]="dateRangeDays()===days" [class.border-wx-border]="dateRangeDays()!==days" [class.text-wx-text]="dateRangeDays()!==days" (click)="selectDateRange(days)">{{ days }}d</button>}</div></div><div class="flex flex-wrap gap-2">@for(type of [{value:null,label:'All quizzes'},{value:'Test',label:'Multiple choice'},{value:'Writing',label:'Writing'}];track type.label){<button type="button" class="rounded-full border px-3 py-1.5 text-xs font-bold transition" [class.border-wx-accent]="quizType()===type.value" [class.bg-wx-surface-muted]="quizType()===type.value" [class.border-wx-border]="quizType()!==type.value" (click)="selectQuizType(type.value)">{{ type.label }}</button>}</div>
-  @if(quizStatisticsStatus()==='loading'){<wx-card padding="lg"><div class="flex min-h-36 items-center justify-center"><wx-spinner label="Loading quiz statistics" /></div></wx-card>}@else if(quizStatisticsError();as error){<wx-card padding="none"><wx-error-state title="Quiz statistics could not be loaded" [description]="error" retryLabel="Try again" (retry)="loadQuizStatistics()" /></wx-card>}@else if(quizStatistics();as statistics){<wx-quiz-statistics-panel [statistics]="statistics" />}</section>
+  <section class="space-y-4">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 class="text-xl font-black text-wx-text">Quiz analytics</h2>
+        <p class="mt-1 text-sm text-wx-text-muted">Change only filters supported by the backend.</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        @for (days of [7, 30, 90]; track days) {
+          <button
+            type="button"
+            class="rounded-full border px-3 py-1.5 text-xs font-bold transition"
+            [class.border-wx-accent]="dateRangeDays() === days"
+            [class.bg-wx-accent]="dateRangeDays() === days"
+            [class.text-white]="dateRangeDays() === days"
+            [class.border-wx-border]="dateRangeDays() !== days"
+            [class.text-wx-text]="dateRangeDays() !== days"
+            (click)="selectDateRange(days)"
+          >
+            {{ days }}d
+          </button>
+        }
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      @for (
+        type of [
+          { value: null, label: 'All quizzes' },
+          { value: 'Test', label: 'Multiple choice' },
+          { value: 'Writing', label: 'Writing' },
+        ];
+        track type.label
+      ) {
+        <button
+          type="button"
+          class="rounded-full border px-3 py-1.5 text-xs font-bold transition"
+          [class.border-wx-accent]="quizType() === type.value"
+          [class.bg-wx-surface-muted]="quizType() === type.value"
+          [class.border-wx-border]="quizType() !== type.value"
+          (click)="selectQuizType(type.value)"
+        >
+          {{ type.label }}
+        </button>
+      }
+    </div>
+    @if (quizStatisticsStatus() === 'loading') {
+      <wx-card padding="lg"
+        ><div class="flex min-h-36 items-center justify-center">
+          <wx-spinner label="Loading quiz statistics" /></div
+      ></wx-card>
+    } @else if (quizStatisticsError(); as error) {
+      <wx-card padding="none"
+        ><wx-error-state
+          title="Quiz statistics could not be loaded"
+          [description]="error"
+          retryLabel="Try again"
+          (retry)="loadQuizStatistics()"
+      /></wx-card>
+    } @else if (quizStatistics(); as statistics) {
+      <wx-quiz-statistics-panel [statistics]="statistics" />
+    }
+  </section>
 
-  <div class="grid gap-6 lg:grid-cols-2"><div>@if(confidenceStatus()==='loading'){<wx-card padding="lg"><div class="flex min-h-64 items-center justify-center"><wx-spinner label="Loading confidence distribution" /></div></wx-card>}@else if(confidenceError();as error){<wx-card padding="none"><wx-error-state title="Confidence distribution could not be loaded" [description]="error" retryLabel="Try again" (retry)="loadConfidenceDistribution()" /></wx-card>}@else if(confidenceDistribution();as distribution){<wx-confidence-distribution-chart [distribution]="distribution" />}</div><wx-card padding="lg"><div class="flex items-center justify-between gap-3"><div><h2 class="text-xl font-black text-wx-text">Learning composition</h2><p class="mt-1 text-sm text-wx-text-muted">Saved content by backend item type.</p></div></div>@if(learningSummary();as summary){<div class="mt-6 grid grid-cols-3 gap-3 text-center"><div class="rounded-xl bg-wx-surface-muted p-4"><p class="text-2xl font-black text-wx-text">{{ summary.wordCount }}</p><p class="text-xs text-wx-text-muted">Words</p></div><div class="rounded-xl bg-wx-surface-muted p-4"><p class="text-2xl font-black text-wx-text">{{ summary.phraseCount }}</p><p class="text-xs text-wx-text-muted">Phrases</p></div><div class="rounded-xl bg-wx-surface-muted p-4"><p class="text-2xl font-black text-wx-text">{{ summary.sentenceCount }}</p><p class="text-xs text-wx-text-muted">Sentences</p></div></div>}</wx-card></div>
+  <div class="grid gap-6 lg:grid-cols-2">
+    <div>
+      @if (confidenceStatus() === 'loading') {
+        <wx-card padding="lg"
+          ><div class="flex min-h-64 items-center justify-center">
+            <wx-spinner label="Loading confidence distribution" /></div
+        ></wx-card>
+      } @else if (confidenceError(); as error) {
+        <wx-card padding="none"
+          ><wx-error-state
+            title="Confidence distribution could not be loaded"
+            [description]="error"
+            retryLabel="Try again"
+            (retry)="loadConfidenceDistribution()"
+        /></wx-card>
+      } @else if (confidenceDistribution(); as distribution) {
+        <wx-confidence-distribution-chart [distribution]="distribution" />
+      }
+    </div>
+    <wx-card padding="lg"
+      ><div class="flex items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-black text-wx-text">Learning composition</h2>
+          <p class="mt-1 text-sm text-wx-text-muted">Saved content by backend item type.</p>
+        </div>
+      </div>
+      @if (learningSummary(); as summary) {
+        <div class="mt-6 grid grid-cols-3 gap-3 text-center">
+          <div class="rounded-xl bg-wx-surface-muted p-4">
+            <p class="text-2xl font-black text-wx-text">{{ summary.wordCount }}</p>
+            <p class="text-xs text-wx-text-muted">Words</p>
+          </div>
+          <div class="rounded-xl bg-wx-surface-muted p-4">
+            <p class="text-2xl font-black text-wx-text">{{ summary.phraseCount }}</p>
+            <p class="text-xs text-wx-text-muted">Phrases</p>
+          </div>
+          <div class="rounded-xl bg-wx-surface-muted p-4">
+            <p class="text-2xl font-black text-wx-text">{{ summary.sentenceCount }}</p>
+            <p class="text-xs text-wx-text-muted">Sentences</p>
+          </div>
+        </div>
+      }
+    </wx-card>
+  </div>
 
-  <wx-card padding="lg">@if(difficultItemsStatus()==='loading'){<div class="flex min-h-48 items-center justify-center"><wx-spinner label="Loading difficult items" /></div>}@else if(difficultItemsError();as error){<wx-error-state title="Difficult items could not be loaded" [description]="error" retryLabel="Try again" (retry)="loadDifficultItems()" />}@else if(difficultItems();as page){<wx-difficult-items-table [page]="page" [source]="$any(difficultQuery().source)" [sortBy]="$any(difficultQuery().sortBy)" (pageRequested)="changeDifficultPage($event)" (sourceRequested)="changeDifficultSource($event)" (sortRequested)="changeDifficultSort($event)" />}</wx-card>
+  <wx-card padding="lg">
+    @if (difficultItemsStatus() === 'loading') {
+      <div class="flex min-h-48 items-center justify-center">
+        <wx-spinner label="Loading difficult items" />
+      </div>
+    } @else if (difficultItemsError(); as error) {
+      <wx-error-state
+        title="Difficult items could not be loaded"
+        [description]="error"
+        retryLabel="Try again"
+        (retry)="loadDifficultItems()"
+      />
+    } @else if (difficultItems(); as page) {
+      <wx-difficult-items-table
+        [page]="page"
+        [source]="$any(difficultQuery().source)"
+        [sortBy]="$any(difficultQuery().sortBy)"
+        (pageRequested)="changeDifficultPage($event)"
+        (sourceRequested)="changeDifficultSource($event)"
+        (sortRequested)="changeDifficultSort($event)"
+      />
+    }
+  </wx-card>
 
-  <wx-card padding="lg">@if(deckStatisticsStatus()==='loading'){<div class="flex min-h-48 items-center justify-center"><wx-spinner label="Loading deck statistics" /></div>}@else if(deckStatisticsError();as error){<wx-error-state title="Deck statistics could not be loaded" [description]="error" retryLabel="Try again" (retry)="loadDeckStatistics()" />}@else if(deckStatistics();as statistics){<wx-deck-statistics-grid [statistics]="statistics" />}</wx-card>
+  <wx-card padding="lg">
+    @if (deckStatisticsStatus() === 'loading') {
+      <div class="flex min-h-48 items-center justify-center">
+        <wx-spinner label="Loading deck statistics" />
+      </div>
+    } @else if (deckStatisticsError(); as error) {
+      <wx-error-state
+        title="Deck statistics could not be loaded"
+        [description]="error"
+        retryLabel="Try again"
+        (retry)="loadDeckStatistics()"
+      />
+    } @else if (deckStatistics(); as statistics) {
+      <wx-deck-statistics-grid [statistics]="statistics" />
+    }
+  </wx-card>
 </div>

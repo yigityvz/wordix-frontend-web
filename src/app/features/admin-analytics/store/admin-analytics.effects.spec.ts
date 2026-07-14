@@ -21,12 +21,17 @@ describe('AdminAnalyticsEffects', () => {
   /** Her testte isolated action stream ve API mock containerını kurar. */
   beforeEach(() => {
     actions = new Subject<Action>();
-    [getDashboard, getTopSearches, getTopSaved, getMostWrong, getProviderStats].forEach((mock) => mock.mockReset());
+    [getDashboard, getTopSearches, getTopSaved, getMostWrong, getProviderStats].forEach((mock) =>
+      mock.mockReset(),
+    );
     TestBed.configureTestingModule({
       providers: [
         AdminAnalyticsEffects,
         { provide: Actions, useFactory: () => new Actions(actions) },
-        { provide: AdminAnalyticsApiService, useValue: { getDashboard, getTopSearches, getTopSaved, getMostWrong, getProviderStats } },
+        {
+          provide: AdminAnalyticsApiService,
+          useValue: { getDashboard, getTopSearches, getTopSaved, getMostWrong, getProviderStats },
+        },
       ],
     });
   });
@@ -47,7 +52,9 @@ describe('AdminAnalyticsEffects', () => {
     const output = firstValueFrom(TestBed.inject(AdminAnalyticsEffects).loadProviderStats$);
     const query = { fromUtc: '2026-01-01T00:00:00Z' };
     actions.next(AdminAnalyticsActions.loadProviderStats({ query }));
-    await expect(output).resolves.toEqual(AdminAnalyticsActions.loadProviderStatsSuccess({ analytics: { ...dto, items: [] } }));
+    await expect(output).resolves.toEqual(
+      AdminAnalyticsActions.loadProviderStatsSuccess({ analytics: { ...dto, items: [] } }),
+    );
     expect(getProviderStats).toHaveBeenCalledWith(query);
   });
 
@@ -66,6 +73,8 @@ describe('AdminAnalyticsEffects', () => {
     getDashboard.mockReturnValue(throwError(() => error));
     const output = firstValueFrom(TestBed.inject(AdminAnalyticsEffects).loadDashboard$);
     actions.next(AdminAnalyticsActions.loadDashboard({ query: {} }));
-    await expect(output).resolves.toEqual(AdminAnalyticsActions.loadDashboardFailure({ message: 'Admin analytics unavailable.' }));
+    await expect(output).resolves.toEqual(
+      AdminAnalyticsActions.loadDashboardFailure({ message: 'Admin analytics unavailable.' }),
+    );
   });
 });

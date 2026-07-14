@@ -1,13 +1,13 @@
-/* Root strict TypeScript and Angular compiler policy inherited by application and test builds. */
+/* Uygulama ve test derlemelerinin miras aldığı katı TypeScript ve Angular compiler kurallarını tanımlar. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@core/*": ["src/app/core/*"],
-      "@shared/*": ["src/app/shared/*"],
-      "@features/*": ["src/app/features/*"],
-      "@env/*": ["src/environments/*"]
+      "@core/*": ["./src/app/core/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@features/*": ["./src/app/features/*"],
+      "@env/*": ["./src/environments/*"],
+      "angular-api-client-core": ["./dist/angular-api-client-core"]
     },
     "strict": true,
     "noImplicitOverride": true,
@@ -35,6 +35,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/angular-api-client-core/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/angular-api-client-core/tsconfig.spec.json"
     }
   ]
 }

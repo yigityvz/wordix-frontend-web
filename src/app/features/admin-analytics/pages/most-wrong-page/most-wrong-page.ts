@@ -6,7 +6,12 @@ import { AdminAnalyticsFacade } from '../../facades/admin-analytics.facade';
 import { createAdminListQuery } from '../../mappers/admin-analytics-query.mapper';
 
 /** En çok yanlış cevaplanan learning itemları canlı admin endpointinden sunar. */
-@Component({ selector: 'wx-most-wrong-page', imports: [ErrorState, Spinner], templateUrl: './most-wrong-page.html', changeDetection: ChangeDetectionStrategy.OnPush })
+@Component({
+  selector: 'wx-most-wrong-page',
+  imports: [ErrorState, Spinner],
+  templateUrl: './most-wrong-page.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
 export class MostWrongPage implements OnInit {
   /** State ve backend intentlerini facade üzerinden yönetir. */
   private readonly facade = inject(AdminAnalyticsFacade);
@@ -16,17 +21,28 @@ export class MostWrongPage implements OnInit {
   protected readonly error = this.facade.mostWrongError;
 
   /** Sayfa açılışında canonical limit ile gerçek endpointi çağırır. */
-  ngOnInit(): void { this.load(); }
+  ngOnInit(): void {
+    this.load();
+  }
 
   /** Tarih filtresini değiştirip backend sorgusunu yeniler. */
-  protected selectDateRange(days: number): void { this.dateRangeDays.set(days); this.load(); }
+  protected selectDateRange(days: number): void {
+    this.dateRangeDays.set(days);
+    this.load();
+  }
 
   /** Mevcut tarih filtresiyle gerçek most-wrong isteğini gönderir. */
-  protected load(): void { this.facade.loadMostWrong(createAdminListQuery(this.dateRangeDays(), 20)); }
+  protected load(): void {
+    this.facade.loadMostWrong(createAdminListQuery(this.dateRangeDays(), 20));
+  }
 
   /** Backend oranını okunabilir tam yüzde metnine dönüştürür. */
-  protected percentage(value: number): string { return Math.round(value) + '%'; }
+  protected percentage(value: number): string {
+    return Math.round(value) + '%';
+  }
 
   /** Backend response süresini okunabilir millisecond metnine dönüştürür. */
-  protected milliseconds(value: number): string { return Math.round(value) + ' ms'; }
+  protected milliseconds(value: number): string {
+    return Math.round(value) + ' ms';
+  }
 }

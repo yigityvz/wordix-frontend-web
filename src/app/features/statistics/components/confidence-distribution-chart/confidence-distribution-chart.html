@@ -1,2 +1,40 @@
 ﻿<!-- Confidence bucketlarını metin ve bar birlikteliğiyle erişilebilir gösterir. -->
-<wx-card padding="lg"><div class="flex items-start justify-between gap-4"><div><h2 class="text-xl font-black text-wx-text">Confidence distribution</h2><p class="mt-1 text-sm text-wx-text-muted">{{ distribution().totalItemCount }} active items</p></div><p class="text-2xl font-black text-wx-accent">{{ distribution().averageConfidenceScore.toFixed(0) }}</p></div><div class="mt-6 space-y-4">@for (bucket of distribution().buckets; track bucket.label) { <div><div class="mb-1.5 flex items-center justify-between gap-3 text-xs font-bold"><span class="text-wx-text">{{ bucket.label || (bucket.minScore + '–' + bucket.maxScore) }}</span><span class="text-wx-text-muted">{{ bucket.itemCount }} · {{ bucket.percentage.toFixed(0) }}%</span></div><div class="h-3 overflow-hidden rounded-full bg-wx-surface-muted" role="progressbar" [attr.aria-label]="bucket.label" [attr.aria-valuenow]="bucket.percentage" aria-valuemin="0" aria-valuemax="100"><div class="h-full rounded-full bg-gradient-to-r from-steel-blue to-yale-blue-bright" [style.width.%]="width(bucket.percentage)"></div></div></div> }</div></wx-card>
+<wx-card padding="lg"
+  ><div class="flex items-start justify-between gap-4">
+    <div>
+      <h2 class="text-xl font-black text-wx-text">Confidence distribution</h2>
+      <p class="mt-1 text-sm text-wx-text-muted">
+        {{ distribution().totalItemCount }} active items
+      </p>
+    </div>
+    <p class="text-2xl font-black text-wx-accent">
+      {{ distribution().averageConfidenceScore.toFixed(0) }}
+    </p>
+  </div>
+  <div class="mt-6 space-y-4">
+    @for (bucket of distribution().buckets; track bucket.label) {
+      <div>
+        <div class="mb-1.5 flex items-center justify-between gap-3 text-xs font-bold">
+          <span class="text-wx-text">{{
+            bucket.label || bucket.minScore + '–' + bucket.maxScore
+          }}</span
+          ><span class="text-wx-text-muted"
+            >{{ bucket.itemCount }} · {{ bucket.percentage.toFixed(0) }}%</span
+          >
+        </div>
+        <div
+          class="h-3 overflow-hidden rounded-full bg-wx-surface-muted"
+          role="progressbar"
+          [attr.aria-label]="bucket.label"
+          [attr.aria-valuenow]="bucket.percentage"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <div
+            class="h-full rounded-full bg-gradient-to-r from-steel-blue to-yale-blue-bright"
+            [style.width.%]="width(bucket.percentage)"
+          ></div>
+        </div>
+      </div>
+    }</div
+></wx-card>

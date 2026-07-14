@@ -2,22 +2,68 @@
 <div class="mx-auto max-w-3xl space-y-6">
   @if (session(); as activeSession) {
     @if (activeSession.questions.length > 0 && currentQuestion(); as question) {
-      <wx-question-progress [current]="currentIndex() + 1" [total]="activeSession.questions.length" [answered]="answeredQuestionCount()" />
-      <wx-question-shell [questionText]="question.questionText" [questionType]="question.questionType" [isSystemRecommended]="question.isSystemRecommended">
+      <wx-question-progress
+        [current]="currentIndex() + 1"
+        [total]="activeSession.questions.length"
+        [answered]="answeredQuestionCount()"
+      />
+      <wx-question-shell
+        [questionText]="question.questionText"
+        [questionType]="question.questionType"
+        [isSystemRecommended]="question.isSystemRecommended"
+      >
         @if (feedback(); as answerResult) {
-          <wx-answer-feedback [result]="answerResult" [isLastQuestion]="isLastQuestion()" [isSavingRecommendation]="isSavingRecommendation()" [savedRecommendation]="savedRecommendation()" [recommendationSaveError]="recommendationSaveError()" (saveRecommendationRequested)="saveRecommendation()" (continueRequested)="continueToNextQuestion()" />
+          <wx-answer-feedback
+            [result]="answerResult"
+            [isLastQuestion]="isLastQuestion()"
+            [isSavingRecommendation]="isSavingRecommendation()"
+            [savedRecommendation]="savedRecommendation()"
+            [recommendationSaveError]="recommendationSaveError()"
+            (saveRecommendationRequested)="saveRecommendation()"
+            (continueRequested)="continueToNextQuestion()"
+          />
         } @else if (isMultipleChoice()) {
-          <wx-multiple-choice-question [options]="question.options" [disabled]="isSubmitting()" [loading]="isSubmitting()" (answerRequested)="submitMultipleChoice($event)" />
+          <wx-multiple-choice-question
+            [options]="question.options"
+            [disabled]="isSubmitting()"
+            [loading]="isSubmitting()"
+            (answerRequested)="submitMultipleChoice($event)"
+          />
         } @else {
-          <wx-writing-question [disabled]="isSubmitting()" [loading]="isSubmitting()" (answerRequested)="submitWriting($event)" />
+          <wx-writing-question
+            [disabled]="isSubmitting()"
+            [loading]="isSubmitting()"
+            (answerRequested)="submitWriting($event)"
+          />
         }
       </wx-question-shell>
-      @if (answerError(); as errorMessage) { <wx-card padding="none"><wx-error-state title="Answer could not be submitted" [description]="errorMessage" /></wx-card> }
+      @if (answerError(); as errorMessage) {
+        <wx-card padding="none"
+          ><wx-error-state title="Answer could not be submitted" [description]="errorMessage"
+        /></wx-card>
+      }
     } @else {
-      <wx-card padding="none"><wx-error-state title="This quiz has no questions" description="The backend created the session without playable questions. Start a new quiz after checking your source content." /></wx-card>
+      <wx-card padding="none"
+        ><wx-error-state
+          title="This quiz has no questions"
+          description="The backend created the session without playable questions. Start a new quiz after checking your source content."
+      /></wx-card>
     }
   } @else {
     <!-- Backend active-session read endpointi olmadığı için refresh/direct route gerçeği açıkça gösterilir. -->
-    <wx-card padding="lg"><div class="py-5 text-center"><h1 class="text-2xl font-black text-wx-text">Quiz session is not available</h1><p class="mx-auto mt-3 max-w-lg text-sm leading-6 text-wx-text-muted">This play screen needs the session returned when the quiz starts. The backend does not yet expose an active-session reload endpoint.</p><a routerLink="/quizzes/start" class="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-yale-blue-bright px-4 text-sm font-bold text-white transition hover:bg-yale-blue">Start a new quiz</a></div></wx-card>
+    <wx-card padding="lg"
+      ><div class="py-5 text-center">
+        <h1 class="text-2xl font-black text-wx-text">Quiz session is not available</h1>
+        <p class="mx-auto mt-3 max-w-lg text-sm leading-6 text-wx-text-muted">
+          This play screen needs the session returned when the quiz starts. The backend does not yet
+          expose an active-session reload endpoint.
+        </p>
+        <a
+          routerLink="/quizzes/start"
+          class="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-yale-blue-bright px-4 text-sm font-bold text-white transition hover:bg-yale-blue"
+          >Start a new quiz</a
+        >
+      </div></wx-card
+    >
   }
 </div>

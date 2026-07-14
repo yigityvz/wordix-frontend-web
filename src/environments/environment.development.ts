@@ -6,9 +6,6 @@ import { AppConfig } from '@core/config/app-config.model';
 
 /** Local backend ve Keycloak Docker servislerine bağlanan typesafe development ayarlarıdır. */
 export const environment = {
-  // Development build olduğunu uygulama altyapısına bildirir.
-  production: false,
-
   // Local Wordix API servisinin public HTTP kök adresidir.
   apiBaseUrl: 'http://localhost:5000/api',
 

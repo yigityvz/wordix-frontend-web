@@ -20,6 +20,10 @@
 
   <!-- Gerçek localStorage ve system preference akışına bağlı tema kontrolüdür. -->
   <div class="ml-auto">
-    <wx-theme-toggle [theme]="theme()" [resolvedTheme]="resolvedTheme()" (themeChange)="changeTheme($event)" />
+    <wx-theme-toggle
+      [theme]="theme()"
+      [resolvedTheme]="resolvedTheme()"
+      (themeChange)="changeTheme($event)"
+    />
   </div>
 </header>

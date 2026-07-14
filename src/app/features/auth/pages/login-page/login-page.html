@@ -1,6 +1,6 @@
-﻿<!-- GerÃ§ek Keycloak giriÅŸ aksiyonlarÄ±nÄ± premium ve responsive Wordix auth yÃ¼zeyinde sunar. -->
+<!-- Gerçek Keycloak giriş aksiyonlarını premium ve responsive Wordix auth yüzeyinde sunar. -->
 <main class="relative min-h-dvh overflow-hidden bg-wx-bg px-4 py-6 text-wx-text sm:px-6 lg:px-8">
-  <!-- Coastal Blues Ä±ÅŸÄ±k lekeleri dark ve light temada marka derinliÄŸi saÄŸlar. -->
+  <!-- Coastal Blues ışık lekeleri dark ve light temada marka derinliği sağlar. -->
   <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
     <div class="absolute -left-24 -top-24 size-80 rounded-full bg-cerulean/15 blur-3xl"></div>
     <div
@@ -8,10 +8,10 @@
     ></div>
   </div>
 
-  <!-- Auth iÃ§eriÄŸi geniÅŸ ekranlarda marka ve aksiyon alanlarÄ±nÄ± dengeli iki sÃ¼tuna ayÄ±rÄ±r. -->
+  <!-- Auth içeriği geniş ekranlarda marka ve aksiyon alanlarını dengeli iki sütuna ayırır. -->
   <div class="relative mx-auto flex min-h-[calc(100dvh-3rem)] max-w-6xl flex-col">
     <header class="flex items-center justify-between gap-4">
-      <!-- Metin tabanlÄ± logo dÄ±ÅŸ gÃ¶rsel baÄŸÄ±mlÄ±lÄ±ÄŸÄ± olmadan Wordix kimliÄŸini korur. -->
+      <!-- Metin tabanlı logo dış görsel bağımlılığı olmadan Wordix kimliğini korur. -->
       <a class="inline-flex items-center gap-3" href="/" aria-label="Wordix home">
         <span
           class="flex size-11 items-center justify-center rounded-2xl bg-yale-blue-bright text-lg font-black text-white shadow-lg shadow-yale-blue-bright/20"
@@ -20,11 +20,15 @@
         <span class="text-xl font-black tracking-tight">Wordix</span>
       </a>
 
-      <wx-theme-toggle [theme]="theme()" [resolvedTheme]="resolvedTheme()" (themeChange)="setTheme($event)" />
+      <wx-theme-toggle
+        [theme]="theme()"
+        [resolvedTheme]="resolvedTheme()"
+        (themeChange)="setTheme($event)"
+      />
     </header>
 
     <div class="grid flex-1 items-center gap-12 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:py-16">
-      <!-- KÄ±sa Ã¼rÃ¼n anlatÄ±mÄ± welcome hero yerine auth baÄŸlamÄ±nÄ± destekler. -->
+      <!-- Kısa ürün anlatımı welcome hero yerine auth bağlamını destekler. -->
       <section class="mx-auto max-w-xl text-center lg:mx-0 lg:text-left">
         <p class="text-sm font-bold uppercase tracking-[0.24em] text-wx-accent">
           Learn with clarity
@@ -52,7 +56,7 @@
         </div>
       </section>
 
-      <!-- Auth kartÄ± credential alanÄ± iÃ§ermez; iki aksiyon da doÄŸrudan Keycloak'a baÄŸlÄ±dÄ±r. -->
+      <!-- Auth kartı credential alanı içermez; iki aksiyon da doğrudan Keycloak'a bağlıdır. -->
       <section
         class="mx-auto w-full max-w-md rounded-3xl border border-wx-border bg-wx-surface/90 p-6 shadow-2xl shadow-deep-space-blue/10 backdrop-blur sm:p-8"
         aria-labelledby="auth-title"
@@ -66,7 +70,7 @@
         </div>
 
         @if (authError(); as errorMessage) {
-          <!-- Teknik ayrÄ±ntÄ± sÄ±zdÄ±rmayan gerÃ§ek auth hatasÄ± retry aksiyonuyla gÃ¶sterilir. -->
+          <!-- Teknik ayrıntı sızdırmayan gerçek auth hatası retry aksiyonuyla gösterilir. -->
           <div class="mb-5 rounded-2xl border border-wx-error/30 bg-wx-error/10 p-4" role="alert">
             <p class="text-sm font-semibold text-wx-error">{{ errorMessage }}</p>
             <button
@@ -100,4 +104,3 @@
     </div>
   </div>
 </main>
-

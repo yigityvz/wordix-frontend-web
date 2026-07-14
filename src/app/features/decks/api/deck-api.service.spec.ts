@@ -2,7 +2,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { AppConfigService } from '@core/config/app-config.service';
+import { provideApiClient } from 'angular-api-client-core';
 import { firstValueFrom } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
@@ -19,8 +19,8 @@ describe('DeckApiService', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideApiClient({ baseUrl: 'http://localhost:5000/api/' }),
         DeckApiService,
-        { provide: AppConfigService, useValue: { apiBaseUrl: 'http://localhost:5000/api/' } },
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);

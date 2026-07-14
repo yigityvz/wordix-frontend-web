@@ -4,7 +4,12 @@ import { Badge } from '@shared/components/badge/badge';
 import { QuizSummaryQuestion } from '../../models/quiz.models';
 
 /** Summary question breakdown verisini değiştirmeden sunan reusable componenttir. */
-@Component({ selector: 'wx-quiz-summary-question', imports: [Badge], templateUrl: './quiz-summary-question.html', changeDetection: ChangeDetectionStrategy.OnPush })
+@Component({
+  selector: 'wx-quiz-summary-question',
+  imports: [Badge],
+  templateUrl: './quiz-summary-question.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
 export class QuizSummaryQuestionComponent {
   /** Backend summary responseundaki tek question sonucudur. */
   readonly question = input.required<QuizSummaryQuestion>();

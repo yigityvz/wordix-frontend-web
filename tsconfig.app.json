@@ -1,4 +1,4 @@
-/* Application compiler entry that includes production source and excludes unit-test specifications. */
+/* Production kaynaklarını kapsayan ve unit test dosyalarını dışlayan uygulama compiler girişidir. */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {

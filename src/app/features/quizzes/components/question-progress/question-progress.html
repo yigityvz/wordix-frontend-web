@@ -4,7 +4,16 @@
     <span class="text-wx-text">Question {{ current() }} of {{ total() }}</span>
     <span class="text-wx-text-muted">{{ answered() }} answered</span>
   </div>
-  <div class="h-2 overflow-hidden rounded-full bg-wx-surface-muted" role="progressbar" [attr.aria-valuenow]="answered()" aria-valuemin="0" [attr.aria-valuemax]="total()">
-    <div class="h-full rounded-full bg-yale-blue-bright transition-[width] duration-300" [style.width.%]="percentage()"></div>
+  <div
+    class="h-2 overflow-hidden rounded-full bg-wx-surface-muted"
+    role="progressbar"
+    [attr.aria-valuenow]="answered()"
+    aria-valuemin="0"
+    [attr.aria-valuemax]="total()"
+  >
+    <div
+      class="h-full rounded-full bg-yale-blue-bright transition-[width] duration-300"
+      [style.width.%]="percentage()"
+    ></div>
   </div>
 </div>

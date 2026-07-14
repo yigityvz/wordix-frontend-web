@@ -1,0 +1,34 @@
+{
+  "name": "angular-api-client-core",
+  "version": "0.0.1",
+  "description": "Backend-agnostic typed base API service for Angular HttpClient applications.",
+  "keywords": [
+    "angular",
+    "api-client",
+    "http-client",
+    "typescript",
+    "rest",
+    "library"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yigityvz/angular-api-client-core.git"
+  },
+  "homepage": "https://github.com/yigityvz/angular-api-client-core#readme",
+  "bugs": {
+    "url": "https://github.com/yigityvz/angular-api-client-core/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@angular/common": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "rxjs": "^7.8.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

@@ -11,7 +11,8 @@ export interface QuizStatisticsQuery {
 /** Difficult-items endpointinin backend-supported source değerleridir. */
 export type DifficultItemSource = 'both' | 'manual' | 'progress';
 /** Difficult-items endpointinin backend-supported sıralama değerleridir. */
-export type DifficultItemSort = 'confidenceAsc' | 'wrongCountDesc' | 'consecutiveWrongDesc' | 'nextReviewAsc' | 'savedAtDesc';
+export type DifficultItemSort =
+  'confidenceAsc' | 'wrongCountDesc' | 'consecutiveWrongDesc' | 'nextReviewAsc' | 'savedAtDesc';
 
 /** Sayfalı difficult-items endpointinin canonical query parametreleridir. */
 export interface DifficultItemsQuery {

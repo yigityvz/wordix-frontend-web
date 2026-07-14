@@ -20,7 +20,11 @@ describe('AppShell', () => {
         {
           provide: AuthFacade,
           useValue: {
-            user: signal({ username: 'ali.yilmaz', email: 'ali@example.com', roles: ['basic_user'] }),
+            user: signal({
+              username: 'ali.yilmaz',
+              email: 'ali@example.com',
+              roles: ['basic_user'],
+            }),
             logout: vi.fn(),
           },
         },

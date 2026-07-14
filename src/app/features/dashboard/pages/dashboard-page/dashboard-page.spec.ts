@@ -7,7 +7,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { ProfileFacade } from '../../../profile/facades/profile.facade';
 import { Profile } from '../../../profile/models/profile.models';
 import { StatisticsFacade } from '../../../statistics/facades/statistics.facade';
-import { DifficultLearningItemsPage, UserLearningSummary } from '../../../statistics/models/statistics.models';
+import {
+  DifficultLearningItemsPage,
+  UserLearningSummary,
+} from '../../../statistics/models/statistics.models';
 import { DashboardPage } from './dashboard-page';
 
 /** Profile ve statistics facade mocklarıyla dashboard davranışını izole sınar. */
@@ -58,7 +61,9 @@ describe('DashboardPage', () => {
     const context = await createDashboardFixture(profile, summary, difficult, true, false);
     context.fixture.detectChanges();
 
-    const buttons = Array.from(context.fixture.nativeElement.querySelectorAll('button')) as HTMLButtonElement[];
+    const buttons = Array.from(
+      context.fixture.nativeElement.querySelectorAll('button'),
+    ) as HTMLButtonElement[];
     const signOutButton = buttons.find((button) => button.textContent?.includes('Sign out'));
     signOutButton?.click();
 
@@ -80,8 +85,15 @@ async function createDashboardFixture(
   isLoading: boolean,
 ): Promise<{
   readonly fixture: ComponentFixture<DashboardPage>;
-  readonly profileFacade: Record<string, unknown> & { load: ReturnType<typeof vi.fn>; clear: ReturnType<typeof vi.fn> };
-  readonly statisticsFacade: Record<string, unknown> & { loadLearningSummary: ReturnType<typeof vi.fn>; loadDifficultItems: ReturnType<typeof vi.fn>; clear: ReturnType<typeof vi.fn> };
+  readonly profileFacade: Record<string, unknown> & {
+    load: ReturnType<typeof vi.fn>;
+    clear: ReturnType<typeof vi.fn>;
+  };
+  readonly statisticsFacade: Record<string, unknown> & {
+    loadLearningSummary: ReturnType<typeof vi.fn>;
+    loadDifficultItems: ReturnType<typeof vi.fn>;
+    clear: ReturnType<typeof vi.fn>;
+  };
   readonly authFacade: { logout: ReturnType<typeof vi.fn> };
 }> {
   const profileFacade = {
@@ -122,4 +134,3 @@ async function createDashboardFixture(
     authFacade,
   };
 }
-

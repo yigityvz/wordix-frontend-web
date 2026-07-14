@@ -3,7 +3,9 @@
   <header class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
     <div>
       <p class="text-sm font-bold uppercase tracking-[0.18em] text-wx-accent">Administration</p>
-      <h1 class="mt-2 text-3xl font-black tracking-tight text-wx-text sm:text-4xl">Admin dashboard</h1>
+      <h1 class="mt-2 text-3xl font-black tracking-tight text-wx-text sm:text-4xl">
+        Admin dashboard
+      </h1>
       <p class="mt-2 text-sm text-wx-text-muted">
         Live platform activity
         @if (profile(); as currentProfile) {
@@ -13,37 +15,96 @@
     </div>
     <div class="flex flex-wrap items-center gap-2">
       @for (days of [7, 30, 90]; track days) {
-        <button type="button" class="rounded-full border px-3 py-1.5 text-xs font-bold transition" [class.border-wx-accent]="dateRangeDays() === days" [class.bg-wx-accent]="dateRangeDays() === days" [class.text-white]="dateRangeDays() === days" [class.border-wx-border]="dateRangeDays() !== days" [class.text-wx-text]="dateRangeDays() !== days" (click)="selectDateRange(days)">
+        <button
+          type="button"
+          class="rounded-full border px-3 py-1.5 text-xs font-bold transition"
+          [class.border-wx-accent]="dateRangeDays() === days"
+          [class.bg-wx-accent]="dateRangeDays() === days"
+          [class.text-white]="dateRangeDays() === days"
+          [class.border-wx-border]="dateRangeDays() !== days"
+          [class.text-wx-text]="dateRangeDays() !== days"
+          (click)="selectDateRange(days)"
+        >
           {{ days }}d
         </button>
       }
-      <button type="button" class="ml-2 rounded-xl border border-wx-border bg-wx-surface px-3 py-2 text-xs font-bold text-wx-text transition hover:bg-wx-surface-muted" (click)="logout()">Sign out</button>
+      <button
+        type="button"
+        class="ml-2 rounded-xl border border-wx-border bg-wx-surface px-3 py-2 text-xs font-bold text-wx-text transition hover:bg-wx-surface-muted"
+        (click)="logout()"
+      >
+        Sign out
+      </button>
     </div>
   </header>
 
   @if (dashboardStatus() === 'loading') {
-    <div class="flex min-h-56 items-center justify-center rounded-2xl border border-wx-border bg-wx-surface">
+    <div
+      class="flex min-h-56 items-center justify-center rounded-2xl border border-wx-border bg-wx-surface"
+    >
       <wx-spinner label="Loading admin analytics" />
     </div>
   } @else if (dashboardError(); as errorMessage) {
     <div class="rounded-2xl border border-wx-border bg-wx-surface">
-      <wx-error-state title="Admin analytics could not be loaded" [description]="errorMessage" retryLabel="Try again" (retry)="retryDashboard()" />
+      <wx-error-state
+        title="Admin analytics could not be loaded"
+        [description]="errorMessage"
+        retryLabel="Try again"
+        (retry)="retryDashboard()"
+      />
     </div>
   } @else if (dashboard(); as analytics) {
     <!-- Aggregate cards yalnızca backend tarafından hesaplanan metrikleri gösterir. -->
     <section class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-      @for (metric of [
-        { label: 'Lookups', value: analytics.lookupCount, sub: analytics.uniqueLookupUserCount + ' unique users' },
-        { label: 'Dictionary saves', value: analytics.dictionarySaveCount, sub: analytics.activeDictionarySaveCount + ' active' },
-        { label: 'Quiz sessions', value: analytics.quizSessionCount, sub: analytics.quizAnswerCount + ' answers' },
-        { label: 'Quiz accuracy', value: percentage(analytics.averageAccuracyRate), sub: analytics.wrongAnswerCount + ' wrong answers' },
-        { label: 'Provider requests', value: analytics.providerRequestCount, sub: analytics.providerSuccessCount + ' succeeded' },
-        { label: 'Provider failures', value: analytics.providerFailureCount, sub: analytics.providerTimeoutCount + ' timeouts' },
-        { label: 'Cache hits', value: analytics.externalCacheHitCount, sub: analytics.activeExternalCacheEntryCount + ' active entries' },
-        { label: 'Import jobs', value: analytics.importJobCount, sub: analytics.failedImportJobCount + ' failed' }
-      ]; track metric.label) {
+      @for (
+        metric of [
+          {
+            label: 'Lookups',
+            value: analytics.lookupCount,
+            sub: analytics.uniqueLookupUserCount + ' unique users',
+          },
+          {
+            label: 'Dictionary saves',
+            value: analytics.dictionarySaveCount,
+            sub: analytics.activeDictionarySaveCount + ' active',
+          },
+          {
+            label: 'Quiz sessions',
+            value: analytics.quizSessionCount,
+            sub: analytics.quizAnswerCount + ' answers',
+          },
+          {
+            label: 'Quiz accuracy',
+            value: percentage(analytics.averageAccuracyRate),
+            sub: analytics.wrongAnswerCount + ' wrong answers',
+          },
+          {
+            label: 'Provider requests',
+            value: analytics.providerRequestCount,
+            sub: analytics.providerSuccessCount + ' succeeded',
+          },
+          {
+            label: 'Provider failures',
+            value: analytics.providerFailureCount,
+            sub: analytics.providerTimeoutCount + ' timeouts',
+          },
+          {
+            label: 'Cache hits',
+            value: analytics.externalCacheHitCount,
+            sub: analytics.activeExternalCacheEntryCount + ' active entries',
+          },
+          {
+            label: 'Import jobs',
+            value: analytics.importJobCount,
+            sub: analytics.failedImportJobCount + ' failed',
+          },
+        ];
+        track metric.label
+      ) {
         <article class="rounded-2xl border border-wx-border bg-wx-surface p-5 shadow-sm">
-          <p class="text-xs font-bold uppercase tracking-wider text-wx-text-muted">{{ metric.label }}</p>
+          <p class="text-xs font-bold uppercase tracking-wider text-wx-text-muted">
+            {{ metric.label }}
+          </p>
           <p class="mt-3 text-3xl font-black text-wx-text">{{ metric.value }}</p>
           <p class="mt-1 text-xs text-wx-text-muted">{{ metric.sub }}</p>
         </article>
@@ -52,76 +113,150 @@
 
     <!-- Platform source dağılımı backend aggregate alanlarından oluşturulur. -->
     <section class="grid gap-6 lg:grid-cols-3">
-      <article class="rounded-2xl border border-wx-border bg-gradient-to-br from-deep-space-blue to-yale-blue-dark p-6 text-white shadow-lg lg:col-span-2">
+      <article
+        class="rounded-2xl border border-wx-border bg-gradient-to-br from-deep-space-blue to-yale-blue-dark p-6 text-white shadow-lg lg:col-span-2"
+      >
         <p class="text-xs font-bold uppercase tracking-widest text-white/60">Lookup sources</p>
         <div class="mt-5 grid grid-cols-3 gap-4">
-          <div><p class="text-3xl font-black">{{ analytics.databaseLookupCount }}</p><p class="mt-1 text-xs text-white/60">Database</p></div>
-          <div><p class="text-3xl font-black">{{ analytics.providerLookupCount }}</p><p class="mt-1 text-xs text-white/60">Provider</p></div>
-          <div><p class="text-3xl font-black">{{ analytics.providerCreatedLookupCount }}</p><p class="mt-1 text-xs text-white/60">Provider created</p></div>
+          <div>
+            <p class="text-3xl font-black">{{ analytics.databaseLookupCount }}</p>
+            <p class="mt-1 text-xs text-white/60">Database</p>
+          </div>
+          <div>
+            <p class="text-3xl font-black">{{ analytics.providerLookupCount }}</p>
+            <p class="mt-1 text-xs text-white/60">Provider</p>
+          </div>
+          <div>
+            <p class="text-3xl font-black">{{ analytics.providerCreatedLookupCount }}</p>
+            <p class="mt-1 text-xs text-white/60">Provider created</p>
+          </div>
         </div>
       </article>
       <article class="rounded-2xl border border-wx-border bg-wx-surface p-6 shadow-sm">
         <p class="text-xs font-bold uppercase tracking-widest text-wx-text-muted">Provider speed</p>
-        <p class="mt-4 text-4xl font-black text-wx-text">{{ milliseconds(analytics.averageProviderDurationMs) }}</p>
-        <p class="mt-2 text-sm text-wx-text-muted">{{ analytics.providerServedFromCacheCount }} requests served from cache.</p>
-        <a routerLink="/admin/analytics/provider" class="mt-5 inline-flex text-sm font-bold text-wx-accent hover:underline">Open provider stats</a>
+        <p class="mt-4 text-4xl font-black text-wx-text">
+          {{ milliseconds(analytics.averageProviderDurationMs) }}
+        </p>
+        <p class="mt-2 text-sm text-wx-text-muted">
+          {{ analytics.providerServedFromCacheCount }} requests served from cache.
+        </p>
+        <a
+          routerLink="/admin/analytics/provider"
+          class="mt-5 inline-flex text-sm font-bold text-wx-accent hover:underline"
+          >Open provider stats</a
+        >
       </article>
     </section>
 
     <!-- Preview panelleri gerçek liste endpointlerinden gelen ilk beş kaydı gösterir. -->
     <section class="grid gap-6 xl:grid-cols-2">
       <article class="rounded-2xl border border-wx-border bg-wx-surface p-6 shadow-sm">
-        <div class="flex items-center justify-between"><h2 class="text-lg font-black text-wx-text">Top lookups</h2><a routerLink="/admin/analytics/top-lookups" class="text-sm font-bold text-wx-accent hover:underline">View all</a></div>
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-black text-wx-text">Top lookups</h2>
+          <a
+            routerLink="/admin/analytics/top-lookups"
+            class="text-sm font-bold text-wx-accent hover:underline"
+            >View all</a
+          >
+        </div>
         <div class="mt-4 space-y-2">
-          @for (item of topSearches()?.items ?? []; track item.normalizedQueryText ?? item.queryText) {
+          @for (
+            item of topSearches()?.items ?? [];
+            track item.normalizedQueryText ?? item.queryText
+          ) {
             <div class="flex items-center gap-3 rounded-xl bg-wx-surface-muted p-3">
-              <span class="min-w-0 flex-1 truncate text-sm font-bold text-wx-text">{{ item.queryText ?? item.normalizedQueryText ?? 'Unknown query' }}</span>
+              <span class="min-w-0 flex-1 truncate text-sm font-bold text-wx-text">{{
+                item.queryText ?? item.normalizedQueryText ?? 'Unknown query'
+              }}</span>
               <span class="text-sm font-black text-wx-accent">{{ item.searchCount }}</span>
             </div>
           } @empty {
-            <p class="rounded-xl bg-wx-surface-muted p-4 text-sm text-wx-text-muted">No lookup activity in this period.</p>
+            <p class="rounded-xl bg-wx-surface-muted p-4 text-sm text-wx-text-muted">
+              No lookup activity in this period.
+            </p>
           }
         </div>
       </article>
 
       <article class="rounded-2xl border border-wx-border bg-wx-surface p-6 shadow-sm">
-        <div class="flex items-center justify-between"><h2 class="text-lg font-black text-wx-text">Most saved</h2><a routerLink="/admin/analytics/most-saved" class="text-sm font-bold text-wx-accent hover:underline">View all</a></div>
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-black text-wx-text">Most saved</h2>
+          <a
+            routerLink="/admin/analytics/most-saved"
+            class="text-sm font-bold text-wx-accent hover:underline"
+            >View all</a
+          >
+        </div>
         <div class="mt-4 space-y-2">
           @for (item of topSaved()?.items ?? []; track item.learningItemId) {
             <div class="flex items-center gap-3 rounded-xl bg-wx-surface-muted p-3">
-              <span class="min-w-0 flex-1 truncate text-sm font-bold text-wx-text">{{ item.displayText ?? 'Learning item' }}</span>
+              <span class="min-w-0 flex-1 truncate text-sm font-bold text-wx-text">{{
+                item.displayText ?? 'Learning item'
+              }}</span>
               <span class="text-sm font-black text-wx-accent">{{ item.saveCount }}</span>
             </div>
           } @empty {
-            <p class="rounded-xl bg-wx-surface-muted p-4 text-sm text-wx-text-muted">No dictionary saves in this period.</p>
+            <p class="rounded-xl bg-wx-surface-muted p-4 text-sm text-wx-text-muted">
+              No dictionary saves in this period.
+            </p>
           }
         </div>
       </article>
 
       <article class="rounded-2xl border border-wx-border bg-wx-surface p-6 shadow-sm">
-        <div class="flex items-center justify-between"><h2 class="text-lg font-black text-wx-text">Quiz insights</h2><a routerLink="/admin/analytics/quiz-insights" class="text-sm font-bold text-wx-accent hover:underline">View all</a></div>
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-black text-wx-text">Quiz insights</h2>
+          <a
+            routerLink="/admin/analytics/quiz-insights"
+            class="text-sm font-bold text-wx-accent hover:underline"
+            >View all</a
+          >
+        </div>
         <div class="mt-4 space-y-2">
           @for (item of mostWrong()?.items ?? []; track item.learningItemId) {
             <div class="flex items-center gap-3 rounded-xl bg-wx-surface-muted p-3">
-              <span class="min-w-0 flex-1 truncate text-sm font-bold text-wx-text">{{ item.displayText ?? 'Learning item' }}</span>
+              <span class="min-w-0 flex-1 truncate text-sm font-bold text-wx-text">{{
+                item.displayText ?? 'Learning item'
+              }}</span>
               <span class="text-sm font-black text-wx-error">{{ percentage(item.wrongRate) }}</span>
             </div>
           } @empty {
-            <p class="rounded-xl bg-wx-surface-muted p-4 text-sm text-wx-text-muted">No wrong-answer activity in this period.</p>
+            <p class="rounded-xl bg-wx-surface-muted p-4 text-sm text-wx-text-muted">
+              No wrong-answer activity in this period.
+            </p>
           }
         </div>
       </article>
 
       <article class="rounded-2xl border border-wx-border bg-wx-surface p-6 shadow-sm">
-        <div class="flex items-center justify-between"><h2 class="text-lg font-black text-wx-text">Provider operations</h2><a routerLink="/admin/analytics/provider" class="text-sm font-bold text-wx-accent hover:underline">View all</a></div>
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-black text-wx-text">Provider operations</h2>
+          <a
+            routerLink="/admin/analytics/provider"
+            class="text-sm font-bold text-wx-accent hover:underline"
+            >View all</a
+          >
+        </div>
         <div class="mt-4 space-y-2">
-          @for (item of providerStats()?.items ?? []; track (item.providerName ?? '') + (item.operationName ?? '')) {
+          @for (
+            item of providerStats()?.items ?? [];
+            track (item.providerName ?? '') + (item.operationName ?? '')
+          ) {
             <div class="flex items-center gap-3 rounded-xl bg-wx-surface-muted p-3">
-              <span class="min-w-0 flex-1"><span class="block truncate text-sm font-bold text-wx-text">{{ item.providerName ?? 'Provider' }}</span><span class="block truncate text-xs text-wx-text-muted">{{ item.operationName ?? item.providerType ?? 'Operation' }}</span></span>
+              <span class="min-w-0 flex-1"
+                ><span class="block truncate text-sm font-bold text-wx-text">{{
+                  item.providerName ?? 'Provider'
+                }}</span
+                ><span class="block truncate text-xs text-wx-text-muted">{{
+                  item.operationName ?? item.providerType ?? 'Operation'
+                }}</span></span
+              >
               <span class="text-sm font-black text-wx-accent">{{ item.totalRequestCount }}</span>
             </div>
           } @empty {
-            <p class="rounded-xl bg-wx-surface-muted p-4 text-sm text-wx-text-muted">No provider activity in this period.</p>
+            <p class="rounded-xl bg-wx-surface-muted p-4 text-sm text-wx-text-muted">
+              No provider activity in this period.
+            </p>
           }
         </div>
       </article>

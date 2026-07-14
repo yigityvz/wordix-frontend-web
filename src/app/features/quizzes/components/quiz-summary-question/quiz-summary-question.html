@@ -1,14 +1,38 @@
 ﻿<!-- Backend question breakdownunu cevap, doğruluk ve süre bilgileriyle gösterir. -->
 <article class="rounded-2xl border border-wx-border bg-wx-surface-muted p-4 sm:p-5">
   <div class="flex flex-wrap items-start justify-between gap-3">
-    <div class="min-w-0 flex-1"><p class="text-xs font-black uppercase tracking-[0.14em] text-wx-text-muted">Question {{ question().questionOrder }}</p><h3 class="mt-1 font-black text-wx-text">{{ question().questionText }}</h3></div>
-    @if (!question().isAnswered) { <wx-badge variant="warning" [dot]="true">Unanswered</wx-badge> }
-    @else if (question().isCorrect) { <wx-badge variant="success" [dot]="true">Correct</wx-badge> }
-    @else { <wx-badge variant="error" [dot]="true">Incorrect</wx-badge> }
+    <div class="min-w-0 flex-1">
+      <p class="text-xs font-black uppercase tracking-[0.14em] text-wx-text-muted">
+        Question {{ question().questionOrder }}
+      </p>
+      <h3 class="mt-1 font-black text-wx-text">{{ question().questionText }}</h3>
+    </div>
+    @if (!question().isAnswered) {
+      <wx-badge variant="warning" [dot]="true">Unanswered</wx-badge>
+    } @else if (question().isCorrect) {
+      <wx-badge variant="success" [dot]="true">Correct</wx-badge>
+    } @else {
+      <wx-badge variant="error" [dot]="true">Incorrect</wx-badge>
+    }
   </div>
   <dl class="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-    <div><dt class="font-bold text-wx-text-muted">Your answer</dt><dd class="mt-1 break-words text-wx-text">{{ question().selectedAnswerText || 'No answer submitted' }}</dd></div>
-    <div><dt class="font-bold text-wx-text-muted">Correct answer</dt><dd class="mt-1 break-words text-wx-text">{{ question().correctAnswerText || 'Not provided' }}</dd></div>
-    <div><dt class="font-bold text-wx-text-muted">Response time</dt><dd class="mt-1 text-wx-text">{{ formatResponseTime(question().questionResponseTimeInMilliseconds) }}</dd></div>
+    <div>
+      <dt class="font-bold text-wx-text-muted">Your answer</dt>
+      <dd class="mt-1 break-words text-wx-text">
+        {{ question().selectedAnswerText || 'No answer submitted' }}
+      </dd>
+    </div>
+    <div>
+      <dt class="font-bold text-wx-text-muted">Correct answer</dt>
+      <dd class="mt-1 break-words text-wx-text">
+        {{ question().correctAnswerText || 'Not provided' }}
+      </dd>
+    </div>
+    <div>
+      <dt class="font-bold text-wx-text-muted">Response time</dt>
+      <dd class="mt-1 text-wx-text">
+        {{ formatResponseTime(question().questionResponseTimeInMilliseconds) }}
+      </dd>
+    </div>
   </dl>
 </article>

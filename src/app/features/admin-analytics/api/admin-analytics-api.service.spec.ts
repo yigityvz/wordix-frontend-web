@@ -2,7 +2,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { AppConfigService } from '@core/config/app-config.service';
+import { provideApiClient } from 'angular-api-client-core';
 import { firstValueFrom } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { AdminAnalyticsApiService } from './admin-analytics-api.service';
@@ -17,8 +17,8 @@ describe('AdminAnalyticsApiService', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideApiClient({ baseUrl: 'http://localhost:5000/api/' }),
         AdminAnalyticsApiService,
-        { provide: AppConfigService, useValue: { apiBaseUrl: 'http://localhost:5000/api/' } },
       ],
     });
     http = TestBed.inject(HttpTestingController);
@@ -39,11 +39,13 @@ describe('AdminAnalyticsApiService', () => {
 
   /** Tarih ve limit filtrelerini Swagger PascalCase alan adlarıyla gönderir. */
   it('sends canonical top searches filters', () => {
-    TestBed.inject(AdminAnalyticsApiService).getTopSearches({
-      fromUtc: '2026-01-01T00:00:00Z',
-      toUtc: '2026-02-01T00:00:00Z',
-      limit: 50,
-    }).subscribe();
+    TestBed.inject(AdminAnalyticsApiService)
+      .getTopSearches({
+        fromUtc: '2026-01-01T00:00:00Z',
+        toUtc: '2026-02-01T00:00:00Z',
+        limit: 50,
+      })
+      .subscribe();
     const req = http.expectOne((request) => request.url.endsWith('/admin/analytics/top-searches'));
     expect(req.request.params.get('FromUtc')).toBe('2026-01-01T00:00:00Z');
     expect(req.request.params.get('ToUtc')).toBe('2026-02-01T00:00:00Z');

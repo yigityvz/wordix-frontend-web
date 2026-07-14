@@ -1,4 +1,77 @@
 ﻿<!-- Difficult items gerçek pagination metadata ve dictionary detail route'larıyla gösterilir. -->
-<div><div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><h2 class="text-xl font-black text-wx-text">Difficult items</h2><p class="mt-1 text-sm text-wx-text-muted">{{ page().totalCount }} items need attention</p></div><div class="flex flex-wrap gap-2"><select class="min-h-10 rounded-xl border border-wx-border bg-wx-surface-muted px-3 text-sm font-bold text-wx-text" [value]="source()" (change)="requestSource($any($event.target).value)"><option value="both">All sources</option><option value="manual">Manually marked</option><option value="progress">Progress signals</option></select><select class="min-h-10 rounded-xl border border-wx-border bg-wx-surface-muted px-3 text-sm font-bold text-wx-text" [value]="sortBy()" (change)="requestSort($any($event.target).value)"><option value="confidenceAsc">Lowest confidence</option><option value="wrongCountDesc">Most wrong</option><option value="consecutiveWrongDesc">Consecutive wrong</option><option value="nextReviewAsc">Review due</option><option value="savedAtDesc">Recently saved</option></select></div></div>
-@if (page().items.length===0) { <wx-empty-state title="No difficult items" description="The backend did not return an item for these filters." /> } @else { <div class="mt-5 divide-y divide-wx-border">@for(item of page().items;track item.userLearningItemId){<a [routerLink]="['/dictionary',item.userLearningItemId]" class="flex items-center gap-4 py-4 transition hover:bg-wx-surface-muted"><div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-2"><span class="truncate font-black text-wx-text">{{ item.displayText || 'Untitled item' }}</span><wx-badge variant="warning">{{ item.itemType || 'Item' }}</wx-badge></div><p class="mt-1 truncate text-sm text-wx-text-muted">{{ item.primaryMeaning || item.difficultyReason || 'No meaning provided' }}</p></div><div class="text-right"><p class="font-black text-wx-accent">{{ item.confidenceScore }}</p><p class="text-xs text-wx-text-muted">{{ item.wrongCount }} wrong</p></div></a>}</div>}
-<div class="mt-5 flex items-center justify-between"><wx-button variant="secondary" size="sm" [disabled]="!page().hasPreviousPage" (activated)="requestPage(page().pageNumber-1)">Previous</wx-button><span class="text-xs font-bold text-wx-text-muted">Page {{ page().pageNumber }} / {{ page().totalPages || 1 }}</span><wx-button variant="secondary" size="sm" [disabled]="!page().hasNextPage" (activated)="requestPage(page().pageNumber+1)">Next</wx-button></div></div>
+<div>
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h2 class="text-xl font-black text-wx-text">Difficult items</h2>
+      <p class="mt-1 text-sm text-wx-text-muted">{{ page().totalCount }} items need attention</p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <select
+        class="min-h-10 rounded-xl border border-wx-border bg-wx-surface-muted px-3 text-sm font-bold text-wx-text"
+        [value]="source()"
+        (change)="requestSource($any($event.target).value)"
+      >
+        <option value="both">All sources</option>
+        <option value="manual">Manually marked</option>
+        <option value="progress">Progress signals</option></select
+      ><select
+        class="min-h-10 rounded-xl border border-wx-border bg-wx-surface-muted px-3 text-sm font-bold text-wx-text"
+        [value]="sortBy()"
+        (change)="requestSort($any($event.target).value)"
+      >
+        <option value="confidenceAsc">Lowest confidence</option>
+        <option value="wrongCountDesc">Most wrong</option>
+        <option value="consecutiveWrongDesc">Consecutive wrong</option>
+        <option value="nextReviewAsc">Review due</option>
+        <option value="savedAtDesc">Recently saved</option>
+      </select>
+    </div>
+  </div>
+  @if (page().items.length === 0) {
+    <wx-empty-state
+      title="No difficult items"
+      description="The backend did not return an item for these filters."
+    />
+  } @else {
+    <div class="mt-5 divide-y divide-wx-border">
+      @for (item of page().items; track item.userLearningItemId) {
+        <a
+          [routerLink]="['/dictionary', item.userLearningItemId]"
+          class="flex items-center gap-4 py-4 transition hover:bg-wx-surface-muted"
+          ><div class="min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="truncate font-black text-wx-text">{{
+                item.displayText || 'Untitled item'
+              }}</span
+              ><wx-badge variant="warning">{{ item.itemType || 'Item' }}</wx-badge>
+            </div>
+            <p class="mt-1 truncate text-sm text-wx-text-muted">
+              {{ item.primaryMeaning || item.difficultyReason || 'No meaning provided' }}
+            </p>
+          </div>
+          <div class="text-right">
+            <p class="font-black text-wx-accent">{{ item.confidenceScore }}</p>
+            <p class="text-xs text-wx-text-muted">{{ item.wrongCount }} wrong</p>
+          </div></a
+        >
+      }
+    </div>
+  }
+  <div class="mt-5 flex items-center justify-between">
+    <wx-button
+      variant="secondary"
+      size="sm"
+      [disabled]="!page().hasPreviousPage"
+      (activated)="requestPage(page().pageNumber - 1)"
+      >Previous</wx-button
+    ><span class="text-xs font-bold text-wx-text-muted"
+      >Page {{ page().pageNumber }} / {{ page().totalPages || 1 }}</span
+    ><wx-button
+      variant="secondary"
+      size="sm"
+      [disabled]="!page().hasNextPage"
+      (activated)="requestPage(page().pageNumber + 1)"
+      >Next</wx-button
+    >
+  </div>
+</div>

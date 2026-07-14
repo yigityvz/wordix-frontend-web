@@ -9,7 +9,9 @@
       class="flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl px-1 text-[11px] font-semibold text-wx-text-muted transition-colors hover:bg-wx-surface-muted hover:text-wx-text"
       [routerLink]="item.route"
       routerLinkActive="text-wx-accent"
-      [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' || item.route === '/admin/dashboard' }"
+      [routerLinkActiveOptions]="{
+        exact: item.route === '/dashboard' || item.route === '/admin/dashboard',
+      }"
     >
       <wx-navigation-icon [name]="item.icon" [size]="19" />
       <span class="max-w-full truncate">{{ item.label }}</span>
