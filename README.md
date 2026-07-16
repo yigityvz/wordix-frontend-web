@@ -36,9 +36,9 @@ Web Client:  wordix-web
 API Client:  wordix-api
 ```
 
-## Tasarım referansı
+## Tasarım sistemi
 
-Figma/Make React exportu `design/figma/react-reference` altında yalnızca görsel referans olarak tutulur. React kodu Angular'a kopyalanmaz. Dark-mode ekran görüntüleri `design/figma/screenshots/dark` altındadır; light tema referansı exportun tema tokenlarından alınır.
+Wordix arayüzü `docs/DESIGN_SYSTEM.md` içindeki Coastal Blues tema ve component standartlarına göre geliştirilir. Uygulama light, dark ve system tema modlarını destekler; bütün davranışlar gerçek Angular uygulaması ve backend sözleşmesi üzerinden yürütülür.
 
 ## Proje dokümanları
 

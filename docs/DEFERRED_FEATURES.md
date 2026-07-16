@@ -29,7 +29,7 @@ Son güncelleme: 2026-07-10
 - Spaced-repetition tuning preferences
 - Workspace switching; mevcut karara göre gerekli değildir ve ancak yeni ürün kararıyla açılabilir
 
-## Planlanmayan Figma demo özellikleri
+## Planlanmayan demo özellikleri
 
 Aşağıdakiler ertelenmiş özellik değil, mevcut kapsamdan çıkarılmış demo davranışlarıdır:
 

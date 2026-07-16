@@ -2,7 +2,7 @@
 
 Tarih: 2026-07-10
 
-Bu plan production uygulamasının route, rol, data ve UI state sınırlarını tanımlar. Figma/Make export yalnızca görsel referanstır.
+Bu plan production uygulamasının route, rol, data ve UI state sınırlarını tanımlar.
 
 ## Global layout
 
@@ -384,7 +384,7 @@ Desktop: sidebar + topbar + bounded content width
 
 Admin mobil navigation user bottom navı yeniden kullanmaz.
 
-## Uygulanmayacak Figma davranışları
+## Uygulanmayacak demo davranışları
 
 - Demo user/admin/404/500 switcher
 - See demo flow

@@ -47,4 +47,43 @@ describe('AuthCallbackPage', () => {
 
     expect(load).toHaveBeenCalledOnce();
   });
+
+  /** Logout callbacki oturum üretmediğinde public giriş route'una otomatik döner. */
+  it('returns an unauthenticated logout callback to the sign-in page', () => {
+    const navigateByUrl = vi.fn().mockResolvedValue(true);
+    const consumeReturnUrl = vi.fn().mockReturnValue(null);
+
+    TestBed.configureTestingModule({
+      imports: [AuthCallbackPage],
+      providers: [
+        {
+          provide: AuthFacade,
+          useValue: {
+            status: signal('unauthenticated'),
+            error: signal(null),
+            isInitialized: signal(true),
+            isAuthenticated: signal(false),
+            initialize: vi.fn(),
+          },
+        },
+        {
+          provide: ProfileFacade,
+          useValue: {
+            status: signal('idle'),
+            profile: signal(null),
+            error: signal(null),
+            load: vi.fn(),
+          },
+        },
+        { provide: AuthNavigationService, useValue: { consumeReturnUrl } },
+        { provide: Router, useValue: { navigateByUrl } },
+      ],
+    });
+
+    const fixture = TestBed.createComponent(AuthCallbackPage);
+    fixture.detectChanges();
+
+    expect(consumeReturnUrl).toHaveBeenCalledOnce();
+    expect(navigateByUrl).toHaveBeenCalledWith('/');
+  });
 });

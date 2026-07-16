@@ -90,12 +90,11 @@ Route param: backend contractındaki canonical id adı
 - Frontend cevap doğruluğu, ownership veya authorization kararı üretmez.
 - Backend mutation cevabı gelmeden fake success gösterilmez.
 
-## Figma referansı
+## UI geliştirme kuralı
 
-- React export yalnızca görsel/component referansıdır.
-- React hooks, local mock state ve `setTimeout` tabanlı demo davranışı Angular'a taşınmaz.
-- Dark screenshots görsel kompozisyonu destekler.
-- Light görünüm `index.css` tokenlarından yeniden kurulur.
+- Canonical görsel kurallar `docs/DESIGN_SYSTEM.md` içinde tutulur.
+- Local mock state ve `setTimeout` tabanlı demo davranışı eklenmez.
+- Light, dark ve system tema aynı component yapısı üzerinden desteklenir.
 - Demo role switcher, See demo flow ve Back to User App yoktur.
 
 ## Git çalışma biçimi

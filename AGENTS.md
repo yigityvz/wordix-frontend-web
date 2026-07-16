@@ -27,7 +27,7 @@ docs/DEFERRED_FEATURES.md
 Kurallar:
 
 ```text
-Figma/Make export yalnızca görsel referanstır; demo davranışları implementation kaynağı değildir.
+Harici tasarım araçlarındaki demo davranışları implementation kaynağı değildir.
 Her ekran production'a çıkacak gerçek uygulama yaklaşımıyla geliştirilir.
 Mock mutation, fake success, demo switcher ve backend desteği olmayan çalışan buton yapılmaz.
 Backend desteği bekleyen özellikler uygulamada Coming Soon olarak gösterilmez.
@@ -80,24 +80,15 @@ wordix-api
 
 Frontend ileride Docker'a alınacaksa compose'a ayrıca `wordix-web` servisi eklenecektir.
 
-## Figma ZIP Visual Reference
+## Wordix UI kaynakları
 
-This repository contains a Figma/Make generated React + Vite + Tailwind export under:
+UI geliştirirken aşağıdaki Wordix dokümanları okunmalıdır:
 
 ```text
-design/figma/react-reference
-```
-
-This export is only a visual reference. Codex must not copy React code into Angular.
-
-Before implementing UI, Codex must read:
-
-docs/FIGMA_EXPORT_HANDOFF.md
 docs/DESIGN_SYSTEM.md
 docs/UI_SCREEN_INVENTORY.md
-design/figma/react-reference/src/index.css
-design/figma/react-reference/src/pages
-design/figma/react-reference/src/components
+docs/PRODUCT_DECISIONS.md
+```
 
 Rules:
 
@@ -109,7 +100,7 @@ admin redirects to /admin/dashboard.
 basic_user redirects to /dashboard.
 No dead buttons.
 Backend Swagger/OpenAPI is behavior source of truth.
-Do not copy demo switchers, fake notifications, mock mutations or unsupported admin screens.
+Do not add demo switchers, fake notifications, mock mutations or unsupported admin screens.
 Admin and user applications must have separate shells and navigation.
 
 ---

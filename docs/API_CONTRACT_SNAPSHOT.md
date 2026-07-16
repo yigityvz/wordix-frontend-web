@@ -251,7 +251,7 @@ POST /api/imports/meanings/freedict/enrich
 POST /api/imports/meanings/missing/azure-backfill
 ```
 
-Bunlar doğrudan operasyon başlatan endpointlerdir. Figma'daki import job listesi, raw log, progress ve retry UI'ları için gerekli read/retry sözleşmesi bulunmadığından frontend kapsamına alınmaz ve admin navigation'a eklenmez.
+Bunlar doğrudan operasyon başlatan endpointlerdir. Import job listesi, raw log, progress ve retry UI'ları için gerekli read/retry sözleşmesi bulunmadığından bu ekranlar frontend kapsamına alınmaz ve admin navigation'a eklenmez.
 
 ## Bilinen sözleşme farkları
 

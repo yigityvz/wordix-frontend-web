@@ -75,7 +75,11 @@ export class KeycloakService {
 
   /** Keycloak oturumunu sonlandırır ve kullanıcıyı uygulama giriş adresine döndürür. */
   logout(): Promise<void> {
-    return this.client.logout({ redirectUri: this.getApplicationRootRedirectUri() });
+    // Önceki login dönüş adresinin yeni oturumda yanlışlıkla kullanılmasını engeller.
+    this.authNavigationService.rememberReturnUrl(null);
+
+    // Keycloak clientta izinli olan auth callback adresi logout sonucunu güvenle karşılar.
+    return this.client.logout({ redirectUri: this.getAuthCallbackRedirectUri() });
   }
 
   /** F4B bearer interceptor için geçerli veya yenilenmiş access token sağlar. */

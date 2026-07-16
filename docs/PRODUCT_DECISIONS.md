@@ -7,7 +7,6 @@ Son güncelleme: 2026-07-10
 ## Production-first yaklaşımı
 
 - Her ekran canlıya çıkacak gerçek uygulamanın parçasıymış gibi geliştirilir.
-- Figma/Make exportu yalnızca görsel referanstır.
 - Mock veri, sahte gecikme, fake success toast ve demo navigation production uygulamasına taşınmaz.
 - Backend desteği olmayan aksiyon uygulamada çalışıyormuş gibi gösterilmez.
 - Coming Soon özellikleri UI'da gösterilmez; `DEFERRED_FEATURES.md` içinde takip edilir.

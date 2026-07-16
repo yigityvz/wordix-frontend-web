@@ -1,6 +1,6 @@
 <!-- Search, loading, error ve gerçek result durumlarını tek responsive lookup sayfasında birleştirir. -->
 <div class="mx-auto max-w-3xl space-y-6">
-  <!-- Sayfa başlığı Figma kompozisyonunu korurken demo öneri veya recent-search verisi göstermez. -->
+  <!-- Sayfa başlığı demo öneri veya recent-search verisi göstermeden gerçek arama akışını tanıtır. -->
   <header>
     <p class="text-sm font-bold uppercase tracking-[0.18em] text-wx-accent">Discover</p>
     <h1 class="mt-2 text-3xl font-black tracking-tight text-wx-text sm:text-4xl">Smart Lookup</h1>
@@ -55,7 +55,7 @@
       (addToDeckRequested)="openDeckDialog($event)"
     />
   } @else {
-    <!-- İlk açılışta Figma'daki mock recent/popular listeler yerine tarafsız başlangıç durumu sunulur. -->
+    <!-- İlk açılışta mock recent/popular listeler yerine tarafsız başlangıç durumu sunulur. -->
     <wx-card padding="lg">
       <div class="flex flex-col items-center px-4 py-8 text-center">
         <span

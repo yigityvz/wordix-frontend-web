@@ -48,7 +48,19 @@ export class AuthCallbackPage {
 
   /** Auth tamamlandığında profili yükler ve backend rollerinden hedef route'u çözer. */
   private readonly callbackFlow = effect(() => {
-    if (!this.authFacade.isInitialized() || !this.authFacade.isAuthenticated()) {
+    // Keycloak kontrolü tamamlanmadan login veya logout sonucu hakkında karar verilmez.
+    if (!this.authFacade.isInitialized()) {
+      return;
+    }
+
+    // Logout callbacki oturum üretmediyse kullanıcı bekletilmeden public girişe döndürülür.
+    if (!this.authFacade.isAuthenticated()) {
+      if (!this.navigationCompleted) {
+        this.navigationCompleted = true;
+        this.authNavigationService.consumeReturnUrl();
+        void this.router.navigateByUrl('/');
+      }
+
       return;
     }
 

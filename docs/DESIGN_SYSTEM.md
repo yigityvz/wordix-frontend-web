@@ -1,10 +1,8 @@
 # Wordix Design System
 
-## Source and implementation rule
+## Kaynak ve uygulama kuralı
 
-Tasarım dili `design/figma/react-reference` ve dark-mode ekran görüntülerinden türetilir. Export yalnızca görsel/component referansıdır; React kodu veya demo davranışları Angular'a kopyalanmaz.
-
-Angular uygulaması production kalitesinde, responsive, erişilebilir ve backend durumlarıyla uyumlu olarak yeniden inşa edilir.
+Bu doküman Wordix uygulamasının canonical görsel tasarım kaynağıdır. Angular uygulaması production kalitesinde, responsive, erişilebilir ve backend durumlarıyla uyumlu olarak geliştirilir.
 
 ## Visual character
 

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "prestart": "npm run build:api-core",
-    "start": "ng serve wordix-frontend-web",
+    "start": "ng serve wordix-frontend-web --host localhost --port 4200",
     "prebuild": "npm run build:api-core",
     "build": "ng build wordix-frontend-web",
     "build:api-core": "ng build angular-api-client-core",

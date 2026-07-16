@@ -116,7 +116,7 @@ describe('LookupPage', () => {
     expect(clear).toHaveBeenCalledOnce();
   });
 
-  /** İlk görünümde Figma mock recent/popular listelerinin render edilmediğini doğrular. */
+  /** İlk görünümde mock recent/popular listelerinin render edilmediğini doğrular. */
   it('does not render mock search suggestions', () => {
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
 

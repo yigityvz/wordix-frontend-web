@@ -75,14 +75,14 @@ describe('KeycloakService', () => {
     });
   });
 
-  /** Logout sonrasında callback yerine public uygulama köküne dönüldüğünü doğrular. */
-  it('returns to the application root after logout', async () => {
+  /** Logout sonrasında Keycloak'ın izinli Angular callback adresini kullandığını doğrular. */
+  it('uses the Angular callback route after logout', async () => {
     const service = TestBed.inject(KeycloakService);
 
     await service.logout();
 
     expect(client.logout).toHaveBeenCalledWith({
-      redirectUri: expect.not.stringMatching(/\/auth\/callback$/),
+      redirectUri: expect.stringMatching(/\/auth\/callback$/),
     });
   });
 

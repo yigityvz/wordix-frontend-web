@@ -1,6 +1,6 @@
 # Wordix UI Screen Inventory
 
-Bu dosya production uygulamasının canonical ekran ve aksiyon envanteridir. Figma/Make exportundaki demo-only ekran ve davranışlar bu envantere dahil değildir.
+Bu dosya production uygulamasının canonical ekran ve aksiyon envanteridir. Demo-only ekran ve davranışlar bu envantere dahil değildir.
 
 ## Authentication Entry
 
