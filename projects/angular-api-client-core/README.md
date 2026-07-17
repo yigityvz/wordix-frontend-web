@@ -111,7 +111,7 @@ npm pack
 Install the generated `.tgz` file in another Angular project:
 
 ```bash
-npm install /absolute/path/to/angular-api-client-core-0.0.1.tgz
+npm install /absolute/path/to/angular-api-client-core-1.0.0.tgz
 ```
 
 ### From the same Angular workspace
